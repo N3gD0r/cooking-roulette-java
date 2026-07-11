@@ -1,19 +1,17 @@
 package org.n3gd0r.recipe.domain;
 
+import jakarta.persistence.*;
 import org.n3gd0r.commons.AbstractEntity;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 
 @Entity
 public class RecipeIngredient extends AbstractEntity<RecipeIngredientId> {
-    @Column(length = 255, unique = true)
+    @Column(length = 255)
     private String ingredientName;
     @Enumerated(EnumType.STRING)
     private IngredientEnum ingredientType;
     private Mass weight;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Recipe recipe;
 
     protected RecipeIngredient() {
     }
@@ -34,7 +32,7 @@ public class RecipeIngredient extends AbstractEntity<RecipeIngredientId> {
     }
 
     public float totalMass() {
-        return weight.value() * weight.quantity().orElse(Integer.valueOf(1));
+        return weight.value();
     }
 
     public IngredientEnum getIngredientType() {
@@ -51,5 +49,13 @@ public class RecipeIngredient extends AbstractEntity<RecipeIngredientId> {
 
     public void setIngredientName(String ingredientName) {
         this.ingredientName = ingredientName;
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 }

@@ -6,6 +6,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=${DBPASSWORD}
       - POSTGRES_USER=${DBUSER}
+      - POSTGRES_DB=${DBNAME}
     expose:
       - 5432
     ports:

@@ -10,7 +10,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class RecipeNotFoundException extends RuntimeException {
-     public RecipeNotFoundException(RecipeId id) {
+    public RecipeNotFoundException(RecipeId id) {
         super("Recipe with id %s not found".formatted(id.getId()));
+    }
+
+    public RecipeNotFoundException(String name) {
+        super("Recipe with name %s not found".formatted(name));
+    }
+
+    public RecipeNotFoundException() {
+        super("Recipe not found, check the query parameters used");
     }
 }
