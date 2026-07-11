@@ -1,13 +1,16 @@
 package org.n3gd0r.recipe.domain;
 
-import org.n3gd0r.commons.AbstractEntity;
-
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
+import org.n3gd0r.commons.AbstractEntity;
 
 @Entity
 public class RecipeStep extends AbstractEntity<RecipeStepId> {
     private int stepNumber;
     private String stepInstruction;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Recipe recipe;
 
     protected RecipeStep() {
     }
@@ -32,5 +35,13 @@ public class RecipeStep extends AbstractEntity<RecipeStepId> {
 
     public void setInstruction(String stepInstruction) {
         this.stepInstruction = stepInstruction;
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 }

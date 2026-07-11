@@ -1,9 +1,8 @@
 package org.n3gd0r.recipe.repository;
 
-import org.n3gd0r.recipe.domain.Mass;
-
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import org.n3gd0r.recipe.domain.Mass;
 
 /**
  * MassAttributeConverter

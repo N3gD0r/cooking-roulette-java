@@ -4,12 +4,14 @@ import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
 import org.springframework.util.Assert;
 
+import java.util.List;
+
 /**
  * RegisterRecipeWithIngredientParameters
  */
 public record RegisterRecipeWithAllParameters(RegisterRecipeWithParameters recipeParameters,
-        RegisterRecipeWithIngredientsParameters ingredientParameters,
-        RegisterRecipeWithInstructionsParameters instructionParameters) {
+                                              List<RegisterRecipeWithIngredientsParameters> ingredientParameters,
+                                              List<RegisterRecipeWithInstructionsParameters> instructionParameters) {
     public RegisterRecipeWithAllParameters {
         Assert.notNull(recipeParameters, "The recipeParameters should not be null");
         Assert.notNull(ingredientParameters, "The ingredientParameters should not be null");
@@ -26,7 +28,7 @@ public record RegisterRecipeWithAllParameters(RegisterRecipeWithParameters recip
     }
 
     public record RegisterRecipeWithIngredientsParameters(String ingredientName, IngredientEnum ingredientType,
-            Mass weight) {
+                                                          Mass weight) {
         public RegisterRecipeWithIngredientsParameters {
             Assert.notNull(ingredientName,
                     "The RegisterRecipeWithIngredientsParameters ingredientName should not be null");
@@ -44,8 +46,6 @@ public record RegisterRecipeWithAllParameters(RegisterRecipeWithParameters recip
             Assert.notNull(stepNumber, "The RegisterRecipeWithInstructionsParameters stepNumber should not be null");
             Assert.hasText(stepInstruction,
                     "The RegisterRecipeWithInstructionsParameters stepInstruction should have text");
-            Assert.notNull(stepInstruction,
-                    "The RegisterRecipeWithInstructionsParameters stepInstruction should not be null");
         }
     }
 }

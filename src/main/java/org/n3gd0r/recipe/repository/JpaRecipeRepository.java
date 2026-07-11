@@ -1,16 +1,17 @@
 package org.n3gd0r.recipe.repository;
 
-import java.util.Optional;
-import java.util.UUID;
-
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeIngredientId;
 import org.n3gd0r.recipe.domain.RecipeStepId;
 import org.n3gd0r.recipe.domain.exception.RecipeNotFoundException;
+import org.n3gd0r.recipe.domain.exception.RecipeWithNameAlreadyExistsException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * JpaRecipeRepository
@@ -45,12 +46,17 @@ public class JpaRecipeRepository implements RecipeRepository {
     }
 
     @Override
+    public Recipe findByName(String name) {
+        return repository.getRecipeByName(name).orElseThrow(() -> new RecipeNotFoundException(name));
+    }
+
+    @Override
     public void save(Recipe recipe) {
         repository.save(recipe);
     }
 
     @Override
-    public Recipe getbyId(RecipeId id) {
+    public Recipe getById(RecipeId id) {
         return repository.findById(id).orElseThrow(() -> new RecipeNotFoundException(id));
     }
 
@@ -63,6 +69,13 @@ public class JpaRecipeRepository implements RecipeRepository {
     public void validateExistsById(RecipeId recipeId) {
         if (!repository.existsById(recipeId)) {
             throw new RecipeNotFoundException(recipeId);
+        }
+    }
+
+    @Override
+    public void validateNameUnique(String name) {
+        if (repository.existsByName(name)) {
+            throw new RecipeWithNameAlreadyExistsException(name);
         }
     }
 

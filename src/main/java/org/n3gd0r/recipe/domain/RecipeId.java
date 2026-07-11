@@ -1,8 +1,8 @@
 package org.n3gd0r.recipe.domain;
 
-import java.util.UUID;
-
 import org.n3gd0r.commons.AbstractEntityId;
+
+import java.util.UUID;
 
 /**
  * RecipeId
