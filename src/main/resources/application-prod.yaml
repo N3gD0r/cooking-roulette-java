@@ -1,6 +1,10 @@
 spring:
   application:
     name: cooking
+  devtools:
+    add-properties: false
+    livereload:
+      enabled: false
 
   datasource:
     url: ${DBURL}
@@ -9,7 +13,8 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: "none"
-    show-sql: true
+      ddl-auto: none
+    show-sql: false
+
   flyway:
-    enabled: false
+    enabled: true
