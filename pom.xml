@@ -11,7 +11,7 @@
     </parent>
     <groupId>org.n3gd0r</groupId>
     <artifactId>cooking</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name/>
     <description/>
     <url/>
@@ -62,12 +62,12 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
+        <!-- <dependency> -->
+        <!--     <groupId>org.springframework.boot</groupId> -->
+        <!--     <artifactId>spring-boot-devtools</artifactId> -->
+        <!--     <scope>runtime</scope> -->
+        <!--     <optional>true</optional> -->
+        <!-- </dependency> -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
