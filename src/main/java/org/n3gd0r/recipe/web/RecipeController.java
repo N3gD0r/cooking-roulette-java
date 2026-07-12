@@ -1,6 +1,7 @@
 package org.n3gd0r.recipe.web;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.n3gd0r.infrastructure.mediator.Mediator;
@@ -10,11 +11,12 @@ import org.n3gd0r.recipe.usecase.DeleteRecipeCommand;
 import org.n3gd0r.recipe.usecase.GetAllRecipesQuery;
 import org.n3gd0r.recipe.usecase.GetRecipeQuery;
 import org.n3gd0r.recipe.usecase.RegisterRecipeCommand;
-import org.n3gd0r.recipe.usecase.RegisterRecipeWithAllParameters;
+import org.n3gd0r.recipe.usecase.UpdateRecipeCommand;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,24 +42,21 @@ public class RecipeController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RecipeResponse registerRecipe(@Valid @RequestBody RegisterRecipeWithAllRequest request) {
-        RegisterRecipeWithAllParameters parameters = request.toParameters();
-        Recipe recipe = mediator.send(new RegisterRecipeCommand(parameters));
+        Recipe recipe = mediator.send(new RegisterRecipeCommand(request.toParameters()));
         return RecipeResponse.of(recipe);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public RecipeResponse getRecipe(@PathVariable UUID id) {
-        GetRecipeQuery query = new GetRecipeQuery(new RecipeId(id));
-        Recipe recipe = mediator.send(query);
+        Recipe recipe = mediator.send(new GetRecipeQuery(new RecipeId(id)));
         return RecipeResponse.of(recipe);
     }
 
     @GetMapping("/filter")
     @ResponseStatus(HttpStatus.OK)
     public RecipeResponse getRecipeByName(@RequestParam String name) {
-        GetRecipeQuery query = new GetRecipeQuery(name);
-        Recipe recipe = mediator.send(query);
+        Recipe recipe = mediator.send(new GetRecipeQuery(name));
         return RecipeResponse.of(recipe);
     }
 
@@ -73,6 +72,13 @@ public class RecipeController {
     @ResponseStatus(HttpStatus.OK)
     public List<RecipeResponse> getRecipes() {
         return mediator.send(new GetAllRecipesQuery()).stream().map(RecipeResponse::of).toList();
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public RecipeResponse patchRecipe(@PathVariable UUID id, @RequestBody Map<String, Object> patchFields) {
+        Recipe recipe = mediator.send(new UpdateRecipeCommand(new RecipeId(id), patchFields));
+        return RecipeResponse.of(recipe);
     }
 
     @DeleteMapping("/{id}")
