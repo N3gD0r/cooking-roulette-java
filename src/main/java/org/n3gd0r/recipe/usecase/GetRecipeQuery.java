@@ -3,6 +3,7 @@ package org.n3gd0r.recipe.usecase;
 import org.n3gd0r.infrastructure.mediator.Query;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
+import org.springframework.util.Assert;
 
 /**
  * GetRecipeQuery
@@ -12,11 +13,13 @@ public class GetRecipeQuery extends Query<Recipe> {
     private final RecipeId id;
 
     public GetRecipeQuery(String name) {
+        Assert.hasText(name, "The GetRecipeQuery name should have text");
         this.name = name;
-        this.id = null;
+        id = null;
     }
 
     public GetRecipeQuery(RecipeId id) {
+        Assert.notNull(id, "The GetRecipeQuery id should not be null");
         this.id = id;
         this.name = null;
     }

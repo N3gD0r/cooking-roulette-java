@@ -5,22 +5,17 @@ import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * DeleteRecipe
- */
 @Component
 @Transactional
-public class DeleteRecipe implements RequestHandler<DeleteRecipeCommand, Boolean> {
+public class UpdateRecipe implements RequestHandler<UpdateRecipeCommand, Boolean> {
     private final RecipeRepository repository;
 
-    public DeleteRecipe(RecipeRepository repository) {
+    public UpdateRecipe(RecipeRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public Boolean execute(DeleteRecipeCommand request) {
-        repository.validateExistsById(request.id());
-        repository.deleteById(request.id());
-        return true;
+    public Boolean execute(UpdateRecipeCommand request) {
+        return false;
     }
 }

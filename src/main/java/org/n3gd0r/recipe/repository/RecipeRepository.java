@@ -1,14 +1,13 @@
 package org.n3gd0r.recipe.repository;
 
+import java.util.Optional;
+
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeIngredientId;
 import org.n3gd0r.recipe.domain.RecipeStepId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * RecipeRepository
@@ -29,6 +28,7 @@ public interface RecipeRepository {
     Recipe getById(RecipeId id);
 
     void validateExistsById(RecipeId recipeId);
+
     void validateNameUnique(String name);
 
     Page<Recipe> findAll(Pageable pageable);
