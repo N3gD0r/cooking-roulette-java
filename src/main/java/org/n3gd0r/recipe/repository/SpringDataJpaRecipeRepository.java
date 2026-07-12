@@ -5,7 +5,6 @@ import org.n3gd0r.recipe.domain.RecipeId;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 /**

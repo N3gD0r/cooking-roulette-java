@@ -1,13 +1,14 @@
 package org.n3gd0r.recipe.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.n3gd0r.commons.AbstractEntity;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import org.n3gd0r.commons.AbstractEntity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A Recipe consists of: The name of the recipe; Ingredients, a set of
@@ -29,10 +30,10 @@ public class Recipe extends AbstractEntity<RecipeId> {
     }
 
     public Recipe(RecipeId id,
-                  String name,
-                  float cookTime,
-                  List<RecipeIngredient> ingredients,
-                  List<RecipeStep> steps) {
+            String name,
+            float cookTime,
+            List<RecipeIngredient> ingredients,
+            List<RecipeStep> steps) {
         super(id);
         this.name = name;
         this.cookTime = cookTime;

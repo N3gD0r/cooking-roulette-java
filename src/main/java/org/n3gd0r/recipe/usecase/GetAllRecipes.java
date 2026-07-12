@@ -1,12 +1,12 @@
 package org.n3gd0r.recipe.usecase;
 
+import java.util.List;
+
 import org.n3gd0r.infrastructure.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * GetAllRecipes

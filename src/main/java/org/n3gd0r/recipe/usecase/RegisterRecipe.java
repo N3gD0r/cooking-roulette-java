@@ -21,17 +21,20 @@ public class RegisterRecipe implements RequestHandler<RegisterRecipeCommand, Rec
         this.repository = repository;
     }
 
-    // TODO Use parallel stream mapping to handle ingredient list and instruction list at the same time
+    // TODO map ingredient and instruction lists with threads/concurrency/parallel
     public Recipe execute(RegisterRecipeCommand request) {
         repository.validateNameUnique(request.parameters.recipeParameters().name());
         var ingredients = request.parameters.ingredientParameters()
                 .stream()
-                .map(ingredientParameters -> new RecipeIngredient(repository.nextRecipeIngredientId(), ingredientParameters.ingredientName(), ingredientParameters.ingredientType(), ingredientParameters.weight()))
+                .map(ingredientParameters -> new RecipeIngredient(repository.nextRecipeIngredientId(),
+                        ingredientParameters.ingredientName(), ingredientParameters.ingredientType(),
+                        ingredientParameters.weight()))
                 .toList();
 
         var instructions = request.parameters.instructionParameters()
                 .stream()
-                .map(instructionParameters -> new RecipeStep(repository.nextRecipeStepId(), instructionParameters.stepNumber(), instructionParameters.stepInstruction()))
+                .map(instructionParameters -> new RecipeStep(repository.nextRecipeStepId(),
+                        instructionParameters.stepNumber(), instructionParameters.stepInstruction()))
                 .toList();
 
         RecipeId id = repository.nextId();
