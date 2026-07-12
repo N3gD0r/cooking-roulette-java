@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import org.n3gd0r.commons.AbstractEntity;
 import org.n3gd0r.commons.AbstractEntityId;
@@ -76,10 +75,10 @@ public class UpdateRecipe implements RequestHandler<UpdateRecipeCommand, Recipe>
             Function<ID, ? extends RuntimeException> notFoundException) {
         for (Map<String, Object> patch : patches) {
             ID id = idFactory.apply(extractId(patch, clazz));
-            Stream<T> streamEntities = entities.stream();
-            Stream<T> filterEntities = streamEntities.filter(e -> e.getId().equals(id));
-            var any = filterEntities.findAny();
-            var entity = any.orElseThrow(() -> notFoundException.apply(id));
+            T entity = entities.stream()
+                    .filter(e -> e.getId().equals(id))
+                    .findAny()
+                    .orElseThrow(() -> notFoundException.apply(id));
             setFields(patch, entity, clazz);
         }
     }
