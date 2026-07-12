@@ -20,9 +20,9 @@ import jakarta.persistence.OneToMany;
 public class Recipe extends AbstractEntity<RecipeId> {
     @Column(length = 255, unique = true)
     private String name;
-    private float cookTime;
+    private int cookTime;
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RecipeStep> steps = new ArrayList<>();
+    private List<RecipeStep> instructions = new ArrayList<>();
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeIngredient> ingredients = new ArrayList<>();
 
@@ -31,7 +31,7 @@ public class Recipe extends AbstractEntity<RecipeId> {
 
     public Recipe(RecipeId id,
             String name,
-            float cookTime,
+            int cookTime,
             List<RecipeIngredient> ingredients,
             List<RecipeStep> steps) {
         super(id);
@@ -53,7 +53,7 @@ public class Recipe extends AbstractEntity<RecipeId> {
         this.name = name;
     }
 
-    public float getCookTime() {
+    public int getCookTime() {
         return cookTime;
     }
 
@@ -65,17 +65,17 @@ public class Recipe extends AbstractEntity<RecipeId> {
         return ingredients;
     }
 
-    public List<RecipeStep> getSteps() {
-        return steps;
+    public List<RecipeStep> getInstructions() {
+        return instructions;
     }
 
     public void addStep(RecipeStep step) {
-        steps.add(step);
+        instructions.add(step);
         step.setRecipe(this);
     }
 
     public boolean hasStep(RecipeStepId stepId) {
-        return steps.stream().anyMatch(step -> step.getId().equals(stepId));
+        return instructions.stream().anyMatch(step -> step.getId().equals(stepId));
     }
 
     public void addIngredient(RecipeIngredient ingredient) {

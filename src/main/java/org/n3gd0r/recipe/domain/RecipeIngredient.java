@@ -1,7 +1,13 @@
 package org.n3gd0r.recipe.domain;
 
-import jakarta.persistence.*;
 import org.n3gd0r.commons.AbstractEntity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class RecipeIngredient extends AbstractEntity<RecipeIngredientId> {
@@ -31,7 +37,7 @@ public class RecipeIngredient extends AbstractEntity<RecipeIngredientId> {
         this.weight = weight;
     }
 
-    public float totalMass() {
+    public int totalMass() {
         return weight.value();
     }
 

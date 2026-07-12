@@ -1,22 +1,23 @@
 package org.n3gd0r.recipe.repository;
 
+import org.n3gd0r.recipe.domain.Mass;
+
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import org.n3gd0r.recipe.domain.Mass;
 
 /**
  * MassAttributeConverter
  */
 @Converter(autoApply = true)
-class MassAttributeConverter implements AttributeConverter<Mass, Float> {
+class MassAttributeConverter implements AttributeConverter<Mass, Integer> {
 
     @Override
-    public Float convertToDatabaseColumn(Mass attribute) {
+    public Integer convertToDatabaseColumn(Mass attribute) {
         return attribute.value();
     }
 
     @Override
-    public Mass convertToEntityAttribute(Float dbData) {
+    public Mass convertToEntityAttribute(Integer dbData) {
         return Mass.ofGrams(dbData);
     }
 }
