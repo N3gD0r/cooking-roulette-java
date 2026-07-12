@@ -23,15 +23,15 @@ public class RegisterRecipe implements RequestHandler<RegisterRecipeCommand, Rec
 
     // TODO map ingredient and instruction lists with threads/concurrency/parallel
     public Recipe execute(RegisterRecipeCommand request) {
-        repository.validateNameUnique(request.parameters.recipeParameters().name());
-        var ingredients = request.parameters.ingredientParameters()
+        repository.validateNameUnique(request.name());
+        var ingredients = request.ingredients()
                 .stream()
                 .map(ingredientParameters -> new RecipeIngredient(repository.nextRecipeIngredientId(),
                         ingredientParameters.ingredientName(), ingredientParameters.ingredientType(),
                         ingredientParameters.weight()))
                 .toList();
 
-        var instructions = request.parameters.instructionParameters()
+        var instructions = request.instructions()
                 .stream()
                 .map(instructionParameters -> new RecipeStep(repository.nextRecipeStepId(),
                         instructionParameters.stepNumber(), instructionParameters.stepInstruction()))
@@ -39,8 +39,8 @@ public class RegisterRecipe implements RequestHandler<RegisterRecipeCommand, Rec
 
         RecipeId id = repository.nextId();
         Recipe recipe = new Recipe(id,
-                request.parameters.recipeParameters().name(),
-                request.parameters.recipeParameters().cookTime(),
+                request.name(),
+                request.cookTime(),
                 ingredients,
                 instructions);
         repository.save(recipe);

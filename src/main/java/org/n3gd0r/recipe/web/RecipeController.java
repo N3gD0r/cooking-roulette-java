@@ -10,7 +10,6 @@ import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.usecase.DeleteRecipeCommand;
 import org.n3gd0r.recipe.usecase.GetAllRecipesQuery;
 import org.n3gd0r.recipe.usecase.GetRecipeQuery;
-import org.n3gd0r.recipe.usecase.RegisterRecipeCommand;
 import org.n3gd0r.recipe.usecase.UpdateRecipeCommand;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +41,7 @@ public class RecipeController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RecipeResponse registerRecipe(@Valid @RequestBody RegisterRecipeWithAllRequest request) {
-        Recipe recipe = mediator.send(new RegisterRecipeCommand(request.toParameters()));
+        Recipe recipe = mediator.send(request.toParameters());
         return RecipeResponse.of(recipe);
     }
 

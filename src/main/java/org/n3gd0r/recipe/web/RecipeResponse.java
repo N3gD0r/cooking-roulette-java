@@ -13,7 +13,7 @@ import org.n3gd0r.recipe.domain.RecipeStep;
  */
 public record RecipeResponse(UUID id,
         String name,
-        float cookTime,
+        int cookTime,
         List<IngredientResponse> ingredients,
         List<RecipeStepResponse> steps) {
 
@@ -22,13 +22,13 @@ public record RecipeResponse(UUID id,
                 recipe.getName(),
                 recipe.getCookTime(),
                 recipe.getIngredients().stream().map(IngredientResponse::of).toList(),
-                recipe.getSteps().stream().map(RecipeStepResponse::of).toList());
+                recipe.getInstructions().stream().map(RecipeStepResponse::of).toList());
     }
 
     public record IngredientResponse(UUID id,
             String ingredientName,
             IngredientEnum ingredientType,
-            float weightInGrams) {
+            int weightInGrams) {
         public static IngredientResponse of(RecipeIngredient ingredient) {
             return new IngredientResponse(ingredient.getId().getId(),
                     ingredient.getIngredientName(),
