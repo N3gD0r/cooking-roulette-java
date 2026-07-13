@@ -61,8 +61,8 @@ public class RecipeController {
 
     @GetMapping("/{page}/{size}")
     @ResponseStatus(HttpStatus.OK)
-    public List<RecipeResponse> getRecipes(@PathVariable(required = false) int page,
-            @PathVariable(required = false) int size) {
+    public List<RecipeResponse> getRecipes(@PathVariable int page,
+            @PathVariable int size) {
         GetAllRecipesQuery query = new GetAllRecipesQuery(page, size);
         return mediator.send(query).stream().map(RecipeResponse::of).toList();
     }

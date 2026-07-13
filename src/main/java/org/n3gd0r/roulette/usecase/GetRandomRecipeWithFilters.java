@@ -80,33 +80,45 @@ public class GetRandomRecipeWithFilters implements RequestHandler<RandomRecipeWi
         List<Predicate<Recipe>> recipePredicates = new ArrayList<>();
 
         params.forEach((k, v) -> {
-            if (k.equals("ingredientName")) {
-                Predicate<Recipe> ingredientName = r -> r.getIngredients().stream()
-                        .filter(i -> i.getIngredientName().toLowerCase().equals(v.toLowerCase()))
-                        .count() > 0;
-                recipePredicates.add(ingredientName);
+            if (k.equals("ingredients")) {
+                List<String> ingredients = stringToList(v);
+                for (String ingredient : ingredients) {
+                    Predicate<Recipe> ingredientPredicate = r -> r.getIngredients().stream()
+                            .filter(i -> i.getIngredientName()
+                                    .equalsIgnoreCase(ingredient))
+                            .count() > 0;
+                    recipePredicates.add(ingredientPredicate);
+                }
             }
-            if (k.equals("ingredientType")) {
-                Predicate<Recipe> ingredientType = r -> r.getIngredients().stream()
-                        .filter(i -> i.getIngredientType().toString().toLowerCase().equals(v.toLowerCase()))
-                        .count() > 0;
-                recipePredicates.add(ingredientType);
+            if (k.equals("ingredientTypes")) {
+                List<String> ingredientTypes = stringToList(v);
+                for (String ingredientType : ingredientTypes) {
+                    Predicate<Recipe> ingredientTypePredicate = r -> r.getIngredients().stream()
+                            .filter(i -> i.getIngredientType().toString()
+                                    .equalsIgnoreCase(ingredientType))
+                            .count() > 0;
+                    recipePredicates.add(ingredientTypePredicate);
+                }
             }
             if (k.equals("instructionQuantity")) {
-                Predicate<Recipe> instructionQuantity = r -> r.getInstructions().size() == Integer.parseInt(v);
-                recipePredicates.add(instructionQuantity);
+                Predicate<Recipe> instructionQuantityPredicate = r -> r.getInstructions().size() == Integer.parseInt(v);
+                recipePredicates.add(instructionQuantityPredicate);
             }
 
             if (k.equals("cookTime")) {
-                Predicate<Recipe> cookTime = r -> r.getCookTime() == Integer.parseInt(v);
-                recipePredicates.add(cookTime);
+                Predicate<Recipe> cookTimePredicate = r -> r.getCookTime() == Integer.parseInt(v);
+                recipePredicates.add(cookTimePredicate);
             }
 
             if (k.equals("name")) {
-                Predicate<Recipe> recipeName = r -> r.getName().toLowerCase().contains(v.toLowerCase());
-                recipePredicates.add(recipeName);
+                Predicate<Recipe> recipeNamePredicate = r -> r.getName().toLowerCase().contains(v.toLowerCase());
+                recipePredicates.add(recipeNamePredicate);
             }
         });
         return recipePredicates;
+    }
+
+    private List<String> stringToList(String str) {
+        return List.of(str.split(" "));
     }
 }
