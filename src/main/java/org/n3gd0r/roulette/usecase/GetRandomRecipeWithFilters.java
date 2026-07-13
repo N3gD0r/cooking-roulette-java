@@ -76,49 +76,48 @@ public class GetRandomRecipeWithFilters implements RequestHandler<RandomRecipeWi
         return foundRecipe;
     }
 
-    private List<Predicate<Recipe>> getPredicates(Map<String, String> params) {
+    private List<Predicate<Recipe>> getPredicates(Map<String, Object> params) {
         List<Predicate<Recipe>> recipePredicates = new ArrayList<>();
 
         params.forEach((k, v) -> {
-            if (k.equals("ingredients")) {
-                List<String> ingredients = stringToList(v);
-                for (String ingredient : ingredients) {
-                    Predicate<Recipe> ingredientPredicate = r -> r.getIngredients().stream()
-                            .filter(i -> i.getIngredientName()
-                                    .equalsIgnoreCase(ingredient))
-                            .count() > 0;
-                    recipePredicates.add(ingredientPredicate);
+            if (k.equals("ingredients") && v instanceof List<?> ingredients) {
+                for (int i = 0; i < ingredients.size(); i++) {
+                    if (ingredients.get(i) instanceof String ingredient) {
+                        Predicate<Recipe> ingredientPredicate = r -> r.getIngredients().stream()
+                                .filter(ri -> ri.getIngredientName()
+                                        .equalsIgnoreCase(ingredient))
+                                .count() > 0;
+                        recipePredicates.add(ingredientPredicate);
+                    }
                 }
             }
-            if (k.equals("ingredientTypes")) {
-                List<String> ingredientTypes = stringToList(v);
-                for (String ingredientType : ingredientTypes) {
-                    Predicate<Recipe> ingredientTypePredicate = r -> r.getIngredients().stream()
-                            .filter(i -> i.getIngredientType().toString()
-                                    .equalsIgnoreCase(ingredientType))
-                            .count() > 0;
-                    recipePredicates.add(ingredientTypePredicate);
+            if (k.equals("ingredientTypes") && v instanceof List<?> ingredientTypes) {
+                for (int i = 0; i < ingredientTypes.size(); i++) {
+                    if (ingredientTypes.get(i) instanceof String ingredientType) {
+                        Predicate<Recipe> ingredientTypePredicate = r -> r.getIngredients().stream()
+                                .filter(ri -> ri.getIngredientType().toString()
+                                        .equalsIgnoreCase(ingredientType))
+                                .count() > 0;
+                        recipePredicates.add(ingredientTypePredicate);
+                    }
                 }
             }
-            if (k.equals("instructionQuantity")) {
-                Predicate<Recipe> instructionQuantityPredicate = r -> r.getInstructions().size() == Integer.parseInt(v);
+            if (k.equals("instructionQuantity") && v instanceof Integer instructionQuantity) {
+                Predicate<Recipe> instructionQuantityPredicate = r -> r.getInstructions().size() == instructionQuantity;
                 recipePredicates.add(instructionQuantityPredicate);
             }
 
-            if (k.equals("cookTime")) {
-                Predicate<Recipe> cookTimePredicate = r -> r.getCookTime() == Integer.parseInt(v);
+            if (k.equals("cookTime") && v instanceof Integer cookTime) {
+                Predicate<Recipe> cookTimePredicate = r -> r.getCookTime() == cookTime;
                 recipePredicates.add(cookTimePredicate);
             }
 
-            if (k.equals("name")) {
-                Predicate<Recipe> recipeNamePredicate = r -> r.getName().toLowerCase().contains(v.toLowerCase());
+            if (k.equals("name") && v instanceof String recipeName) {
+                Predicate<Recipe> recipeNamePredicate = r -> r.getName().toLowerCase()
+                        .contains(recipeName);
                 recipePredicates.add(recipeNamePredicate);
             }
         });
         return recipePredicates;
-    }
-
-    private List<String> stringToList(String str) {
-        return List.of(str.split(" "));
     }
 }

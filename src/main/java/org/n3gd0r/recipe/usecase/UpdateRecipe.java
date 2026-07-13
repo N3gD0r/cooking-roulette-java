@@ -90,7 +90,12 @@ public class UpdateRecipe implements RequestHandler<UpdateRecipeCommand, Recipe>
                 throw new IllegalArgumentException("Unknown field %s for %s".formatted(key, clazz.getSimpleName()));
             }
             field.setAccessible(true);
-            ReflectionUtils.setField(field, entity, value);
+            if ((key.equalsIgnoreCase("name") || key.equalsIgnoreCase("ingredientName"))
+                    && value instanceof String lowerName) {
+                ReflectionUtils.setField(field, entity, lowerName.toLowerCase());
+            } else {
+                ReflectionUtils.setField(field, entity, value);
+            }
         });
     }
 

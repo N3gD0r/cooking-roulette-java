@@ -32,13 +32,13 @@ public record RegisterRecipeWithAllRequest(@Valid @NotNull List<RegisterInstruct
             @NotNull IngredientEnum ingredientType,
             @NotNull @Positive Integer weightInGrams) {
         public RegisterIngredientsParameters toParameters() {
-            return new RegisterIngredientsParameters(ingredientName, ingredientType,
+            return new RegisterIngredientsParameters(ingredientName.toLowerCase(), ingredientType,
                     Mass.ofGrams(weightInGrams));
         }
     }
 
     public RegisterRecipeCommand toParameters() {
-        return new RegisterRecipeCommand(name,
+        return new RegisterRecipeCommand(name.toLowerCase(),
                 cookTime,
                 ingredients.stream().map(RegisterIngredientRequest::toParameters).toList(),
                 instructions.stream().map(RegisterInstructionRequest::toParameters).toList());

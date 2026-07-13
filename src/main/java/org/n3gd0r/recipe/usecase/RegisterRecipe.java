@@ -1,5 +1,9 @@
 package org.n3gd0r.recipe.usecase;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+
 import org.n3gd0r.infrastructure.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
@@ -21,21 +25,26 @@ public class RegisterRecipe implements RequestHandler<RegisterRecipeCommand, Rec
         this.repository = repository;
     }
 
-    // TODO map ingredient and instruction lists with threads/concurrency/parallel
     public Recipe execute(RegisterRecipeCommand request) {
         repository.validateNameUnique(request.name());
-        var ingredients = request.ingredients()
-                .stream()
-                .map(ingredientParameters -> new RecipeIngredient(repository.nextRecipeIngredientId(),
-                        ingredientParameters.ingredientName(), ingredientParameters.ingredientType(),
-                        ingredientParameters.weight()))
-                .toList();
+        CompletableFuture<List<RecipeIngredient>> cfIngredients = CompletableFuture
+                .supplyAsync(() -> request.ingredients().stream()
+                        .map(ingredientParameters -> new RecipeIngredient(repository.nextRecipeIngredientId(),
+                                ingredientParameters.ingredientName(), ingredientParameters.ingredientType(),
+                                ingredientParameters.weight()))
+                        .collect(Collectors.toList()));
 
-        var instructions = request.instructions()
-                .stream()
-                .map(instructionParameters -> new RecipeStep(repository.nextRecipeStepId(),
-                        instructionParameters.stepNumber(), instructionParameters.stepInstruction()))
-                .toList();
+        CompletableFuture<List<RecipeStep>> cfInstructions = CompletableFuture
+                .supplyAsync(() -> request.instructions().stream()
+                        .map(instructionParameters -> new RecipeStep(repository.nextRecipeStepId(),
+                                instructionParameters.stepNumber(), instructionParameters.stepInstruction()))
+                        .collect(Collectors.toList()));
+
+        CompletableFuture.allOf(cfIngredients, cfInstructions).join();
+
+        List<RecipeIngredient> ingredients = cfIngredients.join();
+
+        List<RecipeStep> instructions = cfInstructions.join();
 
         RecipeId id = repository.nextId();
         Recipe recipe = new Recipe(id,

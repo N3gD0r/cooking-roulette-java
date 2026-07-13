@@ -3,7 +3,6 @@ package org.n3gd0r.roulette.web;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.n3gd0r.roulette.usecase.RandomRecipeWithFilters;
 
@@ -22,28 +21,24 @@ public record RandomRecipeRequest(
         return new RandomRecipeWithFilters(pageSize, toParams());
     }
 
-    private Map<String, String> toParams() {
-        Map<String, String> params = new HashMap<>();
-        if (name != null && !name.trim().isEmpty())
-            params.put("name", name.trim());
-        if (cookTime != null && !cookTime.toString().trim().isEmpty())
-            params.put("cookTime", cookTime.toString().trim());
-        if (instructionQuantity != null && !instructionQuantity.toString().trim().isEmpty())
-            params.put("instructionQuantity", instructionQuantity.toString().trim());
-
+    private Map<String, Object> toParams() {
+        Map<String, Object> params = new HashMap<>();
+        if (name != null && !name.trim().isEmpty()) {
+            params.put("name", name.toLowerCase().trim());
+        }
+        if (cookTime != null && cookTime > 0) {
+            params.put("cookTime", cookTime);
+        }
+        if (instructionQuantity != null && instructionQuantity > 0) {
+            params.put("instructionQuantity", instructionQuantity);
+        }
         if (ingredients != null) {
-            String ingredientsString = listToString(ingredients);
-            params.put("ingredients", ingredientsString.trim());
+            params.put("ingredients", ingredients);
         }
         if (ingredientTypes != null) {
-            String ingredientTypeString = listToString(ingredientTypes);
-            params.put("ingredientTypes", ingredientTypeString.trim());
+            params.put("ingredientTypes", ingredientTypes);
         }
 
         return params;
-    }
-
-    private String listToString(List<String> list) {
-        return list.stream().collect(Collectors.joining(" "));
     }
 }

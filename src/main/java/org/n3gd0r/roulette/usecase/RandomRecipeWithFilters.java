@@ -7,14 +7,14 @@ import org.n3gd0r.recipe.domain.Recipe;
 
 public class RandomRecipeWithFilters extends Query<Recipe> {
     private final int pageSize;
-    private final Map<String, String> params;
+    private final Map<String, Object> params;
 
-    public RandomRecipeWithFilters(int pageSize, Map<String, String> params) {
+    public RandomRecipeWithFilters(int pageSize, Map<String, Object> params) {
         this.params = params;
         this.pageSize = pageSize;
     }
 
-    public Map<String, String> params() {
+    public Map<String, Object> params() {
         return params;
     }
 
