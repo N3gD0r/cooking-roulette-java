@@ -36,4 +36,6 @@ public interface RecipeRepository {
     void deleteAll();
 
     void deleteById(RecipeId recipeId);
+
+    long count();
 }
