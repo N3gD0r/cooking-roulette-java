@@ -23,21 +23,10 @@ public class GetRandomRecipeWithFilters implements RequestHandler<RandomRecipeWi
         this.repository = repository;
     }
 
+    // TODO filter by ingredients quantity
     /**
      * Filter recipes by requested parameters that can be recipe name,
-     * cook time, ingreident name and/or ingredient type.
-     */
-
-    /*
-     * TODO properly filter recipes using pagination
-     * 1. need to get all recipes to filter them
-     * 2. Loading all recipes can memory expensive
-     * 3. need to fo batch/pagination with findAll(pageable)
-     * 4. need to find tolerable page sizes
-     * 5. only accesible information is the total recipes count
-     * 6. need to calculate proper batches sizes from total recipes count
-     * 7. then filter each batch until we find a list of recipes or a recipe that
-     * matches the requested parameters
+     * cook time, instructions quantity, ingredients name and/or ingredients type.
      */
     @Override
     public Recipe execute(RandomRecipeWithFilters request) {

@@ -1,16 +1,18 @@
 package org.n3gd0r.recipe.web;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.n3gd0r.infrastructure.mediator.Mediator;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
-import org.n3gd0r.recipe.usecase.DeleteRecipeCommand;
-import org.n3gd0r.recipe.usecase.GetAllRecipesQuery;
-import org.n3gd0r.recipe.usecase.GetRecipeQuery;
-import org.n3gd0r.recipe.usecase.UpdateRecipeCommand;
+import org.n3gd0r.recipe.usecase.DeleteRecipeParameters;
+import org.n3gd0r.recipe.usecase.GetAllRecipesParameters;
+import org.n3gd0r.recipe.usecase.GetRecipeParameters;
+import org.n3gd0r.recipe.web.dtos.requests.PatchRecipeRequest;
+import org.n3gd0r.recipe.web.dtos.requests.RegisterRecipeWithAllRequest;
+import org.n3gd0r.recipe.web.dtos.requests.UpdateRecipeRequest;
+import org.n3gd0r.recipe.web.dtos.responses.RecipeResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,14 +51,14 @@ public class RecipeController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public RecipeResponse getRecipe(@PathVariable UUID id) {
-        Recipe recipe = mediator.send(new GetRecipeQuery(new RecipeId(id)));
+        Recipe recipe = mediator.send(new GetRecipeParameters(new RecipeId(id)));
         return RecipeResponse.of(recipe);
     }
 
     @GetMapping("/filter")
     @ResponseStatus(HttpStatus.OK)
     public RecipeResponse getRecipeByName(@RequestParam String name) {
-        Recipe recipe = mediator.send(new GetRecipeQuery(name));
+        Recipe recipe = mediator.send(new GetRecipeParameters(name));
         return RecipeResponse.of(recipe);
     }
 
@@ -63,27 +66,34 @@ public class RecipeController {
     @ResponseStatus(HttpStatus.OK)
     public List<RecipeResponse> getRecipes(@PathVariable int page,
             @PathVariable int size) {
-        GetAllRecipesQuery query = new GetAllRecipesQuery(page, size);
+        GetAllRecipesParameters query = new GetAllRecipesParameters(page, size);
         return mediator.send(query).stream().map(RecipeResponse::of).toList();
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<RecipeResponse> getRecipes() {
-        return mediator.send(new GetAllRecipesQuery()).stream().map(RecipeResponse::of).toList();
+        return mediator.send(new GetAllRecipesParameters()).stream().map(RecipeResponse::of).toList();
     }
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public RecipeResponse patchRecipe(@PathVariable UUID id, @RequestBody Map<String, Object> patchFields) {
-        Recipe recipe = mediator.send(new UpdateRecipeCommand(new RecipeId(id), patchFields));
+    public RecipeResponse patchRecipe(@PathVariable UUID id, @RequestBody PatchRecipeRequest request) {
+        Recipe recipe = mediator.send(request.toParameters(id));
+        return RecipeResponse.of(recipe);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public RecipeResponse putRecipe(@PathVariable UUID id, @RequestBody UpdateRecipeRequest request) {
+        Recipe recipe = mediator.send(request.toParameters(id));
         return RecipeResponse.of(recipe);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<Void> deleteRecipe(@PathVariable UUID id) {
-        DeleteRecipeCommand deleteCommand = new DeleteRecipeCommand(new RecipeId(id));
+        DeleteRecipeParameters deleteCommand = new DeleteRecipeParameters(new RecipeId(id));
         mediator.send(deleteCommand);
         return ResponseEntity.accepted().build();
     }

@@ -1,12 +1,12 @@
-package org.n3gd0r.recipe.web;
+package org.n3gd0r.recipe.web.dtos.requests;
 
 import java.util.List;
 
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
-import org.n3gd0r.recipe.usecase.RegisterRecipeCommand;
-import org.n3gd0r.recipe.usecase.RegisterRecipeCommand.RegisterIngredientsParameters;
-import org.n3gd0r.recipe.usecase.RegisterRecipeCommand.RegisterInstructionsParameters;
+import org.n3gd0r.recipe.usecase.RegisterRecipeParameters;
+import org.n3gd0r.recipe.usecase.records.RegisterIngredientParameters;
+import org.n3gd0r.recipe.usecase.records.RegisterInstructionParameters;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -23,22 +23,22 @@ public record RegisterRecipeWithAllRequest(@Valid @NotNull List<RegisterInstruct
     public record RegisterInstructionRequest(
             @Positive Integer stepNumber,
             @NotBlank String stepInstruction) {
-        public RegisterInstructionsParameters toParameters() {
-            return new RegisterInstructionsParameters(stepNumber, stepInstruction);
+        public RegisterInstructionParameters toParameters() {
+            return new RegisterInstructionParameters(stepNumber, stepInstruction);
         }
     }
 
     public record RegisterIngredientRequest(@NotBlank String ingredientName,
             @NotNull IngredientEnum ingredientType,
             @NotNull @Positive Integer weightInGrams) {
-        public RegisterIngredientsParameters toParameters() {
-            return new RegisterIngredientsParameters(ingredientName.toLowerCase(), ingredientType,
+        public RegisterIngredientParameters toParameters() {
+            return new RegisterIngredientParameters(ingredientName.toLowerCase(), ingredientType,
                     Mass.ofGrams(weightInGrams));
         }
     }
 
-    public RegisterRecipeCommand toParameters() {
-        return new RegisterRecipeCommand(name.toLowerCase(),
+    public RegisterRecipeParameters toParameters() {
+        return new RegisterRecipeParameters(name.toLowerCase(),
                 cookTime,
                 ingredients.stream().map(RegisterIngredientRequest::toParameters).toList(),
                 instructions.stream().map(RegisterInstructionRequest::toParameters).toList());

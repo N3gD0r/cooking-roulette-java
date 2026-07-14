@@ -1,4 +1,4 @@
-package org.n3gd0r.recipe.web;
+package org.n3gd0r.recipe.web.dtos.responses;
 
 import java.util.List;
 import java.util.UUID;
