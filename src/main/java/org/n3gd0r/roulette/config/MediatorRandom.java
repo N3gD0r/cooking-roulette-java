@@ -1,10 +1,10 @@
 package org.n3gd0r.roulette.config;
 
 import org.n3gd0r.infrastructure.mediator.Mediator;
-import org.n3gd0r.roulette.usecase.GetRandomRecipe;
-import org.n3gd0r.roulette.usecase.GetRandomRecipeWithFilters;
+import org.n3gd0r.roulette.usecase.RandomRecipeFiltersParameters;
+import org.n3gd0r.roulette.usecase.RandomRecipeFiltersQuery;
+import org.n3gd0r.roulette.usecase.RandomRecipeParameters;
 import org.n3gd0r.roulette.usecase.RandomRecipeQuery;
-import org.n3gd0r.roulette.usecase.RandomRecipeWithFilters;
 import org.springframework.context.annotation.Configuration;
 
 import jakarta.annotation.PostConstruct;
@@ -12,11 +12,11 @@ import jakarta.annotation.PostConstruct;
 @Configuration
 public class MediatorRandom {
     private final Mediator mediator;
-    private final GetRandomRecipe getRandomRecipe;
-    private final GetRandomRecipeWithFilters getRandomRecipeWithFilters;
+    private final RandomRecipeQuery getRandomRecipe;
+    private final RandomRecipeFiltersQuery getRandomRecipeWithFilters;
 
-    public MediatorRandom(GetRandomRecipe getRandomRecipe, Mediator mediator,
-            GetRandomRecipeWithFilters getRandomRecipeWithFilters) {
+    public MediatorRandom(RandomRecipeQuery getRandomRecipe, Mediator mediator,
+            RandomRecipeFiltersQuery getRandomRecipeWithFilters) {
         this.getRandomRecipe = getRandomRecipe;
         this.mediator = mediator;
         this.getRandomRecipeWithFilters = getRandomRecipeWithFilters;
@@ -24,7 +24,7 @@ public class MediatorRandom {
 
     @PostConstruct
     public void registerHandlers() {
-        mediator.registerHandler(RandomRecipeQuery.class, getRandomRecipe);
-        mediator.registerHandler(RandomRecipeWithFilters.class, getRandomRecipeWithFilters);
+        mediator.registerHandler(RandomRecipeParameters.class, getRandomRecipe);
+        mediator.registerHandler(RandomRecipeFiltersParameters.class, getRandomRecipeWithFilters);
     }
 }

@@ -21,6 +21,7 @@ public class UpdateRecipeCommand implements RequestHandler<UpdateRecipeParameter
         this.repository = repository;
     }
 
+    // TODO update ingredients and/or instructions without creating new entities
     @Override
     public Recipe execute(UpdateRecipeParameters request) {
         repository.validateExistsById(request.recipeId());
