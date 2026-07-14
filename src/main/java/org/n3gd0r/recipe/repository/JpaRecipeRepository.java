@@ -88,4 +88,9 @@ public class JpaRecipeRepository implements RecipeRepository {
     public void deleteById(RecipeId recipeId) {
         repository.deleteById(recipeId);
     }
+
+    @Override
+    public long count() {
+        return repository.count();
+    }
 }

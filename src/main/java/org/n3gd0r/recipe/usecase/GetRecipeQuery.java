@@ -1,34 +1,30 @@
 package org.n3gd0r.recipe.usecase;
 
-import org.n3gd0r.infrastructure.mediator.Query;
+import org.n3gd0r.infrastructure.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
-import org.n3gd0r.recipe.domain.RecipeId;
-import org.springframework.util.Assert;
+import org.n3gd0r.recipe.domain.exception.RecipeNotFoundException;
+import org.n3gd0r.recipe.repository.RecipeRepository;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
- * GetRecipeQuery
+ * GetRecipe
  */
-public class GetRecipeQuery extends Query<Recipe> {
-    private final String name;
-    private final RecipeId id;
+@Component
+@Transactional(readOnly = true)
+public class GetRecipeQuery implements RequestHandler<GetRecipeParameters, Recipe> {
+    private final RecipeRepository repository;
 
-    public GetRecipeQuery(String name) {
-        Assert.hasText(name, "The GetRecipeQuery name should have text");
-        this.name = name;
-        id = null;
+    public GetRecipeQuery(RecipeRepository repository) {
+        this.repository = repository;
     }
 
-    public GetRecipeQuery(RecipeId id) {
-        Assert.notNull(id, "The GetRecipeQuery id should not be null");
-        this.id = id;
-        this.name = null;
-    }
-
-    public String name() {
-        return name;
-    }
-
-    public RecipeId id() {
-        return id;
+    @Override
+    public Recipe execute(GetRecipeParameters request) {
+        if (request.id() != null)
+            return repository.getById(request.id());
+        if (request.name() != null)
+            return repository.findByName(request.name());
+        throw new RecipeNotFoundException();
     }
 }

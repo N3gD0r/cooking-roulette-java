@@ -1,26 +1,27 @@
 package org.n3gd0r.recipe.usecase;
 
-import org.n3gd0r.infrastructure.mediator.Query;
-import org.n3gd0r.recipe.domain.Recipe;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.util.Assert;
-
 import java.util.List;
 
-/**
- * GetAllRecipesQuery
- */
-public class GetAllRecipesQuery extends Query<List<Recipe>> {
-    public Pageable pagination;
+import org.n3gd0r.infrastructure.mediator.RequestHandler;
+import org.n3gd0r.recipe.domain.Recipe;
+import org.n3gd0r.recipe.repository.RecipeRepository;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-    public GetAllRecipesQuery() {
-        pagination = PageRequest.of(0, 20);
+/**
+ * GetAllRecipes
+ */
+@Component
+@Transactional(readOnly = true)
+public class GetAllRecipesQuery implements RequestHandler<GetAllRecipesParameters, List<Recipe>> {
+    private final RecipeRepository repository;
+
+    public GetAllRecipesQuery(RecipeRepository repository) {
+        this.repository = repository;
     }
 
-    public GetAllRecipesQuery(int page, int size) {
-        Assert.isTrue(page >= 0, "The Pagination parameter page should not be a negative number");
-        Assert.isTrue(size > 0, "The Pagination parameter size should be a positive number");
-        pagination = PageRequest.of(page, size);
+    @Override
+    public List<Recipe> execute(GetAllRecipesParameters request) {
+        return repository.findAll(request.pagination).toList();
     }
 }

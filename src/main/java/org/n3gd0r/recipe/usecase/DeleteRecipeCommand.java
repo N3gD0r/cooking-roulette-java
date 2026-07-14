@@ -1,21 +1,26 @@
 package org.n3gd0r.recipe.usecase;
 
-import org.n3gd0r.infrastructure.mediator.Command;
-import org.n3gd0r.recipe.domain.RecipeId;
-import org.springframework.util.Assert;
+import org.n3gd0r.infrastructure.mediator.RequestHandler;
+import org.n3gd0r.recipe.repository.RecipeRepository;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
- * DeleteRecipeCommand
+ * DeleteRecipe
  */
-public class DeleteRecipeCommand extends Command<Boolean> {
-    private final RecipeId id;
+@Component
+@Transactional
+public class DeleteRecipeCommand implements RequestHandler<DeleteRecipeParameters, Boolean> {
+    private final RecipeRepository repository;
 
-    public DeleteRecipeCommand(RecipeId id) {
-        Assert.notNull(id, "The DeleteRecipeCommand id should not be null");
-        this.id = id;
+    public DeleteRecipeCommand(RecipeRepository repository) {
+        this.repository = repository;
     }
 
-    public RecipeId id() {
-        return id;
+    @Override
+    public Boolean execute(DeleteRecipeParameters request) {
+        repository.validateExistsById(request.id());
+        repository.deleteById(request.id());
+        return true;
     }
 }

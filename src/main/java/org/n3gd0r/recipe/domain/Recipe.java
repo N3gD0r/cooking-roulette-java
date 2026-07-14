@@ -86,4 +86,12 @@ public class Recipe extends AbstractEntity<RecipeId> {
     public boolean hasIngredient(RecipeIngredientId ingredientId) {
         return ingredients.stream().anyMatch(ingredient -> ingredient.getId().equals(ingredientId));
     }
+
+    public void setInstructions(List<RecipeStep> instructions) {
+        this.instructions = instructions;
+    }
+
+    public void setIngredients(List<RecipeIngredient> ingredients) {
+        this.ingredients = ingredients;
+    }
 }
