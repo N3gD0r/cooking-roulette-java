@@ -23,8 +23,6 @@ public class RandomRecipeFiltersQuery implements RequestHandler<RandomRecipeFilt
         this.repository = repository;
     }
 
-    // TODO check if concurrency can help with this handler
-    // Add check on recipes found > 0
     @Override
     public Recipe execute(RandomRecipeFiltersParameters request) {
         long totalRecipes = repository.count();
@@ -68,7 +66,6 @@ public class RandomRecipeFiltersQuery implements RequestHandler<RandomRecipeFilt
         return randomRecipe;
     }
 
-    // TODO Concurrency to filters: can do the predicates at the same time?
     private List<Predicate<Recipe>> getPredicates(RandomRecipeFiltersParameters request) {
         List<Predicate<Recipe>> recipePredicates = new ArrayList<>();
 
