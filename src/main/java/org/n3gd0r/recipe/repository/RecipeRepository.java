@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeIngredientId;
-import org.n3gd0r.recipe.domain.RecipeStepId;
+import org.n3gd0r.recipe.domain.RecipeInstructionId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,7 +17,7 @@ public interface RecipeRepository {
 
     RecipeIngredientId nextRecipeIngredientId();
 
-    RecipeStepId nextRecipeStepId();
+    RecipeInstructionId nextRecipeInstructionId();
 
     Optional<Recipe> findById(RecipeId id);
 

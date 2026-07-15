@@ -7,7 +7,7 @@ import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeIngredientId;
-import org.n3gd0r.recipe.domain.RecipeStepId;
+import org.n3gd0r.recipe.domain.RecipeInstructionId;
 import org.n3gd0r.recipe.usecase.UpdateRecipeParameters;
 import org.n3gd0r.recipe.usecase.records.UpdateIngredientParameters;
 import org.n3gd0r.recipe.usecase.records.UpdateInstructionParameters;
@@ -22,10 +22,10 @@ public record UpdateRecipeRequest(
         List<UpdateInstructionRequest> instructions) {
     public record UpdateInstructionRequest(
             UUID id,
-            Integer stepNumber,
-            String stepInstruction) {
+            Integer instructionNumber,
+            String instruction) {
         public UpdateInstructionParameters toParameters() {
-            return new UpdateInstructionParameters(new RecipeStepId(id), stepNumber, stepInstruction);
+            return new UpdateInstructionParameters(new RecipeInstructionId(id), instructionNumber, instruction);
         }
     }
 

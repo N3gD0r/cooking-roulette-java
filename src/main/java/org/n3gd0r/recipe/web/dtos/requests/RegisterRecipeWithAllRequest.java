@@ -21,10 +21,10 @@ public record RegisterRecipeWithAllRequest(@Valid @NotNull List<RegisterInstruct
         @Valid @NotNull String name,
         @Valid @NotNull @Positive Integer cookTime) {
     public record RegisterInstructionRequest(
-            @Positive Integer stepNumber,
-            @NotBlank String stepInstruction) {
+            @Positive Integer instructionNumber,
+            @NotBlank String instruction) {
         public RegisterInstructionParameters toParameters() {
-            return new RegisterInstructionParameters(stepNumber, stepInstruction);
+            return new RegisterInstructionParameters(instructionNumber, instruction);
         }
     }
 

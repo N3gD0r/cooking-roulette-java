@@ -1,13 +1,11 @@
 package org.n3gd0r.recipe.usecase;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 import org.n3gd0r.infrastructure.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
-import org.n3gd0r.recipe.domain.RecipeStep;
+import org.n3gd0r.recipe.domain.RecipeInstruction;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,30 +19,24 @@ public class UpdateRecipeCommand implements RequestHandler<UpdateRecipeParameter
         this.repository = repository;
     }
 
-    // TODO update ingredients and/or instructions without creating new entities
     @Override
     public Recipe execute(UpdateRecipeParameters request) {
         repository.validateExistsById(request.recipeId());
         repository.validateNameUnique(request.name());
         Recipe recipe = repository.getById(request.recipeId());
-        CompletableFuture<List<RecipeIngredient>> cfIngredients = CompletableFuture
-                .supplyAsync(() -> request.ingredients().stream()
-                        .map(ingredientParameters -> new RecipeIngredient(repository.nextRecipeIngredientId(),
-                                ingredientParameters.ingredientName(), ingredientParameters.ingredientType(),
-                                ingredientParameters.weight()))
-                        .collect(Collectors.toList()));
 
-        CompletableFuture<List<RecipeStep>> cfInstructions = CompletableFuture
-                .supplyAsync(() -> request.instructions().stream()
-                        .map(instructionParameters -> new RecipeStep(repository.nextRecipeStepId(),
-                                instructionParameters.stepNumber(), instructionParameters.stepInstruction()))
-                        .collect(Collectors.toList()));
+        List<RecipeIngredient> ingredients = request.ingredients().stream()
+                .map(ingredientParameters -> new RecipeIngredient(ingredientParameters.id(),
+                        ingredientParameters.ingredientName(),
+                        ingredientParameters.ingredientType(),
+                        ingredientParameters.weight()))
+                .toList();
 
-        CompletableFuture.allOf(cfIngredients, cfInstructions).join();
-
-        List<RecipeIngredient> ingredients = cfIngredients.join();
-
-        List<RecipeStep> instructions = cfInstructions.join();
+        List<RecipeInstruction> instructions = request.instructions().stream()
+                .map(instructionParameters -> new RecipeInstruction(instructionParameters.id(),
+                        instructionParameters.instructionNumber(),
+                        instructionParameters.instruction()))
+                .toList();
 
         recipe.setName(request.name());
         recipe.setCookTime(request.cookTime());

@@ -9,7 +9,7 @@ import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeIngredientId;
-import org.n3gd0r.recipe.domain.RecipeStepId;
+import org.n3gd0r.recipe.domain.RecipeInstructionId;
 import org.n3gd0r.recipe.usecase.PatchRecipeParameters;
 import org.n3gd0r.recipe.usecase.records.PatchIngredientParameters;
 import org.n3gd0r.recipe.usecase.records.PatchInstructionParameters;
@@ -24,10 +24,10 @@ public record PatchRecipeRequest(
         Optional<List<PatchInstructionRequest>> instructions) {
     public record PatchInstructionRequest(
             UUID id,
-            Integer stepNumber,
-            String stepInstruction) {
+            Integer instructionNumber,
+            String instruction) {
         public PatchInstructionParameters toParameters() {
-            return new PatchInstructionParameters(new RecipeStepId(id), stepNumber, stepInstruction);
+            return new PatchInstructionParameters(new RecipeInstructionId(id), instructionNumber, instruction);
         }
     }
 

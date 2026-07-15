@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeIngredientId;
-import org.n3gd0r.recipe.domain.RecipeStepId;
+import org.n3gd0r.recipe.domain.RecipeInstructionId;
 import org.n3gd0r.recipe.domain.exception.RecipeNotFoundException;
 import org.n3gd0r.recipe.domain.exception.RecipeWithNameAlreadyExistsException;
 import org.springframework.data.domain.Page;
@@ -36,8 +36,8 @@ public class JpaRecipeRepository implements RecipeRepository {
     }
 
     @Override
-    public RecipeStepId nextRecipeStepId() {
-        return new RecipeStepId(UUID.randomUUID());
+    public RecipeInstructionId nextRecipeInstructionId() {
+        return new RecipeInstructionId(UUID.randomUUID());
     }
 
     @Override

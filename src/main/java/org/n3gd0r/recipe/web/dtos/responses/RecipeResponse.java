@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
-import org.n3gd0r.recipe.domain.RecipeStep;
+import org.n3gd0r.recipe.domain.RecipeInstruction;
 
 /**
  * RecipeResponse
@@ -15,14 +15,14 @@ public record RecipeResponse(UUID id,
         String name,
         int cookTime,
         List<IngredientResponse> ingredients,
-        List<RecipeStepResponse> steps) {
+        List<RecipeInstructionResponse> instructions) {
 
     public static RecipeResponse of(Recipe recipe) {
         return new RecipeResponse(recipe.getId().getId(),
                 recipe.getName(),
                 recipe.getCookTime(),
                 recipe.getIngredients().stream().map(IngredientResponse::of).toList(),
-                recipe.getInstructions().stream().map(RecipeStepResponse::of).toList());
+                recipe.getInstructions().stream().map(RecipeInstructionResponse::of).toList());
     }
 
     public record IngredientResponse(UUID id,
@@ -37,13 +37,13 @@ public record RecipeResponse(UUID id,
         }
     }
 
-    public record RecipeStepResponse(UUID id,
-            int stepNumber,
-            String stepInstruction) {
-        public static RecipeStepResponse of(RecipeStep step) {
-            return new RecipeStepResponse(step.getId().getId(),
-                    step.getStep(),
-                    step.getInstruction());
+    public record RecipeInstructionResponse(UUID id,
+            int instructionNumber,
+            String instruction) {
+        public static RecipeInstructionResponse of(RecipeInstruction recipeInstruction) {
+            return new RecipeInstructionResponse(recipeInstruction.getId().getId(),
+                    recipeInstruction.getInstructionNumber(),
+                    recipeInstruction.getInstruction());
         }
     }
 }

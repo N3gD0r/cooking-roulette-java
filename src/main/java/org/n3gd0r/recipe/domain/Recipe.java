@@ -22,7 +22,7 @@ public class Recipe extends AbstractEntity<RecipeId> {
     private String name;
     private int cookTime;
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RecipeStep> instructions = new ArrayList<>();
+    private List<RecipeInstruction> instructions = new ArrayList<>();
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeIngredient> ingredients = new ArrayList<>();
 
@@ -33,15 +33,15 @@ public class Recipe extends AbstractEntity<RecipeId> {
             String name,
             int cookTime,
             List<RecipeIngredient> ingredients,
-            List<RecipeStep> steps) {
+            List<RecipeInstruction> instructions) {
         super(id);
         this.name = name;
         this.cookTime = cookTime;
         for (RecipeIngredient ingredientInfo : ingredients) {
             addIngredient(ingredientInfo);
         }
-        for (RecipeStep step : steps) {
-            addStep(step);
+        for (RecipeInstruction instruction : instructions) {
+            addInstruction(instruction);
         }
     }
 
@@ -65,17 +65,17 @@ public class Recipe extends AbstractEntity<RecipeId> {
         return ingredients;
     }
 
-    public List<RecipeStep> getInstructions() {
+    public List<RecipeInstruction> getInstructions() {
         return instructions;
     }
 
-    public void addStep(RecipeStep step) {
-        instructions.add(step);
-        step.setRecipe(this);
+    public void addInstruction(RecipeInstruction recipeInstruction) {
+        instructions.add(recipeInstruction);
+        recipeInstruction.setRecipe(this);
     }
 
-    public boolean hasStep(RecipeStepId stepId) {
-        return instructions.stream().anyMatch(step -> step.getId().equals(stepId));
+    public boolean hasInstruction(RecipeInstructionId recipeInstructionId) {
+        return instructions.stream().anyMatch(ri -> ri.getId().equals(recipeInstructionId));
     }
 
     public void addIngredient(RecipeIngredient ingredient) {
@@ -87,11 +87,13 @@ public class Recipe extends AbstractEntity<RecipeId> {
         return ingredients.stream().anyMatch(ingredient -> ingredient.getId().equals(ingredientId));
     }
 
-    public void setInstructions(List<RecipeStep> instructions) {
+    public void setInstructions(List<RecipeInstruction> instructions) {
         this.instructions = instructions;
+        this.instructions.forEach(i -> i.setRecipe(this));
     }
 
     public void setIngredients(List<RecipeIngredient> ingredients) {
         this.ingredients = ingredients;
+        this.ingredients.forEach(i -> i.setRecipe(this));
     }
 }

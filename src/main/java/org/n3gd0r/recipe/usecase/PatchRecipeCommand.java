@@ -29,8 +29,8 @@ public class PatchRecipeCommand implements RequestHandler<PatchRecipeParameters,
                         recipe.getInstructions().stream()
                                 .filter(i -> i.getId().equals(pi.id()))
                                 .forEach(i -> {
-                                    i.setStep(pi.stepNumber());
-                                    i.setInstruction(pi.stepInstruction());
+                                    i.setInstructionNumber(pi.instructionNumber());
+                                    i.setInstruction(pi.instruction());
                                 });
                     });
         }

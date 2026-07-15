@@ -1,14 +1,15 @@
 package org.n3gd0r.recipe.usecase.records;
 
-import org.n3gd0r.recipe.domain.RecipeStepId;
+import org.n3gd0r.recipe.domain.RecipeInstructionId;
 import org.springframework.util.Assert;
 
-public record UpdateInstructionParameters(RecipeStepId id, Integer stepNumber, String stepInstruction) {
+public record UpdateInstructionParameters(RecipeInstructionId id, Integer instructionNumber, String instruction) {
     public UpdateInstructionParameters {
-        Assert.isTrue(stepNumber > 0,
-                "The RegisterRecipeWithInstructionsParameters stepNumber should not be less de 1");
-        Assert.notNull(stepNumber, "The RegisterRecipeWithInstructionsParameters stepNumber should not be null");
-        Assert.hasText(stepInstruction,
-                "The RegisterRecipeWithInstructionsParameters stepInstruction should have text");
+        Assert.isTrue(instructionNumber > 0,
+                "The RegisterRecipeWithInstructionsParameters instructionNumber should not be less de 1");
+        Assert.notNull(instructionNumber,
+                "The RegisterRecipeWithInstructionsParameters instructionNumber should not be null");
+        Assert.hasText(instruction,
+                "The RegisterRecipeWithInstructionsParameters instruction should have text");
     }
 }
