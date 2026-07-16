@@ -12,9 +12,9 @@ import org.n3gd0r.recipe.usecase.get.GetRecipeParameters;
 import org.n3gd0r.recipe.web.dtos.requests.PatchRecipeRequest;
 import org.n3gd0r.recipe.web.dtos.requests.RegisterRecipeWithAllRequest;
 import org.n3gd0r.recipe.web.dtos.requests.UpdateRecipeRequest;
+import org.n3gd0r.recipe.web.dtos.responses.DeletedRecipeResponse;
 import org.n3gd0r.recipe.web.dtos.responses.RecipeResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -92,9 +92,8 @@ public class RecipeController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<Void> deleteRecipe(@PathVariable UUID id) {
-        DeleteRecipeParameters deleteCommand = new DeleteRecipeParameters(new RecipeId(id));
-        mediator.send(deleteCommand);
-        return ResponseEntity.accepted().build();
+    public DeletedRecipeResponse deleteRecipe(@PathVariable UUID id) {
+        boolean wasDeleted = mediator.send(new DeleteRecipeParameters(new RecipeId(id)));
+        return DeletedRecipeResponse.of(wasDeleted);
     }
 }
