@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.n3gd0r.infrastructure.mediator.Query;
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Recipe;
+import org.springframework.util.Assert;
 
 public class RandomRecipeFiltersParameters extends Query<Recipe> {
     private final int pageSize;
@@ -23,6 +24,7 @@ public class RandomRecipeFiltersParameters extends Query<Recipe> {
             Optional<Integer> ingredientQuantity,
             Optional<List<String>> ingredients,
             Optional<List<IngredientEnum>> ingredientTypes) {
+        Assert.isTrue(pageSize > 0, "The RandomRecipeFiltersParameters pageSize should be a positive number");
         this.pageSize = pageSize;
         this.name = name;
         this.cookTime = cookTime;

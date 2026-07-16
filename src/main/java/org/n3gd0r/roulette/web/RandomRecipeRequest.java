@@ -13,7 +13,7 @@ import jakarta.validation.constraints.Positive;
 public record RandomRecipeRequest(
         @Valid @NotNull @Positive Integer pageSize,
         Optional<String> name,
-        @Positive Optional<Integer> cookTime,
+        @Valid @Positive Optional<Integer> cookTime,
         Optional<Integer> instructionQuantity,
         Optional<Integer> ingredientQuantity,
         Optional<List<String>> ingredients,
