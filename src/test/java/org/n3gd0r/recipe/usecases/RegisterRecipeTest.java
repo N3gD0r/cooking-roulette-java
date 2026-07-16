@@ -1,0 +1,39 @@
+package org.n3gd0r.recipe.usecases;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+import org.n3gd0r.recipe.domain.IngredientEnum;
+import org.n3gd0r.recipe.domain.Mass;
+import org.n3gd0r.recipe.domain.Recipe;
+import org.n3gd0r.recipe.repository.InMemoryRecipeRepository;
+import org.n3gd0r.recipe.usecase.register.RegisterIngredientParameters;
+import org.n3gd0r.recipe.usecase.register.RegisterInstructionParameters;
+import org.n3gd0r.recipe.usecase.register.RegisterRecipeCommand;
+import org.n3gd0r.recipe.usecase.register.RegisterRecipeParameters;
+import org.springframework.data.domain.PageRequest;
+
+public class RegisterRecipeTest {
+    @Test
+    void testExecute() {
+        InMemoryRecipeRepository recipeRepository = new InMemoryRecipeRepository();
+        RegisterRecipeCommand registerRecipeCommand = new RegisterRecipeCommand(recipeRepository);
+
+        List<RegisterIngredientParameters> ingredients = Arrays.asList(
+                new RegisterIngredientParameters("huevos", IngredientEnum.CARNES, Mass.ofGrams(180)));
+        List<RegisterInstructionParameters> instructions = Arrays.asList(
+                new RegisterInstructionParameters(1, "En agua hirviendo, color los huevos durante 15 minutos."),
+                new RegisterInstructionParameters(2,
+                        "Despues de ese lapso de tiempo, retirar los huevos y colocarlos en agua fria durante 5 minutos"),
+                new RegisterInstructionParameters(3, "Pelar los huevos"));
+        RegisterRecipeParameters recipeParameters = new RegisterRecipeParameters("huevos cocidos", 15, ingredients,
+                instructions);
+        Recipe recipe = registerRecipeCommand.execute(recipeParameters);
+
+        assertThat(recipe).isNotNull();
+        assertThat(recipeRepository.findAll(PageRequest.of(0, 10))).hasSize(1);
+    }
+}
