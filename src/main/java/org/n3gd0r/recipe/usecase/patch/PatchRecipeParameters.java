@@ -1,12 +1,10 @@
-package org.n3gd0r.recipe.usecase;
+package org.n3gd0r.recipe.usecase.patch;
 
 import java.util.List;
 
 import org.n3gd0r.infrastructure.mediator.Command;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
-import org.n3gd0r.recipe.usecase.records.PatchIngredientParameters;
-import org.n3gd0r.recipe.usecase.records.PatchInstructionParameters;
 
 public class PatchRecipeParameters extends Command<Recipe> {
     private final RecipeId recipeId;

@@ -1,12 +1,12 @@
-package org.n3gd0r.recipe.usecase;
+package org.n3gd0r.recipe.usecase.get;
+
+import java.util.List;
 
 import org.n3gd0r.infrastructure.mediator.Query;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.Assert;
-
-import java.util.List;
 
 /**
  * GetAllRecipesQuery

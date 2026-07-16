@@ -1,4 +1,4 @@
-package org.n3gd0r.recipe.repository;
+package org.n3gd0r.recipe.repository.implementations;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -9,6 +9,8 @@ import org.n3gd0r.recipe.domain.RecipeIngredientId;
 import org.n3gd0r.recipe.domain.RecipeInstructionId;
 import org.n3gd0r.recipe.domain.exception.RecipeNotFoundException;
 import org.n3gd0r.recipe.domain.exception.RecipeWithNameAlreadyExistsException;
+import org.n3gd0r.recipe.repository.RecipeRepository;
+import org.n3gd0r.recipe.repository.SpringDataJpaRecipeRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;

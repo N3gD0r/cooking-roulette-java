@@ -1,4 +1,4 @@
-package org.n3gd0r.recipe.usecase;
+package org.n3gd0r.recipe.usecase.get;
 
 import org.n3gd0r.infrastructure.mediator.Query;
 import org.n3gd0r.recipe.domain.Recipe;

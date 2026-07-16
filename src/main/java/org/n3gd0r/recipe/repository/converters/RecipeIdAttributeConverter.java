@@ -1,10 +1,11 @@
-package org.n3gd0r.recipe.repository;
+package org.n3gd0r.recipe.repository.converters;
+
+import java.util.UUID;
+
+import org.n3gd0r.recipe.domain.RecipeId;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import org.n3gd0r.recipe.domain.RecipeId;
-
-import java.util.UUID;
 
 /**
  * RecipeIdConverter

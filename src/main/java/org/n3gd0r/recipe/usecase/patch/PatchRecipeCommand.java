@@ -1,4 +1,4 @@
-package org.n3gd0r.recipe.usecase;
+package org.n3gd0r.recipe.usecase.patch;
 
 import org.n3gd0r.infrastructure.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
@@ -8,8 +8,6 @@ import org.n3gd0r.recipe.domain.exception.EntityNotSuitableForUpdateException;
 import org.n3gd0r.recipe.domain.exception.RecipeIngredientNotFoundException;
 import org.n3gd0r.recipe.domain.exception.RecipeInstructionNotFoundException;
 import org.n3gd0r.recipe.repository.RecipeRepository;
-import org.n3gd0r.recipe.usecase.records.PatchIngredientParameters;
-import org.n3gd0r.recipe.usecase.records.PatchInstructionParameters;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

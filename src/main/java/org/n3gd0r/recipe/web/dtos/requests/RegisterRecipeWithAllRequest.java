@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
-import org.n3gd0r.recipe.usecase.RegisterRecipeParameters;
-import org.n3gd0r.recipe.usecase.records.RegisterIngredientParameters;
-import org.n3gd0r.recipe.usecase.records.RegisterInstructionParameters;
+import org.n3gd0r.recipe.usecase.register.RegisterIngredientParameters;
+import org.n3gd0r.recipe.usecase.register.RegisterInstructionParameters;
+import org.n3gd0r.recipe.usecase.register.RegisterRecipeParameters;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

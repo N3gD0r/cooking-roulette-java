@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.RecipeId;
-import org.n3gd0r.recipe.usecase.UpdateRecipeParameters;
-import org.n3gd0r.recipe.usecase.records.UpdateIngredientParameters;
-import org.n3gd0r.recipe.usecase.records.UpdateInstructionParameters;
+import org.n3gd0r.recipe.usecase.update.UpdateIngredientParameters;
+import org.n3gd0r.recipe.usecase.update.UpdateInstructionParameters;
+import org.n3gd0r.recipe.usecase.update.UpdateRecipeParameters;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

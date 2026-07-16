@@ -1,18 +1,18 @@
 package org.n3gd0r.recipe.config;
 
 import org.n3gd0r.infrastructure.mediator.Mediator;
-import org.n3gd0r.recipe.usecase.DeleteRecipeCommand;
-import org.n3gd0r.recipe.usecase.DeleteRecipeParameters;
-import org.n3gd0r.recipe.usecase.GetAllRecipesParameters;
-import org.n3gd0r.recipe.usecase.GetAllRecipesQuery;
-import org.n3gd0r.recipe.usecase.GetRecipeParameters;
-import org.n3gd0r.recipe.usecase.GetRecipeQuery;
-import org.n3gd0r.recipe.usecase.PatchRecipeCommand;
-import org.n3gd0r.recipe.usecase.PatchRecipeParameters;
-import org.n3gd0r.recipe.usecase.RegisterRecipeCommand;
-import org.n3gd0r.recipe.usecase.RegisterRecipeParameters;
-import org.n3gd0r.recipe.usecase.UpdateRecipeCommand;
-import org.n3gd0r.recipe.usecase.UpdateRecipeParameters;
+import org.n3gd0r.recipe.usecase.delete.DeleteRecipeCommand;
+import org.n3gd0r.recipe.usecase.delete.DeleteRecipeParameters;
+import org.n3gd0r.recipe.usecase.get.GetAllRecipesParameters;
+import org.n3gd0r.recipe.usecase.get.GetAllRecipesQuery;
+import org.n3gd0r.recipe.usecase.get.GetRecipeParameters;
+import org.n3gd0r.recipe.usecase.get.GetRecipeQuery;
+import org.n3gd0r.recipe.usecase.patch.PatchRecipeCommand;
+import org.n3gd0r.recipe.usecase.patch.PatchRecipeParameters;
+import org.n3gd0r.recipe.usecase.register.RegisterRecipeCommand;
+import org.n3gd0r.recipe.usecase.register.RegisterRecipeParameters;
+import org.n3gd0r.recipe.usecase.update.UpdateRecipeCommand;
+import org.n3gd0r.recipe.usecase.update.UpdateRecipeParameters;
 import org.springframework.context.annotation.Configuration;
 
 import jakarta.annotation.PostConstruct;

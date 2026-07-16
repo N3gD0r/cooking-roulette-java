@@ -1,4 +1,4 @@
-package org.n3gd0r.recipe.usecase.records;
+package org.n3gd0r.recipe.usecase.patch;
 
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;

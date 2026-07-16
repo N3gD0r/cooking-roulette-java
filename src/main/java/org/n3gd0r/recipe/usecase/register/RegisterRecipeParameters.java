@@ -1,11 +1,9 @@
-package org.n3gd0r.recipe.usecase;
+package org.n3gd0r.recipe.usecase.register;
 
 import java.util.List;
 
 import org.n3gd0r.infrastructure.mediator.Command;
 import org.n3gd0r.recipe.domain.Recipe;
-import org.n3gd0r.recipe.usecase.records.RegisterIngredientParameters;
-import org.n3gd0r.recipe.usecase.records.RegisterInstructionParameters;
 import org.springframework.util.Assert;
 
 /**

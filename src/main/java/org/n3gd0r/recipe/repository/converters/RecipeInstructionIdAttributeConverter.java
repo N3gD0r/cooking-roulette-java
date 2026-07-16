@@ -1,4 +1,4 @@
-package org.n3gd0r.recipe.repository;
+package org.n3gd0r.recipe.repository.converters;
 
 import java.util.UUID;
 

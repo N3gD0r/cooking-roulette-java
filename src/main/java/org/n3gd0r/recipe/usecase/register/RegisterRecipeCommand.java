@@ -1,4 +1,4 @@
-package org.n3gd0r.recipe.usecase;
+package org.n3gd0r.recipe.usecase.register;
 
 import java.util.List;
 import java.util.stream.Collectors;

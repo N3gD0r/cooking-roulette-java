@@ -8,9 +8,9 @@ import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeIngredientId;
 import org.n3gd0r.recipe.domain.RecipeInstructionId;
-import org.n3gd0r.recipe.usecase.PatchRecipeParameters;
-import org.n3gd0r.recipe.usecase.records.PatchIngredientParameters;
-import org.n3gd0r.recipe.usecase.records.PatchInstructionParameters;
+import org.n3gd0r.recipe.usecase.patch.PatchIngredientParameters;
+import org.n3gd0r.recipe.usecase.patch.PatchInstructionParameters;
+import org.n3gd0r.recipe.usecase.patch.PatchRecipeParameters;
 
 /**
  * RegisterRecipeRequest

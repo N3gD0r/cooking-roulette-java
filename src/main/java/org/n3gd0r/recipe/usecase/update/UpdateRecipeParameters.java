@@ -1,12 +1,10 @@
-package org.n3gd0r.recipe.usecase;
+package org.n3gd0r.recipe.usecase.update;
 
 import java.util.List;
 
 import org.n3gd0r.infrastructure.mediator.Query;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
-import org.n3gd0r.recipe.usecase.records.UpdateIngredientParameters;
-import org.n3gd0r.recipe.usecase.records.UpdateInstructionParameters;
 import org.springframework.util.Assert;
 
 public class UpdateRecipeParameters extends Query<Recipe> {
