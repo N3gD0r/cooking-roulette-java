@@ -1,6 +1,7 @@
 package org.n3gd0r.recipe.usecase;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.n3gd0r.infrastructure.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
@@ -22,24 +23,25 @@ public class UpdateRecipeCommand implements RequestHandler<UpdateRecipeParameter
     @Override
     public Recipe execute(UpdateRecipeParameters request) {
         repository.validateExistsById(request.recipeId());
-        repository.validateNameUnique(request.name());
         Recipe recipe = repository.getById(request.recipeId());
-
+        if (!recipe.getName().equalsIgnoreCase(request.name().trim())) {
+            repository.validateNameUnique(request.name().trim());
+        }
+        recipe.setName(request.name().trim().toLowerCase());
+        recipe.setCookTime(request.cookTime());
         List<RecipeIngredient> ingredients = request.ingredients().stream()
-                .map(ingredientParameters -> new RecipeIngredient(ingredientParameters.id(),
-                        ingredientParameters.ingredientName(),
+                .map(ingredientParameters -> new RecipeIngredient(
+                        repository.nextRecipeIngredientId(),
+                        ingredientParameters.ingredientName().trim().toLowerCase(),
                         ingredientParameters.ingredientType(),
                         ingredientParameters.weight()))
-                .toList();
-
+                .collect(Collectors.toList());
         List<RecipeInstruction> instructions = request.instructions().stream()
-                .map(instructionParameters -> new RecipeInstruction(instructionParameters.id(),
+                .map(instructionParameters -> new RecipeInstruction(
+                        repository.nextRecipeInstructionId(),
                         instructionParameters.instructionNumber(),
                         instructionParameters.instruction()))
-                .toList();
-
-        recipe.setName(request.name());
-        recipe.setCookTime(request.cookTime());
+                .collect(Collectors.toList());
         recipe.setInstructions(instructions);
         recipe.setIngredients(ingredients);
         repository.save(recipe);

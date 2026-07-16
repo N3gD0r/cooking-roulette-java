@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.n3gd0r.commons.AbstractEntity;
+import org.n3gd0r.recipe.domain.exception.RecipeIngredientNotFoundException;
+import org.n3gd0r.recipe.domain.exception.RecipeInstructionNotFoundException;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -74,26 +76,42 @@ public class Recipe extends AbstractEntity<RecipeId> {
         recipeInstruction.setRecipe(this);
     }
 
-    public boolean hasInstruction(RecipeInstructionId recipeInstructionId) {
-        return instructions.stream().anyMatch(ri -> ri.getId().equals(recipeInstructionId));
-    }
-
     public void addIngredient(RecipeIngredient ingredient) {
         ingredients.add(ingredient);
         ingredient.setRecipe(this);
+    }
+
+    public boolean hasInstruction(RecipeInstructionId recipeInstructionId) {
+        return instructions.stream().anyMatch(ri -> ri.getId().equals(recipeInstructionId));
     }
 
     public boolean hasIngredient(RecipeIngredientId ingredientId) {
         return ingredients.stream().anyMatch(ingredient -> ingredient.getId().equals(ingredientId));
     }
 
+    public RecipeIngredient getIngredient(RecipeIngredientId ingredientId) {
+        return ingredients.stream()
+                .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                .findFirst()
+                .orElseThrow(() -> new RecipeIngredientNotFoundException(ingredientId));
+    }
+
+    public RecipeInstruction getInstruction(RecipeInstructionId instructionId) {
+        return instructions.stream()
+                .filter(instruction -> instruction.getId().equals(instructionId))
+                .findFirst()
+                .orElseThrow(() -> new RecipeInstructionNotFoundException(instructionId));
+    }
+
     public void setInstructions(List<RecipeInstruction> instructions) {
-        this.instructions = instructions;
+        this.instructions.clear();
+        this.instructions.addAll(instructions);
         this.instructions.forEach(i -> i.setRecipe(this));
     }
 
     public void setIngredients(List<RecipeIngredient> ingredients) {
-        this.ingredients = ingredients;
+        this.ingredients.clear();
+        this.ingredients.addAll(ingredients);
         this.ingredients.forEach(i -> i.setRecipe(this));
     }
 }

@@ -1,6 +1,7 @@
 package org.n3gd0r.recipe.usecase;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.n3gd0r.infrastructure.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
@@ -30,13 +31,13 @@ public class RegisterRecipeCommand implements RequestHandler<RegisterRecipeParam
                         ip.ingredientName(),
                         ip.ingredientType(),
                         ip.weight()))
-                .toList();
+                .collect(Collectors.toList());
 
         List<RecipeInstruction> instructions = request.instructions().stream()
                 .map(ip -> new RecipeInstruction(repository.nextRecipeInstructionId(),
                         ip.instructionNumber(),
                         ip.instruction()))
-                .toList();
+                .collect(Collectors.toList());
 
         RecipeId id = repository.nextId();
         Recipe recipe = new Recipe(id,

@@ -1,9 +1,7 @@
 package org.n3gd0r.recipe.web.dtos.requests;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
@@ -18,16 +16,18 @@ import org.n3gd0r.recipe.usecase.records.PatchInstructionParameters;
  * RegisterRecipeRequest
  */
 public record PatchRecipeRequest(
-        Optional<String> name,
-        Optional<Integer> cookTime,
-        Optional<List<PatchIngredientRequest>> ingredients,
-        Optional<List<PatchInstructionRequest>> instructions) {
+        String name,
+        Integer cookTime,
+        List<PatchIngredientRequest> ingredients,
+        List<PatchInstructionRequest> instructions) {
     public record PatchInstructionRequest(
             UUID id,
             Integer instructionNumber,
             String instruction) {
         public PatchInstructionParameters toParameters() {
-            return new PatchInstructionParameters(new RecipeInstructionId(id), instructionNumber, instruction);
+            return new PatchInstructionParameters(id != null ? new RecipeInstructionId(id) : null,
+                    instructionNumber,
+                    instruction);
         }
     }
 
@@ -37,21 +37,24 @@ public record PatchRecipeRequest(
             IngredientEnum ingredientType,
             Integer weightInGrams) {
         public PatchIngredientParameters toParameters() {
-            return new PatchIngredientParameters(new RecipeIngredientId(id), ingredientName.toLowerCase(),
+            return new PatchIngredientParameters(id != null ? new RecipeIngredientId(id) : null,
+                    ingredientName.toLowerCase(),
                     ingredientType,
                     Mass.ofGrams(weightInGrams));
         }
     }
 
     public PatchRecipeParameters toParameters(UUID id) {
-        return new PatchRecipeParameters(new RecipeId(id),
+        return new PatchRecipeParameters(id != null ? new RecipeId(id) : null,
                 name,
                 cookTime,
-                ingredients.map(liopt -> liopt.stream()
-                        .map(PatchIngredientRequest::toParameters)
-                        .collect(Collectors.toList())),
-                instructions.map(liopt -> liopt.stream()
-                        .map(PatchInstructionRequest::toParameters)
-                        .collect(Collectors.toList())));
+                ingredients == null ? null
+                        : ingredients.stream()
+                                .map(PatchIngredientRequest::toParameters)
+                                .toList(),
+                instructions == null ? null
+                        : instructions.stream()
+                                .map(PatchInstructionRequest::toParameters)
+                                .toList());
     }
 }

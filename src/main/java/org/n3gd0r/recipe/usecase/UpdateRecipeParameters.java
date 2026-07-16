@@ -7,6 +7,7 @@ import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.usecase.records.UpdateIngredientParameters;
 import org.n3gd0r.recipe.usecase.records.UpdateInstructionParameters;
+import org.springframework.util.Assert;
 
 public class UpdateRecipeParameters extends Query<Recipe> {
     private final RecipeId recipeId;
@@ -18,6 +19,14 @@ public class UpdateRecipeParameters extends Query<Recipe> {
     public UpdateRecipeParameters(RecipeId recipeId, String name, Integer cookTime,
             List<UpdateIngredientParameters> ingredients,
             List<UpdateInstructionParameters> instructions) {
+        Assert.notNull(recipeId, "The UpdateRecipeParameters recipeId should not be null");
+        Assert.notNull(name, "The UpdateRecipeParameters name should not be null");
+        Assert.notNull(cookTime, "The UpdateRecipeParameters cookTime should not be null");
+        Assert.isTrue(cookTime > 0, "The UpdateRecipeParameters cookTime should be a positive number");
+        Assert.notEmpty(ingredients,
+                "The UpdateRecipeParameters ingredients should not be null and have at least one element");
+        Assert.notEmpty(instructions,
+                "The UpdateRecipeParameters instructions should not be null and have at least one element");
         this.recipeId = recipeId;
         this.name = name;
         this.cookTime = cookTime;

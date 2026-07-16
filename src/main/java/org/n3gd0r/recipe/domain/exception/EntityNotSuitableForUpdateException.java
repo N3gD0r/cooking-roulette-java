@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class EntityNotSuitableForUpdateException extends RuntimeException {
-    public EntityNotSuitableForUpdateException(String updateEntityName) {
-        super("Current object is not suitable for update operation, missing id for %s".formatted(updateEntityName));
+    public EntityNotSuitableForUpdateException(String updateEntityName, String reason) {
+        super("Current %s is not suitable for update operation, reason: %s".formatted(updateEntityName, reason));
     }
 }

@@ -10,16 +10,17 @@ import org.n3gd0r.recipe.usecase.records.RegisterInstructionParameters;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 /**
  * RegisterRecipeRequest
  */
-public record RegisterRecipeWithAllRequest(@Valid @NotNull List<RegisterInstructionRequest> instructions,
-        @Valid @NotNull List<RegisterIngredientRequest> ingredients,
-        @Valid @NotNull String name,
-        @Valid @NotNull @Positive Integer cookTime) {
+public record RegisterRecipeWithAllRequest(@Valid @NotEmpty List<RegisterInstructionRequest> instructions,
+        @Valid @NotEmpty List<RegisterIngredientRequest> ingredients,
+        @Valid @NotBlank String name,
+        @Valid @Positive Integer cookTime) {
     public record RegisterInstructionRequest(
             @Positive Integer instructionNumber,
             @NotBlank String instruction) {

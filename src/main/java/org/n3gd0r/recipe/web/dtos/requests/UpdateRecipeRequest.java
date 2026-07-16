@@ -2,40 +2,43 @@ package org.n3gd0r.recipe.web.dtos.requests;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.RecipeId;
-import org.n3gd0r.recipe.domain.RecipeIngredientId;
-import org.n3gd0r.recipe.domain.RecipeInstructionId;
 import org.n3gd0r.recipe.usecase.UpdateRecipeParameters;
 import org.n3gd0r.recipe.usecase.records.UpdateIngredientParameters;
 import org.n3gd0r.recipe.usecase.records.UpdateInstructionParameters;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 /**
  * RegisterRecipeRequest
  */
 public record UpdateRecipeRequest(
-        String name,
-        Integer cookTime,
-        List<UpdateIngredientRequest> ingredients,
-        List<UpdateInstructionRequest> instructions) {
+        @Valid @NotBlank String name,
+        @Valid @Positive Integer cookTime,
+        @Valid @NotEmpty List<UpdateIngredientRequest> ingredients,
+        @Valid @NotEmpty List<UpdateInstructionRequest> instructions) {
     public record UpdateInstructionRequest(
-            UUID id,
-            Integer instructionNumber,
-            String instruction) {
+            @Positive Integer instructionNumber,
+            @NotBlank String instruction) {
         public UpdateInstructionParameters toParameters() {
-            return new UpdateInstructionParameters(new RecipeInstructionId(id), instructionNumber, instruction);
+            return new UpdateInstructionParameters(instructionNumber, instruction);
         }
     }
 
     public record UpdateIngredientRequest(
-            UUID id,
-            String ingredientName,
-            IngredientEnum ingredientType,
-            Integer weightInGrams) {
+            @NotBlank String ingredientName,
+            @NotNull IngredientEnum ingredientType,
+            @Positive Integer weightInGrams) {
         public UpdateIngredientParameters toParameters() {
-            return new UpdateIngredientParameters(new RecipeIngredientId(id), ingredientName.toLowerCase(),
+            return new UpdateIngredientParameters(ingredientName,
                     ingredientType,
                     Mass.ofGrams(weightInGrams));
         }
@@ -47,9 +50,9 @@ public record UpdateRecipeRequest(
                 cookTime,
                 ingredients.stream()
                         .map(UpdateIngredientRequest::toParameters)
-                        .toList(),
+                        .collect(Collectors.toList()),
                 instructions.stream()
                         .map(UpdateInstructionRequest::toParameters)
-                        .toList());
+                        .collect(Collectors.toList()));
     }
 }

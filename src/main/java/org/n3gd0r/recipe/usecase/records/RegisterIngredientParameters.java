@@ -7,7 +7,7 @@ import org.springframework.util.Assert;
 public record RegisterIngredientParameters(String ingredientName, IngredientEnum ingredientType,
         Mass weight) {
     public RegisterIngredientParameters {
-        Assert.notNull(ingredientName,
+        Assert.hasText(ingredientName,
                 "The RegisterRecipeWithIngredientsParameters ingredientName should not be null");
         Assert.notNull(ingredientType,
                 "The RegisterRecipeWithIngredientsParameters ingredientType should not be null");

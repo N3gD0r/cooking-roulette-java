@@ -22,11 +22,10 @@ public class RegisterRecipeParameters extends Command<Recipe> {
         Assert.hasText(name, "The RegisterRecipeCommand name should have text");
         Assert.notNull(cookTime, "The RegisterRecipeCommand cookTime should not be null");
         Assert.isTrue(cookTime > 0, "The RegisterRecipeCommand cookTime should be a positive number");
-        Assert.notNull(ingredients, "The RegisterRecipeCommand ingredients should not be null");
-        Assert.notEmpty(ingredients, "The RegisterRecipeCommand ingredients should have at least one ingredient");
-        Assert.notNull(instructions, "The RegisterRecipeCommand instructions should not be null");
+        Assert.notEmpty(ingredients,
+                "The RegisterRecipeCommand ingredients should not be null and have at least one ingredient");
         Assert.notEmpty(instructions,
-                "The RegisterRecipeCommand instructions should have at least one recipe instruction");
+                "The RegisterRecipeCommand instructions should not be null and have at least one recipe instruction");
         this.name = name;
         this.cookTime = cookTime;
         this.ingredients = ingredients;

@@ -1,0 +1,65 @@
+### Create recipe
+POST {{url}}/api/recipes
+Content-Type: application/json
+
+{
+    "name": "Huevito con jamon",
+    "cookTime": 20,
+    "ingredients": [
+        {
+            "ingredientName": "huevo",
+            "ingredientType": "CARNES",
+            "weightInGrams": 350
+        },
+        {
+            "ingredientName": "Jamon",
+            "ingredientType": "CARNES",
+            "weightInGrams": 70
+        }
+    ],
+    "instructions": [
+        {
+            "stepNumber": 1,
+            "stepInstruction": "Abrir y revolver los huevos hasta que la mezcla sea del mismo color."
+        },
+        {
+            "stepNumber": 2,
+            "stepInstruction": "Cortar el jamon en piezas equivalentes (cuadrados o rombos)."
+        },
+        {
+            "stepNumber": 3,
+            "stepInstruction": "Freir o asar el jamon al gusto."
+        },
+        {
+            "stepNumber": 4,
+            "stepInstruction": "Agregar los huevos."
+        },
+        {
+            "stepNumber": 5,
+            "stepInstruction": "Agregar condimentos al gusto (sal, pimienta, paprika, ajo)."
+        },
+        {
+            "stepNumber": 6,
+            "stepInstruction": "Revolver la mezcla en el sarten hasta tener la consistencia adecuada su gusto."
+        }
+    ]
+}
+
+### Patch Recipe
+PATCH {{url}}/api/recipes/{{recipe-id}}
+Content-Type: application/json
+
+{
+    "name": "new recipe name",
+    ingredients: [
+        {
+            "ingredientName": "some ingredient to add"
+            "ingredientType": "SOME_INGREDIENT_TYPE",
+            "weightInGrams": 100
+        },
+        {
+            "id": {{some-ingredient-id}} // uuid
+            "ingredientName": "new ingredient name to patch"
+        },
+    ]
+}

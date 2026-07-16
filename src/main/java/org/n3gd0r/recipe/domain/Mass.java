@@ -7,7 +7,7 @@ import org.springframework.util.Assert;
  */
 public record Mass(int value) {
     public Mass {
-        Assert.isTrue(value > 0, "The mass value shuold be a positive number");
+        Assert.isTrue(value > 0, "The mass value should be a positive number");
     }
 
     public static Mass ofGrams(int value) {
