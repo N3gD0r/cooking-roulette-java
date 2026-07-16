@@ -63,4 +63,9 @@ public class RandomRecipeFiltersParameters extends Query<Recipe> {
         return ingredientTypes;
     }
 
+    public boolean isEmptyRequest() {
+        return name.isEmpty() && cookTime.isEmpty() && instructionQuantity.isEmpty() && ingredientQuantity.isEmpty()
+                && ingredients.isEmpty() && ingredientTypes().isEmpty();
+    }
+
 }

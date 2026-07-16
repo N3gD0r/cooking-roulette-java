@@ -5,6 +5,7 @@ import org.n3gd0r.recipe.web.dtos.responses.RecipeResponse;
 import org.n3gd0r.roulette.usecase.RandomRecipeParameters;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,9 +27,9 @@ public class RandomRecipeController {
         return RecipeResponse.of(mediator.send(new RandomRecipeParameters()));
     }
 
-    @PostMapping
+    @PostMapping("/{pageSize}")
     @ResponseStatus(HttpStatus.OK)
-    public RecipeResponse getRandomRecipe(@RequestBody RandomRecipeRequest params) {
-        return RecipeResponse.of(mediator.send(params.toQuery()));
+    public RecipeResponse getRandomRecipe(@PathVariable int pageSize, @RequestBody RandomRecipeRequest params) {
+        return RecipeResponse.of(mediator.send(params.toQuery(pageSize)));
     }
 }

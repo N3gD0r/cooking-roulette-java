@@ -26,6 +26,15 @@ public class RandomRecipeFiltersQuery implements RequestHandler<RandomRecipeFilt
     @Override
     public Recipe execute(RandomRecipeFiltersParameters request) {
         long totalRecipes = repository.count();
+
+        if (request.isEmptyRequest()) {
+            int randomPage = new Random().nextInt((int) totalRecipes);
+            Recipe foundRecipe = repository.findAll(PageRequest.of(randomPage, 1)).stream()
+                    .findFirst()
+                    .orElseThrow(NoRecipesFoundException::new);
+            return foundRecipe;
+        }
+
         if (totalRecipes < 1) {
             throw new NoRecipesFoundException();
         }
