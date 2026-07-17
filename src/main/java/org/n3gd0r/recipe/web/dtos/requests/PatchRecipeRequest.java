@@ -38,7 +38,7 @@ public record PatchRecipeRequest(
             Integer weightInGrams) {
         public PatchIngredientParameters toParameters() {
             return new PatchIngredientParameters(id != null ? new RecipeIngredientId(id) : null,
-                    ingredientName.toLowerCase(),
+                    ingredientName,
                     ingredientType,
                     Mass.ofGrams(weightInGrams));
         }

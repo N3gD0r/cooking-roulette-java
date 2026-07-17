@@ -28,7 +28,7 @@ public class RegisterRecipeCommand implements RequestHandler<RegisterRecipeParam
         repository.validateNameUnique(request.name());
         List<RecipeIngredient> ingredients = request.ingredients().stream()
                 .map(ip -> new RecipeIngredient(repository.nextRecipeIngredientId(),
-                        ip.ingredientName(),
+                        ip.ingredientName().trim().toLowerCase(),
                         ip.ingredientType(),
                         ip.weight()))
                 .collect(Collectors.toList());
@@ -41,7 +41,7 @@ public class RegisterRecipeCommand implements RequestHandler<RegisterRecipeParam
 
         RecipeId id = repository.nextId();
         Recipe recipe = new Recipe(id,
-                request.name(),
+                request.name().trim().toLowerCase(),
                 request.cookTime(),
                 ingredients,
                 instructions);

@@ -26,8 +26,8 @@ public class PatchRecipeCommand implements RequestHandler<PatchRecipeParameters,
         Recipe recipe = repository.getById(request.id());
 
         if (request.name() != null && !recipe.getName().equalsIgnoreCase(request.name())) {
-            repository.validateNameUnique(request.name());
-            recipe.setName(request.name());
+            repository.validateNameUnique(request.name().trim().toLowerCase());
+            recipe.setName(request.name().trim().toLowerCase());
         }
 
         if (request.cookTime() != null) {
@@ -80,7 +80,7 @@ public class PatchRecipeCommand implements RequestHandler<PatchRecipeParameters,
                 ingredientToPatch.setWeight(parameters.weight());
             }
             if (parameters.ingredientName() != null) {
-                ingredientToPatch.setIngredientName(parameters.ingredientName());
+                ingredientToPatch.setIngredientName(parameters.ingredientName().trim().toLowerCase());
             }
             if (parameters.ingredientType() != null) {
                 ingredientToPatch.setIngredientType(parameters.ingredientType());
@@ -89,7 +89,7 @@ public class PatchRecipeCommand implements RequestHandler<PatchRecipeParameters,
         } else if (parameters.canAddIngredient()) {
             recipe.addIngredient(new RecipeIngredient(
                     repository.nextRecipeIngredientId(),
-                    parameters.ingredientName(),
+                    parameters.ingredientName().trim().toLowerCase(),
                     parameters.ingredientType(),
                     parameters.weight()));
         } else {
