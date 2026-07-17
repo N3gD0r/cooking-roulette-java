@@ -28,6 +28,11 @@ public final class RecipeIngredientMother {
             return this;
         }
 
+        public Builder weight(Mass weight) {
+            this.weight = weight;
+            return this;
+        }
+
         public RecipeIngredient build() {
             return new RecipeIngredient(id, ingredientName, ingredientType, weight);
         }

@@ -4,18 +4,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.Recipe;
-import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
-import org.n3gd0r.recipe.domain.RecipeIngredientId;
+import org.n3gd0r.recipe.domain.RecipeIngredientMother;
 import org.n3gd0r.recipe.domain.RecipeInstruction;
-import org.n3gd0r.recipe.domain.RecipeInstructionId;
+import org.n3gd0r.recipe.domain.RecipeInstructionMother;
 import org.n3gd0r.recipe.domain.RecipeMother;
 import org.n3gd0r.recipe.repository.InMemoryRecipeRepository;
 import org.n3gd0r.recipe.repository.RecipeRepository;
@@ -32,23 +30,34 @@ public class GetAllRecipesTest {
         getAllRecipesQuery = new GetAllRecipesQuery(recipeRepository);
 
         List<RecipeIngredient> ingredients = Arrays.asList(
-                new RecipeIngredient(new RecipeIngredientId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6")),
-                        "huevos",
-                        IngredientEnum.CARNES,
-                        Mass.ofGrams(180)));
+                RecipeIngredientMother.ingredient()
+                        .ingredientName("huevos")
+                        .ingredientType(IngredientEnum.CARNES)
+                        .weight(Mass.ofGrams(180))
+                        .build(),
+                RecipeIngredientMother.ingredient()
+                        .ingredientName("agua")
+                        .ingredientType(IngredientEnum.ALIMENTOS_LIBRES_DE_ENERGIA)
+                        .weight(Mass.ofGrams(500))
+                        .build());
 
         List<RecipeInstruction> instructions = Arrays.asList(
-                new RecipeInstruction(new RecipeInstructionId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6")),
-                        1,
-                        "En agua hirviendo, colocar los huevos durante 15 minutos."));
+                RecipeInstructionMother.recipeInstruction()
+                        .instructionNumber(1)
+                        .instruction("Hervir el agua y colocar los huevos durante 15 minutos")
+                        .build(),
+                RecipeInstructionMother.recipeInstruction()
+                        .instructionNumber(2)
+                        .instruction("Retirar los huevos y colocarlos en agua fria con hielos por 5 minutos")
+                        .build());
 
         Recipe recipe = RecipeMother.recipe()
-                .id(new RecipeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6")))
                 .name("huevos cocidos")
                 .cookTime(20)
                 .ingredients(ingredients)
                 .instructions(instructions)
                 .build();
+
         recipeRepository.save(recipe);
     }
 
@@ -62,12 +71,51 @@ public class GetAllRecipesTest {
     }
 
     @Test
-    void testGetAllRecipesReturnsEmptyList() {
+    void testGetAllRecipesAfterDeleteOperationReturnsEmptyList() {
         recipeRepository.deleteAll();
         GetAllRecipesParameters parameters = new GetAllRecipesParameters();
 
         List<Recipe> recipes = getAllRecipesQuery.execute(parameters);
 
         assertThat(recipes).isNotNull().hasSize(0);
+    }
+
+    @Test
+    void testGetAllRecipesAfterAddinAnotherRecipeShouldReturnTwoItems() {
+        List<RecipeIngredient> ingredients = Arrays.asList(
+                RecipeIngredientMother.ingredient()
+                        .ingredientName("huevos")
+                        .ingredientType(IngredientEnum.CARNES)
+                        .weight(Mass.ofGrams(180))
+                        .build(),
+                RecipeIngredientMother.ingredient()
+                        .ingredientName("agua")
+                        .ingredientType(IngredientEnum.ALIMENTOS_LIBRES_DE_ENERGIA)
+                        .weight(Mass.ofGrams(500))
+                        .build());
+
+        List<RecipeInstruction> instructions = Arrays.asList(
+                RecipeInstructionMother.recipeInstruction()
+                        .instructionNumber(1)
+                        .instruction("Hervir el agua y colocar los huevos durante 15 minutos")
+                        .build(),
+                RecipeInstructionMother.recipeInstruction()
+                        .instructionNumber(2)
+                        .instruction("Retirar los huevos y colocarlos en agua fria con hielos por 5 minutos")
+                        .build());
+
+        Recipe recipe = RecipeMother.recipe()
+                .name("otros huevos hervidos")
+                .cookTime(20)
+                .ingredients(ingredients)
+                .instructions(instructions)
+                .build();
+
+        recipeRepository.save(recipe);
+        GetAllRecipesParameters parameters = new GetAllRecipesParameters();
+
+        List<Recipe> recipes = getAllRecipesQuery.execute(parameters);
+
+        assertThat(recipes).isNotNull().hasSize(2);
     }
 }

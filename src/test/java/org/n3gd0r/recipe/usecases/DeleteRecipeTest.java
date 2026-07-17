@@ -14,54 +14,81 @@ import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
-import org.n3gd0r.recipe.domain.RecipeIngredientId;
+import org.n3gd0r.recipe.domain.RecipeIngredientMother;
 import org.n3gd0r.recipe.domain.RecipeInstruction;
-import org.n3gd0r.recipe.domain.RecipeInstructionId;
+import org.n3gd0r.recipe.domain.RecipeInstructionMother;
 import org.n3gd0r.recipe.domain.RecipeMother;
 import org.n3gd0r.recipe.domain.exception.RecipeNotFoundException;
 import org.n3gd0r.recipe.repository.InMemoryRecipeRepository;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.n3gd0r.recipe.usecase.delete.DeleteRecipeCommand;
 import org.n3gd0r.recipe.usecase.delete.DeleteRecipeParameters;
+import org.springframework.data.domain.PageRequest;
 
 public class DeleteRecipeTest {
     private RecipeRepository recipeRepository;
     private DeleteRecipeCommand deleteRecipeCommand;
-    private RecipeId id;
+    private RecipeId recipeIdToDelete;
 
     @BeforeEach
     void setUp() {
         recipeRepository = new InMemoryRecipeRepository();
         deleteRecipeCommand = new DeleteRecipeCommand(recipeRepository);
-        id = new RecipeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
+        recipeIdToDelete = new RecipeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
+
         List<RecipeIngredient> ingredients = Arrays.asList(
-                new RecipeIngredient(new RecipeIngredientId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6")),
-                        "huevos",
-                        IngredientEnum.CARNES,
-                        Mass.ofGrams(180)));
+                RecipeIngredientMother.ingredient()
+                        .ingredientName("huevos")
+                        .ingredientType(IngredientEnum.CARNES)
+                        .weight(Mass.ofGrams(180))
+                        .build(),
+                RecipeIngredientMother.ingredient()
+                        .ingredientName("agua")
+                        .ingredientType(IngredientEnum.ALIMENTOS_LIBRES_DE_ENERGIA)
+                        .weight(Mass.ofGrams(500))
+                        .build());
 
         List<RecipeInstruction> instructions = Arrays.asList(
-                new RecipeInstruction(new RecipeInstructionId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6")),
-                        1,
-                        "En agua hirviendo, colocar los huevos durante 15 minutos."));
+                RecipeInstructionMother.recipeInstruction()
+                        .instructionNumber(1)
+                        .instruction("Hervir el agua y colocar los huevos durante 15 minutos")
+                        .build(),
+                RecipeInstructionMother.recipeInstruction()
+                        .instructionNumber(2)
+                        .instruction("Retirar los huevos y colocarlos en agua fria con hielos por 5 minutos")
+                        .build());
 
         Recipe recipe = RecipeMother.recipe()
-                .id(id)
+                .id(recipeIdToDelete)
                 .name("huevos cocidos")
                 .cookTime(20)
                 .ingredients(ingredients)
                 .instructions(instructions)
                 .build();
+
         recipeRepository.save(recipe);
     }
 
     @Test
     void testDeleteRecipeById() {
-        DeleteRecipeParameters parameters = new DeleteRecipeParameters(id);
+        DeleteRecipeParameters parameters = new DeleteRecipeParameters(recipeIdToDelete);
 
         boolean wasDeleted = deleteRecipeCommand.execute(parameters);
+        List<Recipe> recipes = recipeRepository.findAll(PageRequest.of(0, 20)).toList();
         assertThat(wasDeleted).isTrue();
+        assertThat(recipes).hasSize(0);
+    }
+
+    @Test
+    void testDeleteRecipeWithNoRecipesAtAllThrowsException() {
+        DeleteRecipeParameters parameters = new DeleteRecipeParameters(recipeIdToDelete);
+
+        boolean wasDeleted = deleteRecipeCommand.execute(parameters);
+        List<Recipe> recipes = recipeRepository.findAll(PageRequest.of(0, 20)).toList();
+
+        assertThat(wasDeleted).isTrue();
+        assertThat(recipes).hasSize(0);
         assertThatExceptionOfType(RecipeNotFoundException.class)
-                .isThrownBy(() -> recipeRepository.validateExistsById(id));
+                .isThrownBy(() -> recipeRepository.validateExistsById(recipeIdToDelete));
     }
 }

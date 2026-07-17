@@ -48,7 +48,7 @@ public class RegisterRecipeTest {
     }
 
     @Test
-    void testRegisterRecipeWithSameNameException() {
+    void testRegisterRecipeWithSameNameThrowsException() {
         List<RegisterIngredientParameters> ingredients = Arrays.asList(
                 new RegisterIngredientParameters("huevos", IngredientEnum.CARNES, Mass.ofGrams(180)));
         List<RegisterInstructionParameters> instructions = Arrays.asList(
@@ -65,7 +65,7 @@ public class RegisterRecipeTest {
     }
 
     @Test
-    void testRegisterRecipeWithEmptyIngredients() {
+    void testRegisterRecipeWithEmptyIngredientsThrowsException() {
         List<RegisterIngredientParameters> ingredients = Arrays.asList();
         List<RegisterInstructionParameters> instructions = Arrays.asList(
                 new RegisterInstructionParameters(1, "En agua hirviendo, colocar los huevos durante 15 minutos."),
@@ -78,7 +78,7 @@ public class RegisterRecipeTest {
     }
 
     @Test
-    void testRegisterRecipeWithEmptyInstructions() {
+    void testRegisterRecipeWithEmptyInstructionsThrowsException() {
         List<RegisterIngredientParameters> ingredients = Arrays.asList(
                 new RegisterIngredientParameters("huevos", IngredientEnum.CARNES, Mass.ofGrams(180)));
         List<RegisterInstructionParameters> instructions = Arrays.asList();
