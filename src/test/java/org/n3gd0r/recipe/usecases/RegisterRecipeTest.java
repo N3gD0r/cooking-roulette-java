@@ -35,7 +35,7 @@ public class RegisterRecipeTest {
         List<RegisterIngredientParameters> ingredients = Arrays.asList(
                 new RegisterIngredientParameters("huevos", IngredientEnum.CARNES, Mass.ofGrams(180)));
         List<RegisterInstructionParameters> instructions = Arrays.asList(
-                new RegisterInstructionParameters(1, "En agua hirviendo, color los huevos durante 15 minutos."),
+                new RegisterInstructionParameters(1, "En agua hirviendo, colocar los huevos durante 15 minutos."),
                 new RegisterInstructionParameters(2,
                         "Despues de ese lapso de tiempo, retirar los huevos y colocarlos en agua fria durante 5 minutos"),
                 new RegisterInstructionParameters(3, "Pelar los huevos"));
@@ -52,7 +52,7 @@ public class RegisterRecipeTest {
         List<RegisterIngredientParameters> ingredients = Arrays.asList(
                 new RegisterIngredientParameters("huevos", IngredientEnum.CARNES, Mass.ofGrams(180)));
         List<RegisterInstructionParameters> instructions = Arrays.asList(
-                new RegisterInstructionParameters(1, "En agua hirviendo, color los huevos durante 15 minutos."),
+                new RegisterInstructionParameters(1, "En agua hirviendo, colocar los huevos durante 15 minutos."),
                 new RegisterInstructionParameters(2,
                         "Despues de ese lapso de tiempo, retirar los huevos y colocarlos en agua fria durante 5 minutos"),
                 new RegisterInstructionParameters(3, "Pelar los huevos"));
@@ -68,7 +68,7 @@ public class RegisterRecipeTest {
     void testRegisterRecipeWithEmptyIngredients() {
         List<RegisterIngredientParameters> ingredients = Arrays.asList();
         List<RegisterInstructionParameters> instructions = Arrays.asList(
-                new RegisterInstructionParameters(1, "En agua hirviendo, color los huevos durante 15 minutos."),
+                new RegisterInstructionParameters(1, "En agua hirviendo, colocar los huevos durante 15 minutos."),
                 new RegisterInstructionParameters(2,
                         "Despues de ese lapso de tiempo, retirar los huevos y colocarlos en agua fria durante 5 minutos"),
                 new RegisterInstructionParameters(3, "Pelar los huevos"));

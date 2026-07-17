@@ -43,7 +43,7 @@ public class DeleteRecipeTest {
         List<RecipeInstruction> instructions = Arrays.asList(
                 new RecipeInstruction(new RecipeInstructionId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6")),
                         1,
-                        "En agua hirviendo, color los huevos durante 15 minutos."));
+                        "En agua hirviendo, colocar los huevos durante 15 minutos."));
 
         Recipe recipe = RecipeMother.recipe()
                 .id(id)
