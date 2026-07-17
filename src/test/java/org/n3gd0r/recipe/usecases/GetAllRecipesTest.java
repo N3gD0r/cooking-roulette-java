@@ -30,12 +30,12 @@ public class GetAllRecipesTest {
         getAllRecipesQuery = new GetAllRecipesQuery(recipeRepository);
 
         List<RecipeIngredient> ingredients = Arrays.asList(
-                RecipeIngredientMother.ingredient()
+                RecipeIngredientMother.recipeIngredient()
                         .ingredientName("huevos")
                         .ingredientType(IngredientEnum.CARNES)
                         .weight(Mass.ofGrams(180))
                         .build(),
-                RecipeIngredientMother.ingredient()
+                RecipeIngredientMother.recipeIngredient()
                         .ingredientName("agua")
                         .ingredientType(IngredientEnum.ALIMENTOS_LIBRES_DE_ENERGIA)
                         .weight(Mass.ofGrams(500))
@@ -83,12 +83,12 @@ public class GetAllRecipesTest {
     @Test
     void testGetAllRecipesAfterAddinAnotherRecipeShouldReturnTwoItems() {
         List<RecipeIngredient> ingredients = Arrays.asList(
-                RecipeIngredientMother.ingredient()
+                RecipeIngredientMother.recipeIngredient()
                         .ingredientName("huevos")
                         .ingredientType(IngredientEnum.CARNES)
                         .weight(Mass.ofGrams(180))
                         .build(),
-                RecipeIngredientMother.ingredient()
+                RecipeIngredientMother.recipeIngredient()
                         .ingredientName("agua")
                         .ingredientType(IngredientEnum.ALIMENTOS_LIBRES_DE_ENERGIA)
                         .weight(Mass.ofGrams(500))

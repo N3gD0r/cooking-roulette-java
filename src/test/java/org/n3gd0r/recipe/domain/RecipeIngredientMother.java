@@ -3,7 +3,7 @@ package org.n3gd0r.recipe.domain;
 import java.util.UUID;
 
 public final class RecipeIngredientMother {
-    public static Builder ingredient() {
+    public static Builder recipeIngredient() {
         return new Builder();
     }
 

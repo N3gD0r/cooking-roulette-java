@@ -39,7 +39,7 @@ public class UpdateRecipeTest {
 
         recipeIdToUpdate = new RecipeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
         List<RecipeIngredient> ingredients = Arrays.asList(
-                RecipeIngredientMother.ingredient()
+                RecipeIngredientMother.recipeIngredient()
                         .ingredientName("huevos")
                         .ingredientType(IngredientEnum.CARNES)
                         .weight(Mass.ofGrams(180))
@@ -141,7 +141,7 @@ public class UpdateRecipeTest {
     @Test
     void testUpdateRecipeWithAnotherRecipeNameThrowsException() {
         List<RecipeIngredient> recipeIngredients = Arrays.asList(
-                RecipeIngredientMother.ingredient()
+                RecipeIngredientMother.recipeIngredient()
                         .ingredientName("huevos")
                         .ingredientType(IngredientEnum.CARNES)
                         .weight(Mass.ofGrams(180))
