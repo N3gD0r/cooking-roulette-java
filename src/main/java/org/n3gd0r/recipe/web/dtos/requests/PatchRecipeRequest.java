@@ -12,6 +12,9 @@ import org.n3gd0r.recipe.usecase.patch.PatchIngredientParameters;
 import org.n3gd0r.recipe.usecase.patch.PatchInstructionParameters;
 import org.n3gd0r.recipe.usecase.patch.PatchRecipeParameters;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+
 /**
  * RegisterRecipeRequest
  */
@@ -44,8 +47,8 @@ public record PatchRecipeRequest(
         }
     }
 
-    public PatchRecipeParameters toParameters(UUID id) {
-        return new PatchRecipeParameters(id != null ? new RecipeId(id) : null,
+    public PatchRecipeParameters toParameters(@Valid @NotNull UUID id) {
+        return new PatchRecipeParameters(new RecipeId(id),
                 name,
                 cookTime,
                 ingredients == null ? null

@@ -1,6 +1,7 @@
 package org.n3gd0r.recipe.usecases;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.n3gd0r.recipe.domain.RecipeInstructionMother;
 import org.n3gd0r.recipe.domain.RecipeMother;
 import org.n3gd0r.recipe.repository.InMemoryRecipeRepository;
 import org.n3gd0r.recipe.repository.RecipeRepository;
+import org.n3gd0r.recipe.usecase.exception.NothingToPatchException;
 import org.n3gd0r.recipe.usecase.patch.PatchIngredientParameters;
 import org.n3gd0r.recipe.usecase.patch.PatchInstructionParameters;
 import org.n3gd0r.recipe.usecase.patch.PatchRecipeCommand;
@@ -72,6 +74,14 @@ public class PatchRecipeTest {
 
         assertThat(patchedRecipe.getName()).isNotEqualToIgnoringCase(recipeNameBeforePatch);
         assertThat(patchedRecipe).isEqualTo(recipeToPatch);
+    }
+
+    @Test
+    void testPatchRecipeWithEmptyNameThrowsException() {
+        PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, "", null,
+                null, null);
+        assertThatExceptionOfType(NothingToPatchException.class)
+                .isThrownBy(() -> patchRecipeCommand.execute(recipeParameters));
     }
 
     @Test
@@ -159,5 +169,43 @@ public class PatchRecipeTest {
         assertThat(patchedRecipe.getInstructions()).hasSize(2);
         assertThat(patchedRecipe.getInstructions().get(1).getInstruction())
                 .isEqualToIgnoringCase("Retirar los huevos y enfriarlos en agua con hielos");
+    }
+
+    @Test
+    void testEmptyPatchRecipeThrowsException() {
+        PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null, null, null);
+
+        assertThatExceptionOfType(NothingToPatchException.class)
+                .isThrownBy(() -> patchRecipeCommand.execute(recipeParameters));
+    }
+
+    @Test
+    void testPatchRecipeWithEmptyIngredientListThrowsException() {
+        List<PatchIngredientParameters> ingredientParameters = Arrays.asList();
+        PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
+                ingredientParameters, null);
+
+        assertThatExceptionOfType(NothingToPatchException.class)
+                .isThrownBy(() -> patchRecipeCommand.execute(recipeParameters));
+    }
+
+    @Test
+    void testPatchRecipeWithInstructionListThrowsException() {
+        List<PatchInstructionParameters> instructionParameters = Arrays.asList();
+        PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
+                null, instructionParameters);
+
+        assertThatExceptionOfType(NothingToPatchException.class)
+                .isThrownBy(() -> patchRecipeCommand.execute(recipeParameters));
+    }
+
+    @Test
+    void testPatchRecipeWithEmptyListsThrowsException() {
+        List<PatchInstructionParameters> instructionParameters = Arrays.asList();
+        List<PatchIngredientParameters> ingredientParameters = Arrays.asList();
+        PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
+                ingredientParameters, instructionParameters);
+        assertThatExceptionOfType(NothingToPatchException.class)
+                .isThrownBy(() -> patchRecipeCommand.execute(recipeParameters));
     }
 }

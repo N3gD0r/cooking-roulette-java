@@ -7,6 +7,7 @@ import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeIngredientId;
 import org.n3gd0r.recipe.domain.RecipeInstructionId;
+import org.n3gd0r.recipe.domain.exception.RecipeNameIsEmptyException;
 import org.n3gd0r.recipe.domain.exception.RecipeNotFoundException;
 import org.n3gd0r.recipe.domain.exception.RecipeWithNameAlreadyExistsException;
 import org.n3gd0r.recipe.repository.RecipeRepository;
@@ -76,6 +77,9 @@ public class JpaRecipeRepository implements RecipeRepository {
 
     @Override
     public void validateNameUnique(String name) {
+        if (name.isEmpty()) {
+            throw new RecipeNameIsEmptyException();
+        }
         if (repository.existsByName(name)) {
             throw new RecipeWithNameAlreadyExistsException(name);
         }

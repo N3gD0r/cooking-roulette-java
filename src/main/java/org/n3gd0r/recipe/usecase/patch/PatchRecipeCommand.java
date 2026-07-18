@@ -8,6 +8,7 @@ import org.n3gd0r.recipe.domain.exception.EntityNotSuitableForUpdateException;
 import org.n3gd0r.recipe.domain.exception.RecipeIngredientNotFoundException;
 import org.n3gd0r.recipe.domain.exception.RecipeInstructionNotFoundException;
 import org.n3gd0r.recipe.repository.RecipeRepository;
+import org.n3gd0r.recipe.usecase.exception.NothingToPatchException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,10 @@ public class PatchRecipeCommand implements RequestHandler<PatchRecipeParameters,
 
     @Override
     public Recipe execute(PatchRecipeParameters request) {
+        if (request.nothingToPatch()) {
+            throw new NothingToPatchException();
+        }
+
         repository.validateExistsById(request.id());
         Recipe recipe = repository.getById(request.id());
 
