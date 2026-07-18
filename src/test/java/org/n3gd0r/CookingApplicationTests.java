@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class CookingApplicationTests {
 
-    // TODO test all usecases functionality, filtering, patching and updating
+    // TODO test recipe controller, and database
     @Test
     void contextLoads() {
     }
