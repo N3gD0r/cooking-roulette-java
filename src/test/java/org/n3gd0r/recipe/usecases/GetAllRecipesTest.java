@@ -1,6 +1,7 @@
 package org.n3gd0r.recipe.usecases;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -67,7 +68,9 @@ public class GetAllRecipesTest {
 
         List<Recipe> recipes = getAllRecipesQuery.execute(parameters);
 
-        assertThat(recipes).isNotNull().hasSize(1);
+        assertNotNull(recipes);
+        assertTrue(!recipes.isEmpty());
+        assertTrue(recipes.size() == 1);
     }
 
     @Test
@@ -77,7 +80,8 @@ public class GetAllRecipesTest {
 
         List<Recipe> recipes = getAllRecipesQuery.execute(parameters);
 
-        assertThat(recipes).isNotNull().hasSize(0);
+        assertNotNull(recipes);
+        assertTrue(recipes.isEmpty());
     }
 
     @Test
@@ -116,6 +120,8 @@ public class GetAllRecipesTest {
 
         List<Recipe> recipes = getAllRecipesQuery.execute(parameters);
 
-        assertThat(recipes).isNotNull().hasSize(2);
+        assertNotNull(recipes);
+        assertTrue(!recipes.isEmpty());
+        assertTrue(recipes.size() == 2);
     }
 }

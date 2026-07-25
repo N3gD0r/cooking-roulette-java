@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: cooking
+
+  datasource:
+    url: ${DB_TEST_URL}
+    username: ${DB_TEST_USER}
+    password: ${DB_TEST_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: "none"
+    show-sql: true
+  flyway:
+    enabled: true

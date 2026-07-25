@@ -1,7 +1,8 @@
 package org.n3gd0r.recipe.usecases;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 import java.util.List;
@@ -64,8 +65,8 @@ public class GetRecipeTest {
 
         Recipe recipe = getRecipeQuery.execute(parameters);
 
-        assertThat(recipe).isNotNull();
-        assertThat(recipe).isEqualTo(this.recipe);
+        assertNotNull(recipe);
+        assertEquals(this.recipe, recipe);
     }
 
     @Test
@@ -74,24 +75,22 @@ public class GetRecipeTest {
 
         Recipe recipe = getRecipeQuery.execute(parameters);
 
-        assertThat(recipe).isNotNull();
-        assertThat(recipe).isEqualTo(this.recipe);
-        assertThat(recipe.getName()).isEqualToIgnoringCase(this.recipe.getName());
+        assertNotNull(recipe);
+        assertEquals(this.recipe, recipe);
+        assertEquals(this.recipe.getName(), recipe.getName());
     }
 
     @Test
     void testGetRecibeWithWrongIdThrowsException() {
         GetRecipeParameters parameters = new GetRecipeParameters(new RecipeId(UUID.randomUUID()));
 
-        assertThatExceptionOfType(RecipeNotFoundException.class)
-                .isThrownBy(() -> getRecipeQuery.execute(parameters));
+        assertThrows(RecipeNotFoundException.class, () -> getRecipeQuery.execute(parameters));
     }
 
     @Test
     void testGetRecibeWithWrongNameThrowsException() {
         GetRecipeParameters parameters = new GetRecipeParameters("Definetly not a name 123");
 
-        assertThatExceptionOfType(RecipeNotFoundException.class)
-                .isThrownBy(() -> getRecipeQuery.execute(parameters));
+        assertThrows(RecipeNotFoundException.class, () -> getRecipeQuery.execute(parameters));
     }
 }

@@ -1,7 +1,10 @@
 package org.n3gd0r.recipe.usecases;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -72,16 +75,16 @@ public class PatchRecipeTest {
 
         Recipe patchedRecipe = patchRecipeCommand.execute(recipeParameters);
 
-        assertThat(patchedRecipe.getName()).isNotEqualToIgnoringCase(recipeNameBeforePatch);
-        assertThat(patchedRecipe).isEqualTo(recipeToPatch);
+        assertNotEquals(recipeNameBeforePatch, patchedRecipe.getName());
+        assertEquals(patchedRecipe, recipeToPatch);
     }
 
     @Test
     void testPatchRecipeWithEmptyNameThrowsException() {
         PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, "", null,
                 null, null);
-        assertThatExceptionOfType(NothingToPatchException.class)
-                .isThrownBy(() -> patchRecipeCommand.execute(recipeParameters));
+
+        assertThrows(NothingToPatchException.class, () -> patchRecipeCommand.execute(recipeParameters));
     }
 
     @Test
@@ -93,9 +96,9 @@ public class PatchRecipeTest {
 
         Recipe patchedRecipe = patchRecipeCommand.execute(recipeParameters);
 
-        assertThat(patchedRecipe.getName()).isNotEqualToIgnoringCase(recipeNameBeforePatch);
-        assertThat(patchedRecipe.getCookTime()).isNotEqualTo(cookTimeBeforePatch);
-        assertThat(patchedRecipe).isEqualTo(recipeToPatch);
+        assertNotEquals(recipeNameBeforePatch, patchedRecipe.getName());
+        assertNotEquals(cookTimeBeforePatch, patchedRecipe.getCookTime());
+        assertEquals(recipeToPatch, patchedRecipe);
     }
 
     @Test
@@ -111,10 +114,10 @@ public class PatchRecipeTest {
         Recipe patchedRecipe = patchRecipeCommand.execute(recipeParameters);
         List<RecipeIngredient> patchedIngredients = patchedRecipe.getIngredients();
 
-        assertThat(patchedIngredients.size()).isEqualTo(originalIngredientsSize);
-        assertThat(patchedIngredients).hasSize(1);
-        assertThat(patchedIngredients.getFirst().getIngredientName()).isEqualToIgnoringCase("jamon");
-        assertThat(patchedIngredients.getFirst().getWeight().value()).isEqualTo(100);
+        assertTrue(patchedIngredients.size() == originalIngredientsSize);
+        assertTrue(patchedIngredients.size() == 1);
+        assertEquals("jamon", patchedIngredients.getFirst().getIngredientName());
+        assertEquals(100, patchedIngredients.getFirst().getWeight().value());
     }
 
     @Test
@@ -130,10 +133,10 @@ public class PatchRecipeTest {
 
         Recipe patchedRecipe = patchRecipeCommand.execute(recipeParameters);
 
-        assertThat(patchedRecipe.getInstructions().size()).isEqualTo(originalInstructionsSize);
-        assertThat(patchedRecipe.getInstructions()).hasSize(1);
-        assertThat(patchedRecipe.getInstructions().getFirst().getInstruction())
-                .isEqualToIgnoringCase("Colocar los huevos en agua hirviendo por 15 minutos");
+        assertTrue(originalInstructionsSize == patchedRecipe.getInstructions().size());
+        assertTrue(patchedRecipe.getInstructions().size() == 1);
+        assertEquals("Colocar los huevos en agua hirviendo por 15 minutos",
+                patchedRecipe.getInstructions().getFirst().getInstruction());
     }
 
     @Test
@@ -147,12 +150,15 @@ public class PatchRecipeTest {
         Recipe patchedRecipe = patchRecipeCommand.execute(recipeParameters);
         List<RecipeIngredient> patchedIngredients = patchedRecipe.getIngredients();
 
-        assertThat(patchedIngredients.size()).isNotEqualTo(originalIngredientsSize);
-        assertThat(patchedIngredients).hasSize(2);
-        assertThat(patchedIngredients.get(0).getIngredientName()).isEqualToIgnoringCase("huevos");
-        assertThat(patchedIngredients.get(0).getWeight().value()).isEqualTo(180);
         assertThat(patchedIngredients.get(1).getIngredientName()).isEqualToIgnoringCase("jamon");
         assertThat(patchedIngredients.get(1).getWeight().value()).isEqualTo(100);
+
+        assertNotEquals(originalIngredientsSize, patchedIngredients.size());
+        assertTrue(patchedIngredients.size() == 2);
+        assertEquals("huevos", patchedIngredients.get(0).getIngredientName());
+        assertEquals(180, patchedIngredients.get(0).getWeight().value());
+        assertEquals("jamon", patchedIngredients.get(1).getIngredientName());
+        assertEquals(100, patchedIngredients.get(1).getWeight().value());
     }
 
     @Test
@@ -165,18 +171,17 @@ public class PatchRecipeTest {
 
         Recipe patchedRecipe = patchRecipeCommand.execute(recipeParameters);
 
-        assertThat(patchedRecipe.getInstructions().size()).isNotEqualTo(originalInstructionsSize);
-        assertThat(patchedRecipe.getInstructions()).hasSize(2);
-        assertThat(patchedRecipe.getInstructions().get(1).getInstruction())
-                .isEqualToIgnoringCase("Retirar los huevos y enfriarlos en agua con hielos");
+        assertTrue(originalInstructionsSize != patchedRecipe.getInstructions().size());
+        assertTrue(patchedRecipe.getInstructions().size() == 2);
+        assertEquals("Retirar los huevos y enfriarlos en agua con hielos",
+                patchedRecipe.getInstructions().get(1).getInstruction());
     }
 
     @Test
     void testEmptyPatchRecipeThrowsException() {
         PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null, null, null);
 
-        assertThatExceptionOfType(NothingToPatchException.class)
-                .isThrownBy(() -> patchRecipeCommand.execute(recipeParameters));
+        assertThrows(NothingToPatchException.class, () -> patchRecipeCommand.execute(recipeParameters));
     }
 
     @Test
@@ -185,8 +190,7 @@ public class PatchRecipeTest {
         PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
                 ingredientParameters, null);
 
-        assertThatExceptionOfType(NothingToPatchException.class)
-                .isThrownBy(() -> patchRecipeCommand.execute(recipeParameters));
+        assertThrows(NothingToPatchException.class, () -> patchRecipeCommand.execute(recipeParameters));
     }
 
     @Test
@@ -195,8 +199,7 @@ public class PatchRecipeTest {
         PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
                 null, instructionParameters);
 
-        assertThatExceptionOfType(NothingToPatchException.class)
-                .isThrownBy(() -> patchRecipeCommand.execute(recipeParameters));
+        assertThrows(NothingToPatchException.class, () -> patchRecipeCommand.execute(recipeParameters));
     }
 
     @Test
@@ -205,7 +208,6 @@ public class PatchRecipeTest {
         List<PatchIngredientParameters> ingredientParameters = Arrays.asList();
         PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
                 ingredientParameters, instructionParameters);
-        assertThatExceptionOfType(NothingToPatchException.class)
-                .isThrownBy(() -> patchRecipeCommand.execute(recipeParameters));
+        assertThrows(NothingToPatchException.class, () -> patchRecipeCommand.execute(recipeParameters));
     }
 }

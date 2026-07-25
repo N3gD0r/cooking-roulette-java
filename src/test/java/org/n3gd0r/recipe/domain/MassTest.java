@@ -1,7 +1,9 @@
 package org.n3gd0r.recipe.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,8 +11,9 @@ public class MassTest {
     @Test
     void testMassCanBeCreatedWithAPositiveValue() {
         Mass mass = new Mass(1);
-        assertThat(mass).isNotNull();
-        assertThat(mass.value()).isGreaterThan(0);
+
+        assertNotNull(mass);
+        assertTrue(mass.value() > 0);
     }
 
     @Test
@@ -23,14 +26,16 @@ public class MassTest {
     @Test
     void testMassFromKilograms() {
         Mass mass = Mass.ofKilograms(1);
-        assertThat(mass).isNotNull();
-        assertThat(mass.value()).isEqualTo(1000);
+
+        assertNotNull(mass);
+        assertEquals(mass.value(), 1000);
     }
 
     @Test
     void testMassFromGrams() {
         Mass mass = Mass.ofGrams(250);
-        assertThat(mass).isNotNull();
-        assertThat(mass.value()).isEqualTo(250);
+
+        assertNotNull(mass);
+        assertEquals(mass.value(), 250);
     }
 }

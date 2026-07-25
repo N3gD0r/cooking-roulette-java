@@ -1,7 +1,8 @@
 package org.n3gd0r.recipe.usecases;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -82,9 +83,9 @@ public class UpdateRecipeTest {
 
         Recipe updatedRecipe = updateRecipeCommand.execute(recipeParameters);
 
-        assertThat(updatedRecipe).isNotNull();
-        assertThat(updatedRecipe.getIngredients()).hasSize(2);
-        assertThat(updatedRecipe.getInstructions()).hasSize(3);
+        assertNotNull(updatedRecipe);
+        assertTrue(updatedRecipe.getIngredients().size() == 2);
+        assertTrue(updatedRecipe.getInstructions().size() == 3);
     }
 
     @Test
@@ -109,9 +110,9 @@ public class UpdateRecipeTest {
 
         Recipe updatedRecipe = updateRecipeCommand.execute(parameters);
 
-        assertThat(updatedRecipe).isNotNull();
-        assertThat(updatedRecipe.getIngredients()).hasSize(2);
-        assertThat(updatedRecipe.getInstructions()).hasSize(3);
+        assertNotNull(updatedRecipe);
+        assertTrue(updatedRecipe.getIngredients().size() == 2);
+        assertTrue(updatedRecipe.getInstructions().size() == 3);
     }
 
     @Test
@@ -134,8 +135,7 @@ public class UpdateRecipeTest {
                 "huevos cocidos", 25, ingredients,
                 instructions);
 
-        assertThatExceptionOfType(RecipeNotFoundException.class)
-                .isThrownBy(() -> updateRecipeCommand.execute(parameters));
+        assertThrows(RecipeNotFoundException.class, () -> updateRecipeCommand.execute(parameters));
     }
 
     @Test
@@ -177,7 +177,6 @@ public class UpdateRecipeTest {
                 ingredientParameters,
                 instructionParameters);
 
-        assertThatExceptionOfType(RecipeWithNameAlreadyExistsException.class)
-                .isThrownBy(() -> updateRecipeCommand.execute(recipeParameters));
+        assertThrows(RecipeWithNameAlreadyExistsException.class, () -> updateRecipeCommand.execute(recipeParameters));
     }
 }

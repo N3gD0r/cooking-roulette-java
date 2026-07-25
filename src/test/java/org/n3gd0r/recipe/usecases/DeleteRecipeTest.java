@@ -1,7 +1,7 @@
 package org.n3gd0r.recipe.usecases;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -75,8 +75,9 @@ public class DeleteRecipeTest {
 
         boolean wasDeleted = deleteRecipeCommand.execute(parameters);
         List<Recipe> recipes = recipeRepository.findAll(PageRequest.of(0, 20)).toList();
-        assertThat(wasDeleted).isTrue();
-        assertThat(recipes).hasSize(0);
+
+        assertTrue(wasDeleted);
+        assertTrue(recipes.isEmpty());
     }
 
     @Test
@@ -86,9 +87,8 @@ public class DeleteRecipeTest {
         boolean wasDeleted = deleteRecipeCommand.execute(parameters);
         List<Recipe> recipes = recipeRepository.findAll(PageRequest.of(0, 20)).toList();
 
-        assertThat(wasDeleted).isTrue();
-        assertThat(recipes).hasSize(0);
-        assertThatExceptionOfType(RecipeNotFoundException.class)
-                .isThrownBy(() -> recipeRepository.validateExistsById(recipeIdToDelete));
+        assertTrue(wasDeleted);
+        assertTrue(recipes.isEmpty());
+        assertThrows(RecipeNotFoundException.class, () -> recipeRepository.validateExistsById(recipeIdToDelete));
     }
 }

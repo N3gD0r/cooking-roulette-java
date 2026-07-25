@@ -1,7 +1,8 @@
 package org.n3gd0r.recipe.usecases;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,8 +44,8 @@ public class RegisterRecipeTest {
                 instructions);
         Recipe recipe = registerRecipeCommand.execute(recipeParameters);
 
-        assertThat(recipe).isNotNull();
-        assertThat(recipeRepository.findAll(PageRequest.of(0, 10))).hasSize(1);
+        assertNotNull(recipe);
+        assertTrue(recipeRepository.findAll(PageRequest.of(0, 10)).getContent().size() == 1);
     }
 
     @Test
@@ -60,8 +61,7 @@ public class RegisterRecipeTest {
                 instructions);
         registerRecipeCommand.execute(recipeParameters);
 
-        assertThatExceptionOfType(RecipeWithNameAlreadyExistsException.class)
-                .isThrownBy(() -> registerRecipeCommand.execute(recipeParameters));
+        assertThrows(RecipeWithNameAlreadyExistsException.class, () -> registerRecipeCommand.execute(recipeParameters));
     }
 
     @Test
@@ -73,8 +73,8 @@ public class RegisterRecipeTest {
                         "Despues de ese lapso de tiempo, retirar los huevos y colocarlos en agua fria durante 5 minutos"),
                 new RegisterInstructionParameters(3, "Pelar los huevos"));
 
-        assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> new RegisterRecipeParameters("huevos cocidos", 15, ingredients, instructions));
+        assertThrows(IllegalArgumentException.class,
+                () -> new RegisterRecipeParameters("huevos cocidos", 15, ingredients, instructions));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class RegisterRecipeTest {
                 new RegisterIngredientParameters("huevos", IngredientEnum.CARNES, Mass.ofGrams(180)));
         List<RegisterInstructionParameters> instructions = Arrays.asList();
 
-        assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> new RegisterRecipeParameters("huevos cocidos", 15, ingredients, instructions));
+        assertThrows(IllegalArgumentException.class,
+                () -> new RegisterRecipeParameters("huevos cocidos", 15, ingredients, instructions));
     }
 }
