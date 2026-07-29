@@ -6,18 +6,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.util.UUID;
+import static org.n3gd0r.recipe.usecases.mocks.MockTestUtils.recipeForMocks;
+import static org.n3gd0r.recipe.usecases.mocks.MockTestUtils.recipeIdForMocks;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.n3gd0r.recipe.domain.IngredientEnum;
-import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
-import org.n3gd0r.recipe.domain.RecipeIngredientMother;
-import org.n3gd0r.recipe.domain.RecipeInstructionMother;
-import org.n3gd0r.recipe.domain.RecipeMother;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.n3gd0r.recipe.usecase.get.GetRecipeParameters;
 import org.n3gd0r.recipe.usecase.get.GetRecipeQuery;
@@ -35,7 +30,7 @@ public class GetRecipeMockTest {
     @Test
     void testMockRecipeRepositoryGetRecipeById() {
         Recipe mockedRecipe = recipeForMocks();
-        RecipeId recipeId = recipeId();
+        RecipeId recipeId = recipeIdForMocks();
         when(repository.getById(any(RecipeId.class))).thenReturn(mockedRecipe);
 
         Recipe foundRecipe = getRecipeQuery.execute(new GetRecipeParameters(recipeId));
@@ -53,25 +48,5 @@ public class GetRecipeMockTest {
 
         verify(repository, times(1)).findByName(any(String.class));
         assertEquals(mockedRecipe, foundRecipe);
-    }
-
-    private static Recipe recipeForMocks() {
-        return RecipeMother.recipe()
-                .name("huevos cocidos")
-                .cookTime(15)
-                .withIngredient(RecipeIngredientMother.recipeIngredient()
-                        .ingredientName("huevos")
-                        .ingredientType(IngredientEnum.CARNES)
-                        .weight(Mass.ofGrams(120))
-                        .build())
-                .withInstruction(RecipeInstructionMother.recipeInstruction()
-                        .instruction("Hervir los huevos")
-                        .instructionNumber(1)
-                        .build())
-                .build();
-    }
-
-    private static RecipeId recipeId() {
-        return new RecipeId(UUID.randomUUID());
     }
 }

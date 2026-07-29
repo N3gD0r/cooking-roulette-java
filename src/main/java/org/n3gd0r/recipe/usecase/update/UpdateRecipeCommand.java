@@ -1,7 +1,6 @@
 package org.n3gd0r.recipe.usecase.update;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.n3gd0r.infrastructure.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
@@ -35,13 +34,13 @@ public class UpdateRecipeCommand implements RequestHandler<UpdateRecipeParameter
                         ingredientParameters.ingredientName().trim().toLowerCase(),
                         ingredientParameters.ingredientType(),
                         ingredientParameters.weight()))
-                .collect(Collectors.toList());
+                .toList();
         List<RecipeInstruction> instructions = request.instructions().stream()
                 .map(instructionParameters -> new RecipeInstruction(
                         repository.nextRecipeInstructionId(),
                         instructionParameters.instructionNumber(),
                         instructionParameters.instruction()))
-                .collect(Collectors.toList());
+                .toList();
         recipe.setInstructions(instructions);
         recipe.setIngredients(ingredients);
         repository.save(recipe);
