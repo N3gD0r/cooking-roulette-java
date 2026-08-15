@@ -3,19 +3,21 @@ package org.n3gd0r.recipe.usecase.register;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.n3gd0r.commons.mediator.HandlerFor;
 import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
 import org.n3gd0r.recipe.domain.RecipeInstruction;
 import org.n3gd0r.recipe.repository.RecipeRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * RegisterRecipe
  */
-@Component
+@HandlerFor(RegisterRecipeParameters.class)
+@Service
 @Transactional
 public class RegisterRecipeHandler implements RequestHandler<RegisterRecipeParameters, Recipe> {
     private final RecipeRepository repository;

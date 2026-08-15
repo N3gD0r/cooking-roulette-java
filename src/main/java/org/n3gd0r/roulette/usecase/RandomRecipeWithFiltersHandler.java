@@ -5,16 +5,18 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import org.n3gd0r.commons.mediator.HandlerFor;
 import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.n3gd0r.roulette.domain.exception.NoRecipesFoundException;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@HandlerFor(RandomRecipeFiltersParameters.class)
+@Service
 @Transactional(readOnly = true)
 public class RandomRecipeWithFiltersHandler implements RequestHandler<RandomRecipeFiltersParameters, Recipe> {
     private final RecipeRepository repository;

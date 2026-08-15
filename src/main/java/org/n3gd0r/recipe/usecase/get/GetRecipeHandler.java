@@ -1,16 +1,18 @@
 package org.n3gd0r.recipe.usecase.get;
 
+import org.n3gd0r.commons.mediator.HandlerFor;
 import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.exception.RecipeNotFoundException;
 import org.n3gd0r.recipe.repository.RecipeRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * GetRecipe
  */
-@Component
+@HandlerFor(GetRecipeParameters.class)
+@Service
 @Transactional(readOnly = true)
 public class GetRecipeHandler implements RequestHandler<GetRecipeParameters, Recipe> {
     private final RecipeRepository repository;

@@ -1,14 +1,16 @@
 package org.n3gd0r.recipe.usecase.delete;
 
+import org.n3gd0r.commons.mediator.HandlerFor;
 import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.repository.RecipeRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * DeleteRecipe
  */
-@Component
+@HandlerFor(DeleteRecipeParameters.class)
+@Service
 @Transactional
 public class DeleteRecipeHandler implements RequestHandler<DeleteRecipeParameters, Void> {
     private final RecipeRepository repository;

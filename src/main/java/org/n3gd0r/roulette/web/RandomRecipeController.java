@@ -1,6 +1,6 @@
 package org.n3gd0r.roulette.web;
 
-import org.n3gd0r.commons.mediator.Mediator;
+import org.n3gd0r.commons.mediator.IMediator;
 import org.n3gd0r.recipe.web.dtos.responses.RecipeResponse;
 import org.n3gd0r.roulette.usecase.RandomRecipeParameters;
 import org.springframework.http.HttpStatus;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/random/recipe")
 public class RandomRecipeController {
-    private final Mediator mediator;
+    private final IMediator mediator;
 
-    public RandomRecipeController(Mediator mediator) {
+    public RandomRecipeController(IMediator mediator) {
         this.mediator = mediator;
     }
 

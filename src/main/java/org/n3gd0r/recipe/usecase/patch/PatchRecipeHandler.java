@@ -1,5 +1,6 @@
 package org.n3gd0r.recipe.usecase.patch;
 
+import org.n3gd0r.commons.mediator.HandlerFor;
 import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
@@ -9,10 +10,11 @@ import org.n3gd0r.recipe.domain.exception.RecipeIngredientNotFoundException;
 import org.n3gd0r.recipe.domain.exception.RecipeInstructionNotFoundException;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.n3gd0r.recipe.usecase.exception.NothingToPatchException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@HandlerFor(PatchRecipeParameters.class)
+@Service
 @Transactional
 public class PatchRecipeHandler implements RequestHandler<PatchRecipeParameters, Recipe> {
     private final RecipeRepository repository;

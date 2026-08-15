@@ -3,7 +3,7 @@ package org.n3gd0r.recipe.web;
 import java.util.List;
 import java.util.UUID;
 
-import org.n3gd0r.commons.mediator.Mediator;
+import org.n3gd0r.commons.mediator.IMediator;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.usecase.delete.DeleteRecipeParameters;
@@ -36,9 +36,9 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/recipes")
 public class RecipeController {
-    private final Mediator mediator;
+    private final IMediator mediator;
 
-    public RecipeController(Mediator mediator) {
+    public RecipeController(IMediator mediator) {
         this.mediator = mediator;
     }
 
