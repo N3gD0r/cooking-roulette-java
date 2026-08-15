@@ -18,17 +18,18 @@ import org.n3gd0r.recipe.domain.RecipeInstructionMother;
 import org.n3gd0r.recipe.domain.RecipeMother;
 import org.n3gd0r.recipe.repository.InMemoryRecipeRepository;
 import org.n3gd0r.recipe.repository.RecipeRepository;
+import org.n3gd0r.recipe.usecase.get.GetAllRecipesHandler;
 import org.n3gd0r.recipe.usecase.get.GetAllRecipesParameters;
-import org.n3gd0r.recipe.usecase.get.GetAllRecipesQuery;
+import org.springframework.data.domain.PageRequest;
 
 public class GetAllRecipesTest {
     private RecipeRepository recipeRepository;
-    private GetAllRecipesQuery getAllRecipesQuery;
+    private GetAllRecipesHandler getAllRecipesQuery;
 
     @BeforeEach
     void setUp() {
         recipeRepository = new InMemoryRecipeRepository();
-        getAllRecipesQuery = new GetAllRecipesQuery(recipeRepository);
+        getAllRecipesQuery = new GetAllRecipesHandler(recipeRepository);
 
         List<RecipeIngredient> ingredients = Arrays.asList(
                 RecipeIngredientMother.recipeIngredient()
@@ -64,7 +65,7 @@ public class GetAllRecipesTest {
 
     @Test
     void testGetAllRecipes() {
-        GetAllRecipesParameters parameters = new GetAllRecipesParameters();
+        GetAllRecipesParameters parameters = new GetAllRecipesParameters(PageRequest.of(0, 5));
 
         List<Recipe> recipes = getAllRecipesQuery.execute(parameters);
 
@@ -76,7 +77,7 @@ public class GetAllRecipesTest {
     @Test
     void testGetAllRecipesAfterDeleteOperationReturnsEmptyList() {
         recipeRepository.deleteAll();
-        GetAllRecipesParameters parameters = new GetAllRecipesParameters();
+        GetAllRecipesParameters parameters = new GetAllRecipesParameters(PageRequest.of(0, 5));
 
         List<Recipe> recipes = getAllRecipesQuery.execute(parameters);
 
@@ -116,7 +117,7 @@ public class GetAllRecipesTest {
                 .build();
 
         recipeRepository.save(recipe);
-        GetAllRecipesParameters parameters = new GetAllRecipesParameters();
+        GetAllRecipesParameters parameters = new GetAllRecipesParameters(PageRequest.of(0, 5));
 
         List<Recipe> recipes = getAllRecipesQuery.execute(parameters);
 

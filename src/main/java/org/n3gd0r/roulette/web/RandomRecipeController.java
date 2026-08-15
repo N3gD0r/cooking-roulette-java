@@ -1,6 +1,6 @@
 package org.n3gd0r.roulette.web;
 
-import org.n3gd0r.infrastructure.mediator.Mediator;
+import org.n3gd0r.commons.mediator.Mediator;
 import org.n3gd0r.recipe.web.dtos.responses.RecipeResponse;
 import org.n3gd0r.roulette.usecase.RandomRecipeParameters;
 import org.springframework.http.HttpStatus;

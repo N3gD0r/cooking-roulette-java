@@ -16,8 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeMother;
 import org.n3gd0r.recipe.repository.RecipeRepository;
+import org.n3gd0r.recipe.usecase.get.GetAllRecipesHandler;
 import org.n3gd0r.recipe.usecase.get.GetAllRecipesParameters;
-import org.n3gd0r.recipe.usecase.get.GetAllRecipesQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -25,20 +25,20 @@ import org.springframework.data.domain.Pageable;
 
 public class GetAllRecipesMockTest {
     private RecipeRepository repository;
-    private GetAllRecipesQuery getAllRecipesQuery;
+    private GetAllRecipesHandler getAllRecipesQuery;
 
     @BeforeEach
     void setUp() {
         repository = mock(RecipeRepository.class);
-        getAllRecipesQuery = new GetAllRecipesQuery(repository);
+        getAllRecipesQuery = new GetAllRecipesHandler(repository);
     }
 
     @Test
     void testGetAllRecipes() {
         when(repository.findAll(any(Pageable.class)))
                 .thenReturn(Page.empty());
-        getAllRecipesQuery.execute(new GetAllRecipesParameters());
-        verify(repository, times(1)).findAll(any(Pageable.class));
+        getAllRecipesQuery.execute(new GetAllRecipesParameters(PageRequest.of(0, 5)));
+        verify(repository, times(1)).findAll(PageRequest.of(0, 5));
     }
 
     @Test
@@ -46,7 +46,7 @@ public class GetAllRecipesMockTest {
         when(repository.findAll(any(Pageable.class)))
                 .thenReturn(getRecipesPage(PageRequest.of(0, 5)));
 
-        List<Recipe> recipes = getAllRecipesQuery.execute(new GetAllRecipesParameters(0, 5));
+        List<Recipe> recipes = getAllRecipesQuery.execute(new GetAllRecipesParameters(PageRequest.of(0, 5)));
         verify(repository, times(1)).findAll(any(Pageable.class));
         assertNotNull(recipes);
         assertTrue(recipes.size() == 2);

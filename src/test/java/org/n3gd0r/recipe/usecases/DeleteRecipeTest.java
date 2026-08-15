@@ -21,19 +21,19 @@ import org.n3gd0r.recipe.domain.RecipeMother;
 import org.n3gd0r.recipe.domain.exception.RecipeNotFoundException;
 import org.n3gd0r.recipe.repository.InMemoryRecipeRepository;
 import org.n3gd0r.recipe.repository.RecipeRepository;
-import org.n3gd0r.recipe.usecase.delete.DeleteRecipeCommand;
+import org.n3gd0r.recipe.usecase.delete.DeleteRecipeHandler;
 import org.n3gd0r.recipe.usecase.delete.DeleteRecipeParameters;
 import org.springframework.data.domain.PageRequest;
 
 public class DeleteRecipeTest {
     private RecipeRepository recipeRepository;
-    private DeleteRecipeCommand deleteRecipeCommand;
+    private DeleteRecipeHandler deleteRecipeCommand;
     private RecipeId recipeIdToDelete;
 
     @BeforeEach
     void setUp() {
         recipeRepository = new InMemoryRecipeRepository();
-        deleteRecipeCommand = new DeleteRecipeCommand(recipeRepository);
+        deleteRecipeCommand = new DeleteRecipeHandler(recipeRepository);
         recipeIdToDelete = new RecipeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
 
         List<RecipeIngredient> ingredients = Arrays.asList(
@@ -73,10 +73,9 @@ public class DeleteRecipeTest {
     void testDeleteRecipeById() {
         DeleteRecipeParameters parameters = new DeleteRecipeParameters(recipeIdToDelete);
 
-        boolean wasDeleted = deleteRecipeCommand.execute(parameters);
+        deleteRecipeCommand.execute(parameters);
         List<Recipe> recipes = recipeRepository.findAll(PageRequest.of(0, 20)).toList();
 
-        assertTrue(wasDeleted);
         assertTrue(recipes.isEmpty());
     }
 
@@ -84,10 +83,9 @@ public class DeleteRecipeTest {
     void testDeleteRecipeWithNoRecipesAtAllThrowsException() {
         DeleteRecipeParameters parameters = new DeleteRecipeParameters(recipeIdToDelete);
 
-        boolean wasDeleted = deleteRecipeCommand.execute(parameters);
+        deleteRecipeCommand.execute(parameters);
         List<Recipe> recipes = recipeRepository.findAll(PageRequest.of(0, 20)).toList();
 
-        assertTrue(wasDeleted);
         assertTrue(recipes.isEmpty());
         assertThrows(RecipeNotFoundException.class, () -> recipeRepository.validateExistsById(recipeIdToDelete));
     }

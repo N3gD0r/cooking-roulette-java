@@ -22,19 +22,19 @@ import org.n3gd0r.recipe.domain.RecipeMother;
 import org.n3gd0r.recipe.domain.exception.RecipeNotFoundException;
 import org.n3gd0r.recipe.repository.InMemoryRecipeRepository;
 import org.n3gd0r.recipe.repository.RecipeRepository;
+import org.n3gd0r.recipe.usecase.get.GetRecipeHandler;
 import org.n3gd0r.recipe.usecase.get.GetRecipeParameters;
-import org.n3gd0r.recipe.usecase.get.GetRecipeQuery;
 
 public class GetRecipeTest {
     private RecipeRepository recipeRepository;
-    private GetRecipeQuery getRecipeQuery;
+    private GetRecipeHandler getRecipeQuery;
     private RecipeId recipeIdToFetch;
     private Recipe recipe;
 
     @BeforeEach
     void setUp() {
         recipeRepository = new InMemoryRecipeRepository();
-        getRecipeQuery = new GetRecipeQuery(recipeRepository);
+        getRecipeQuery = new GetRecipeHandler(recipeRepository);
         recipeIdToFetch = new RecipeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
 
         List<RecipeIngredient> ingredients = Arrays.asList(
@@ -61,7 +61,7 @@ public class GetRecipeTest {
 
     @Test
     void testGetRecipeById() {
-        GetRecipeParameters parameters = new GetRecipeParameters(recipeIdToFetch);
+        GetRecipeParameters parameters = new GetRecipeParameters(recipeIdToFetch, null);
 
         Recipe recipe = getRecipeQuery.execute(parameters);
 
@@ -71,7 +71,7 @@ public class GetRecipeTest {
 
     @Test
     void testGetRecipeByName() {
-        GetRecipeParameters parameters = new GetRecipeParameters("huevos cocidos");
+        GetRecipeParameters parameters = new GetRecipeParameters(null, "huevos cocidos");
 
         Recipe recipe = getRecipeQuery.execute(parameters);
 
@@ -82,14 +82,14 @@ public class GetRecipeTest {
 
     @Test
     void testGetRecibeWithWrongIdThrowsException() {
-        GetRecipeParameters parameters = new GetRecipeParameters(new RecipeId(UUID.randomUUID()));
+        GetRecipeParameters parameters = new GetRecipeParameters(new RecipeId(UUID.randomUUID()), null);
 
         assertThrows(RecipeNotFoundException.class, () -> getRecipeQuery.execute(parameters));
     }
 
     @Test
     void testGetRecibeWithWrongNameThrowsException() {
-        GetRecipeParameters parameters = new GetRecipeParameters("Definetly not a name 123");
+        GetRecipeParameters parameters = new GetRecipeParameters(null, "Definetly not a name 123");
 
         assertThrows(RecipeNotFoundException.class, () -> getRecipeQuery.execute(parameters));
     }

@@ -25,18 +25,18 @@ import org.n3gd0r.recipe.repository.InMemoryRecipeRepository;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.n3gd0r.recipe.usecase.update.UpdateIngredientParameters;
 import org.n3gd0r.recipe.usecase.update.UpdateInstructionParameters;
-import org.n3gd0r.recipe.usecase.update.UpdateRecipeCommand;
+import org.n3gd0r.recipe.usecase.update.UpdateRecipeHandler;
 import org.n3gd0r.recipe.usecase.update.UpdateRecipeParameters;
 
 public class UpdateRecipeTest {
     private RecipeRepository recipeRepository;
-    private UpdateRecipeCommand updateRecipeCommand;
+    private UpdateRecipeHandler updateRecipeCommand;
     private RecipeId recipeIdToUpdate;
 
     @BeforeEach
     void setUp() {
         recipeRepository = new InMemoryRecipeRepository();
-        updateRecipeCommand = new UpdateRecipeCommand(recipeRepository);
+        updateRecipeCommand = new UpdateRecipeHandler(recipeRepository);
 
         recipeIdToUpdate = new RecipeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
         List<RecipeIngredient> ingredients = Arrays.asList(

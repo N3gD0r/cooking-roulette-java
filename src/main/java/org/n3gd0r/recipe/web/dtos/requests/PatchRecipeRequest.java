@@ -51,13 +51,7 @@ public record PatchRecipeRequest(
         return new PatchRecipeParameters(new RecipeId(id),
                 name,
                 cookTime,
-                ingredients == null ? null
-                        : ingredients.stream()
-                                .map(PatchIngredientRequest::toParameters)
-                                .toList(),
-                instructions == null ? null
-                        : instructions.stream()
-                                .map(PatchInstructionRequest::toParameters)
-                                .toList());
+                instructions == null ? null : instructions.stream().map(PatchInstructionRequest::toParameters).toList(),
+                ingredients == null ? null : ingredients.stream().map(PatchIngredientRequest::toParameters).toList());
     }
 }

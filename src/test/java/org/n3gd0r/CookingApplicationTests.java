@@ -5,10 +5,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class CookingApplicationTests {
-
-    // TODO test recipe controller, and database
+    // TODO test recipe controller
     @Test
     void contextLoads() {
     }
-
 }

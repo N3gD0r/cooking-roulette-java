@@ -17,18 +17,18 @@ import org.n3gd0r.recipe.repository.InMemoryRecipeRepository;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.n3gd0r.recipe.usecase.register.RegisterIngredientParameters;
 import org.n3gd0r.recipe.usecase.register.RegisterInstructionParameters;
-import org.n3gd0r.recipe.usecase.register.RegisterRecipeCommand;
+import org.n3gd0r.recipe.usecase.register.RegisterRecipeHandler;
 import org.n3gd0r.recipe.usecase.register.RegisterRecipeParameters;
 import org.springframework.data.domain.PageRequest;
 
 public class RegisterRecipeTest {
     private RecipeRepository recipeRepository;
-    private RegisterRecipeCommand registerRecipeCommand;
+    private RegisterRecipeHandler registerRecipeCommand;
 
     @BeforeEach
     void setUp() {
         recipeRepository = new InMemoryRecipeRepository();
-        registerRecipeCommand = new RegisterRecipeCommand(recipeRepository);
+        registerRecipeCommand = new RegisterRecipeHandler(recipeRepository);
     }
 
     @Test

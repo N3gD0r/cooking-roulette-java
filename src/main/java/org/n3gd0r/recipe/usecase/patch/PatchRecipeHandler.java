@@ -1,6 +1,6 @@
 package org.n3gd0r.recipe.usecase.patch;
 
-import org.n3gd0r.infrastructure.mediator.RequestHandler;
+import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
 import org.n3gd0r.recipe.domain.RecipeInstruction;
@@ -14,10 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Transactional
-public class PatchRecipeCommand implements RequestHandler<PatchRecipeParameters, Recipe> {
+public class PatchRecipeHandler implements RequestHandler<PatchRecipeParameters, Recipe> {
     private final RecipeRepository repository;
 
-    public PatchRecipeCommand(RecipeRepository repository) {
+    public PatchRecipeHandler(RecipeRepository repository) {
         this.repository = repository;
     }
 
@@ -27,8 +27,8 @@ public class PatchRecipeCommand implements RequestHandler<PatchRecipeParameters,
             throw new NothingToPatchException();
         }
 
-        repository.validateExistsById(request.id());
-        Recipe recipe = repository.getById(request.id());
+        repository.validateExistsById(request.recipeId());
+        Recipe recipe = repository.getById(request.recipeId());
 
         if (request.name() != null && !recipe.getName().equalsIgnoreCase(request.name())) {
             repository.validateNameUnique(request.name().trim().toLowerCase());

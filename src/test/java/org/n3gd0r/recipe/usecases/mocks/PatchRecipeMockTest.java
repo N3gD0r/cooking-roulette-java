@@ -16,17 +16,17 @@ import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeMother;
 import org.n3gd0r.recipe.repository.RecipeRepository;
-import org.n3gd0r.recipe.usecase.patch.PatchRecipeCommand;
+import org.n3gd0r.recipe.usecase.patch.PatchRecipeHandler;
 import org.n3gd0r.recipe.usecase.patch.PatchRecipeParameters;
 
 public class PatchRecipeMockTest {
     private RecipeRepository repository;
-    private PatchRecipeCommand patchRecipeCommand;
+    private PatchRecipeHandler patchRecipeCommand;
 
     @BeforeEach
     void setUp() {
         repository = mock(RecipeRepository.class);
-        patchRecipeCommand = new PatchRecipeCommand(repository);
+        patchRecipeCommand = new PatchRecipeHandler(repository);
     }
 
     @Test

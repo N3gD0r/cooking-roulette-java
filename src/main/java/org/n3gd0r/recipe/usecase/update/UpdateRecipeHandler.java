@@ -2,7 +2,7 @@ package org.n3gd0r.recipe.usecase.update;
 
 import java.util.List;
 
-import org.n3gd0r.infrastructure.mediator.RequestHandler;
+import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
 import org.n3gd0r.recipe.domain.RecipeInstruction;
@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Transactional
-public class UpdateRecipeCommand implements RequestHandler<UpdateRecipeParameters, Recipe> {
+public class UpdateRecipeHandler implements RequestHandler<UpdateRecipeParameters, Recipe> {
     private final RecipeRepository repository;
 
-    public UpdateRecipeCommand(RecipeRepository repository) {
+    public UpdateRecipeHandler(RecipeRepository repository) {
         this.repository = repository;
     }
 

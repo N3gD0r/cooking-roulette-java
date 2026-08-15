@@ -25,17 +25,17 @@ import org.n3gd0r.recipe.domain.RecipeMother;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.n3gd0r.recipe.usecase.register.RegisterIngredientParameters;
 import org.n3gd0r.recipe.usecase.register.RegisterInstructionParameters;
-import org.n3gd0r.recipe.usecase.register.RegisterRecipeCommand;
+import org.n3gd0r.recipe.usecase.register.RegisterRecipeHandler;
 import org.n3gd0r.recipe.usecase.register.RegisterRecipeParameters;
 
 public class RegisterRecipeMockTest {
     private RecipeRepository repository;
-    private RegisterRecipeCommand registerRecipeCommand;
+    private RegisterRecipeHandler registerRecipeCommand;
 
     @BeforeEach
     void setUp() {
         repository = Mockito.mock(RecipeRepository.class);
-        registerRecipeCommand = new RegisterRecipeCommand(repository);
+        registerRecipeCommand = new RegisterRecipeHandler(repository);
     }
 
     @Test

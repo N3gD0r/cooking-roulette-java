@@ -14,17 +14,17 @@ import org.junit.jupiter.api.Test;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.repository.RecipeRepository;
+import org.n3gd0r.recipe.usecase.get.GetRecipeHandler;
 import org.n3gd0r.recipe.usecase.get.GetRecipeParameters;
-import org.n3gd0r.recipe.usecase.get.GetRecipeQuery;
 
 public class GetRecipeMockTest {
     private RecipeRepository repository;
-    private GetRecipeQuery getRecipeQuery;
+    private GetRecipeHandler getRecipeQuery;
 
     @BeforeEach
     void setUp() {
         repository = mock(RecipeRepository.class);
-        getRecipeQuery = new GetRecipeQuery(repository);
+        getRecipeQuery = new GetRecipeHandler(repository);
     }
 
     @Test
@@ -33,7 +33,7 @@ public class GetRecipeMockTest {
         RecipeId recipeId = recipeIdForMocks();
         when(repository.getById(any(RecipeId.class))).thenReturn(mockedRecipe);
 
-        Recipe foundRecipe = getRecipeQuery.execute(new GetRecipeParameters(recipeId));
+        Recipe foundRecipe = getRecipeQuery.execute(new GetRecipeParameters(recipeId, null));
 
         verify(repository, times(1)).getById(any(RecipeId.class));
         assertEquals(mockedRecipe, foundRecipe);
@@ -44,7 +44,7 @@ public class GetRecipeMockTest {
         Recipe mockedRecipe = recipeForMocks();
         when(repository.findByName(any(String.class))).thenReturn(mockedRecipe);
 
-        Recipe foundRecipe = getRecipeQuery.execute(new GetRecipeParameters("huevos cocidos"));
+        Recipe foundRecipe = getRecipeQuery.execute(new GetRecipeParameters(null, "huevos cocidos"));
 
         verify(repository, times(1)).findByName(any(String.class));
         assertEquals(mockedRecipe, foundRecipe);

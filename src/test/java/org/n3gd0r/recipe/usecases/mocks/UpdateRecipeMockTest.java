@@ -18,17 +18,17 @@ import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.n3gd0r.recipe.usecase.update.UpdateIngredientParameters;
 import org.n3gd0r.recipe.usecase.update.UpdateInstructionParameters;
-import org.n3gd0r.recipe.usecase.update.UpdateRecipeCommand;
+import org.n3gd0r.recipe.usecase.update.UpdateRecipeHandler;
 import org.n3gd0r.recipe.usecase.update.UpdateRecipeParameters;
 
 public class UpdateRecipeMockTest {
     private RecipeRepository repository;
-    private UpdateRecipeCommand updateRecipeCommand;
+    private UpdateRecipeHandler updateRecipeCommand;
 
     @BeforeEach
     void setUp() {
         repository = mock(RecipeRepository.class);
-        updateRecipeCommand = new UpdateRecipeCommand(repository);
+        updateRecipeCommand = new UpdateRecipeHandler(repository);
     }
 
     @Test

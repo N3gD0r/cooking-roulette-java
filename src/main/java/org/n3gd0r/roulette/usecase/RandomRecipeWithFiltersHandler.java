@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
-import org.n3gd0r.infrastructure.mediator.RequestHandler;
+import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.repository.RecipeRepository;
@@ -16,10 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Transactional(readOnly = true)
-public class RandomRecipeFiltersQuery implements RequestHandler<RandomRecipeFiltersParameters, Recipe> {
+public class RandomRecipeWithFiltersHandler implements RequestHandler<RandomRecipeFiltersParameters, Recipe> {
     private final RecipeRepository repository;
 
-    public RandomRecipeFiltersQuery(RecipeRepository repository) {
+    public RandomRecipeWithFiltersHandler(RecipeRepository repository) {
         this.repository = repository;
     }
 

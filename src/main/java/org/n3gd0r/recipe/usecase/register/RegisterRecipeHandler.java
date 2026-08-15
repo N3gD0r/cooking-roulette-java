@@ -3,7 +3,7 @@ package org.n3gd0r.recipe.usecase.register;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.n3gd0r.infrastructure.mediator.RequestHandler;
+import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
@@ -17,10 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Component
 @Transactional
-public class RegisterRecipeCommand implements RequestHandler<RegisterRecipeParameters, Recipe> {
+public class RegisterRecipeHandler implements RequestHandler<RegisterRecipeParameters, Recipe> {
     private final RecipeRepository repository;
 
-    public RegisterRecipeCommand(RecipeRepository repository) {
+    public RegisterRecipeHandler(RecipeRepository repository) {
         this.repository = repository;
     }
 

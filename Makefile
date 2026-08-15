@@ -1,4 +1,4 @@
-MVN := ./mvnw
+MVN := mvn
 MVN_SPRING := spring-boot:run
 
 .PHONY: dev

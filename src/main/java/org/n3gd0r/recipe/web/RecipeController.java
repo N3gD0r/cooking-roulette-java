@@ -3,7 +3,7 @@ package org.n3gd0r.recipe.web;
 import java.util.List;
 import java.util.UUID;
 
-import org.n3gd0r.infrastructure.mediator.Mediator;
+import org.n3gd0r.commons.mediator.Mediator;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.usecase.delete.DeleteRecipeParameters;
@@ -14,6 +14,7 @@ import org.n3gd0r.recipe.web.dtos.requests.RegisterRecipeWithAllRequest;
 import org.n3gd0r.recipe.web.dtos.requests.UpdateRecipeRequest;
 import org.n3gd0r.recipe.web.dtos.responses.DeletedRecipeResponse;
 import org.n3gd0r.recipe.web.dtos.responses.RecipeResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,29 +52,22 @@ public class RecipeController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public RecipeResponse getRecipe(@PathVariable UUID id) {
-        Recipe recipe = mediator.send(new GetRecipeParameters(new RecipeId(id)));
+        Recipe recipe = mediator.send(new GetRecipeParameters(new RecipeId(id), null));
         return RecipeResponse.of(recipe);
     }
 
     @GetMapping("/filter")
     @ResponseStatus(HttpStatus.OK)
     public RecipeResponse getRecipeByName(@RequestParam String name) {
-        Recipe recipe = mediator.send(new GetRecipeParameters(name));
+        Recipe recipe = mediator.send(new GetRecipeParameters(null, name));
         return RecipeResponse.of(recipe);
-    }
-
-    @GetMapping("/{page}/{size}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<RecipeResponse> getRecipes(@PathVariable int page,
-            @PathVariable int size) {
-        GetAllRecipesParameters query = new GetAllRecipesParameters(page, size);
-        return mediator.send(query).stream().map(RecipeResponse::of).toList();
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<RecipeResponse> getRecipes() {
-        return mediator.send(new GetAllRecipesParameters()).stream().map(RecipeResponse::of).toList();
+    public List<RecipeResponse> getRecipes(Pageable pageable) {
+        GetAllRecipesParameters query = new GetAllRecipesParameters(pageable);
+        return mediator.send(query).stream().map(RecipeResponse::of).toList();
     }
 
     @PatchMapping("/{id}")
@@ -93,7 +87,7 @@ public class RecipeController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public DeletedRecipeResponse deleteRecipe(@PathVariable UUID id) {
-        boolean wasDeleted = mediator.send(new DeleteRecipeParameters(new RecipeId(id)));
-        return DeletedRecipeResponse.of(wasDeleted);
+        mediator.send(new DeleteRecipeParameters(new RecipeId(id)));
+        return DeletedRecipeResponse.of(true);
     }
 }
