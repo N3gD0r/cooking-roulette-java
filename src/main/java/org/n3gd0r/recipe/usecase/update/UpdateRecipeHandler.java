@@ -2,6 +2,8 @@ package org.n3gd0r.recipe.usecase.update;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.n3gd0r.commons.mediator.HandlerFor;
 import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
@@ -11,6 +13,7 @@ import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @HandlerFor(UpdateRecipeParameters.class)
 @Service
 @Transactional
@@ -23,9 +26,11 @@ public class UpdateRecipeHandler implements RequestHandler<UpdateRecipeParameter
 
     @Override
     public Recipe execute(UpdateRecipeParameters request) {
+        log.info("Updating recipe: {}", request.recipeId());
         repository.validateExistsById(request.recipeId());
         Recipe recipe = repository.getById(request.recipeId());
         if (!recipe.getName().equalsIgnoreCase(request.name().trim())) {
+            log.debug("Updating recipe name from '{}' to '{}'", recipe.getName(), request.name());
             repository.validateNameUnique(request.name().trim());
         }
         recipe.setName(request.name().trim().toLowerCase());
@@ -37,15 +42,18 @@ public class UpdateRecipeHandler implements RequestHandler<UpdateRecipeParameter
                         ingredientParameters.ingredientType(),
                         ingredientParameters.weight()))
                 .toList();
+        log.debug("Created {} ingredients for update of recipe: {}", ingredients.size(), request.recipeId());
         List<RecipeInstruction> instructions = request.instructions().stream()
                 .map(instructionParameters -> new RecipeInstruction(
                         repository.nextRecipeInstructionId(),
                         instructionParameters.instructionNumber(),
                         instructionParameters.instruction()))
                 .toList();
+        log.debug("Created {} instructions for update of recipe: {}", instructions.size(), request.recipeId());
         recipe.setInstructions(instructions);
         recipe.setIngredients(ingredients);
         repository.save(recipe);
+        log.info("Recipe updated successfully: {}", request.recipeId());
         return recipe;
     }
 }

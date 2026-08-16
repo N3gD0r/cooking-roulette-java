@@ -11,6 +11,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * A Recipe consists of: The name of the recipe; Ingredients, a set of
@@ -18,6 +20,8 @@ import jakarta.persistence.OneToMany;
  * list of instructions, a step-by-step guide on how to cook the recipe, and
  * last: The estimated cooking time
  */
+@Getter
+@Setter
 @Entity
 public class Recipe extends AbstractEntity<RecipeId> {
     @Column(length = 255, unique = true)
@@ -45,30 +49,6 @@ public class Recipe extends AbstractEntity<RecipeId> {
         for (RecipeInstruction instruction : instructions) {
             addInstruction(instruction);
         }
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getCookTime() {
-        return cookTime;
-    }
-
-    public void setCookTime(int cookTime) {
-        this.cookTime = cookTime;
-    }
-
-    public List<RecipeIngredient> getIngredients() {
-        return ingredients;
-    }
-
-    public List<RecipeInstruction> getInstructions() {
-        return instructions;
     }
 
     public void addInstruction(RecipeInstruction recipeInstruction) {

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.n3gd0r.commons.mediator.HandlerFor;
 import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.IngredientEnum;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @HandlerFor(RandomRecipeFiltersParameters.class)
 @Service
 @Transactional(readOnly = true)
@@ -27,9 +30,12 @@ public class RandomRecipeWithFiltersHandler implements RequestHandler<RandomReci
 
     @Override
     public Recipe execute(RandomRecipeFiltersParameters request) {
+        log.info("Getting random recipe with filters");
         long totalRecipes = repository.count();
+        log.debug("Total recipes in database: {}", totalRecipes);
 
         if (request.isEmptyRequest()) {
+            log.debug("Empty filter request, selecting random recipe from all");
             int randomPage = new Random().nextInt((int) totalRecipes);
             Recipe foundRecipe = repository.findAll(PageRequest.of(randomPage, 1)).stream()
                     .findFirst()
@@ -38,9 +44,11 @@ public class RandomRecipeWithFiltersHandler implements RequestHandler<RandomReci
         }
 
         if (totalRecipes < 1) {
+            log.warn("No recipes found in database");
             throw new NoRecipesFoundException();
         }
         if (totalRecipes == 1) {
+            log.debug("Only one recipe exists, returning it");
             return repository.findAll(PageRequest.of(0, 1)).stream()
                     .findFirst()
                     .orElseThrow(NoRecipesFoundException::new);
@@ -48,6 +56,7 @@ public class RandomRecipeWithFiltersHandler implements RequestHandler<RandomReci
 
         int totalPages = totalRecipes < request.pageSize() ? 1
                 : (int) Math.ceil((double) totalRecipes / request.pageSize());
+        log.debug("Scanning {} pages with pageSize: {}", totalPages, request.pageSize());
         List<Recipe> recipes = new ArrayList<>();
 
         for (int i = 0; i < totalPages; i++) {
@@ -60,11 +69,14 @@ public class RandomRecipeWithFiltersHandler implements RequestHandler<RandomReci
         }
 
         long foundRecipes = recipes.size();
+        log.debug("Found {} recipes matching filters out of {} total", foundRecipes, totalRecipes);
 
         if (foundRecipes < 1) {
+            log.warn("No recipes matched the given filters");
             throw new NoRecipesFoundException();
         }
         if (foundRecipes == 1) {
+            log.debug("Only one recipe matched filters, returning it");
             return recipes.getFirst();
         }
 
@@ -74,6 +86,7 @@ public class RandomRecipeWithFiltersHandler implements RequestHandler<RandomReci
                 .findFirst()
                 .orElseThrow(NoRecipesFoundException::new);
 
+        log.info("Random recipe selected with filters: {} ({})", randomRecipe.getName(), randomRecipe.getId());
         return randomRecipe;
     }
 

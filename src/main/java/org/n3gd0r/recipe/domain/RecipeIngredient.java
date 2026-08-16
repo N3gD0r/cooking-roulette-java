@@ -8,7 +8,11 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 public class RecipeIngredient extends AbstractEntity<RecipeIngredientId> {
     @Column(length = 255)
@@ -29,39 +33,7 @@ public class RecipeIngredient extends AbstractEntity<RecipeIngredientId> {
         this.weight = weight;
     }
 
-    public Mass getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Mass weight) {
-        this.weight = weight;
-    }
-
     public int totalMass() {
         return weight.value();
-    }
-
-    public IngredientEnum getIngredientType() {
-        return ingredientType;
-    }
-
-    public void setIngredientType(IngredientEnum ingredientType) {
-        this.ingredientType = ingredientType;
-    }
-
-    public String getIngredientName() {
-        return ingredientName;
-    }
-
-    public void setIngredientName(String ingredientName) {
-        this.ingredientName = ingredientName;
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
     }
 }
