@@ -1,19 +1,19 @@
 package org.n3gd0r.recipe.usecase.patch;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.n3gd0r.commons.mediator.HandlerFor;
 import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
 import org.n3gd0r.recipe.domain.RecipeInstruction;
-import org.n3gd0r.recipe.domain.exception.EntityNotSuitableForUpdateException;
+import org.n3gd0r.recipe.domain.exception.EntityNotSuitableForPatchException;
 import org.n3gd0r.recipe.domain.exception.RecipeIngredientNotFoundException;
 import org.n3gd0r.recipe.domain.exception.RecipeInstructionNotFoundException;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.n3gd0r.recipe.usecase.exception.NothingToPatchException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @HandlerFor(PatchRecipeParameters.class)
@@ -88,7 +88,7 @@ public class PatchRecipeHandler implements RequestHandler<PatchRecipeParameters,
                     parameters.instruction()));
         } else {
             log.error("Entity not suitable for update: RecipeInstruction - Missing instruction information");
-            throw new EntityNotSuitableForUpdateException("RecipeInstruction", "Missing instruction information.");
+            throw new EntityNotSuitableForPatchException("RecipeInstruction", "Missing instruction information.");
         }
     }
 
@@ -121,7 +121,7 @@ public class PatchRecipeHandler implements RequestHandler<PatchRecipeParameters,
                     parameters.weight()));
         } else {
             log.error("Entity not suitable for update: RecipeIngredient - Missing ingredient information");
-            throw new EntityNotSuitableForUpdateException("RecipeIngredient", "Missing ingredient information.");
+            throw new EntityNotSuitableForPatchException("RecipeIngredient", "Missing ingredient information.");
         }
     }
 }

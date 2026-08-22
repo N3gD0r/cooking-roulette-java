@@ -1,49 +1,49 @@
 package org.n3gd0r.roulette.web;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.n3gd0r.commons.mediator.IMediator;
-import org.n3gd0r.infrastructure.hateoas.RecipeLinkBuilder;
-import org.n3gd0r.infrastructure.hateoas.RecipeResponseModel;
+import org.n3gd0r.infrastructure.hateoas.RecipeModelAssembler;
+import org.n3gd0r.infrastructure.hateoas.RecipeResponse;
 import org.n3gd0r.roulette.usecase.RandomRecipeParameters;
-import org.springframework.http.HttpStatus;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/random/recipe")
+@RequestMapping("/api/recipes")
 public class RandomRecipeController {
     private final IMediator mediator;
+    private final RecipeModelAssembler modelAssembler;
 
-    public RandomRecipeController(IMediator mediator) {
+    public RandomRecipeController(IMediator mediator, RecipeModelAssembler modelAssembler) {
         this.mediator = mediator;
+        this.modelAssembler = modelAssembler;
     }
 
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public RecipeResponseModel getRandomRecipe() {
+    @GetMapping("/random")
+    public ResponseEntity<EntityModel<RecipeResponse>> getRandomRecipe() {
         log.info("GET /api/random/recipe - Getting random recipe");
-        RecipeResponseModel model = RecipeResponseModel.of(mediator.send(new RandomRecipeParameters()));
-        model.add(RecipeLinkBuilder.selfLink(model.getId()));
-        model.add(RecipeLinkBuilder.collectionLink());
-        model.add(RecipeLinkBuilder.randomLink());
-        return model;
+        var params = new RandomRecipeParameters();
+        var recipe = mediator.send(params);
+        var recipeResponse = RecipeResponse.of(recipe);
+        var model = modelAssembler.toModel(recipeResponse);
+        return ResponseEntity.ok(model);
     }
 
-    @PostMapping("/{pageSize}")
-    @ResponseStatus(HttpStatus.OK)
-    public RecipeResponseModel getRandomRecipe(@PathVariable int pageSize, @RequestBody RandomRecipeRequest params) {
-        log.info("POST /api/random/recipe/{} - Getting random recipe with filters", pageSize);
-        RecipeResponseModel model = RecipeResponseModel.of(mediator.send(params.toQuery(pageSize)));
-        model.add(RecipeLinkBuilder.selfLink(model.getId()));
-        model.add(RecipeLinkBuilder.collectionLink());
-        model.add(RecipeLinkBuilder.randomLink());
-        return model;
+    @GetMapping("/random/filter")
+    public ResponseEntity<EntityModel<RecipeResponse>> getRandomRecipe(@RequestParam int pageSize,
+            RandomRecipeRequest request) {
+        log.info("GET /api/random/recipe/{} - Getting random recipe from page size: {}", pageSize);
+        log.info("GET /api/random/recipe/{} - Using filters: {}", pageSize, request);
+        var params = request.toQuery(pageSize);
+        var recipe = mediator.send(params);
+        var recipeResponse = RecipeResponse.of(recipe);
+        var model = modelAssembler.toModel(recipeResponse);
+        return ResponseEntity.ok(model);
     }
 }

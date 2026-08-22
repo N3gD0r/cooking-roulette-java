@@ -15,29 +15,15 @@ public record PatchRecipeParameters(RecipeId recipeId, String name, Integer cook
         Assert.notNull(recipeId, "The PatchRecipeParameters recipeId should not be null");
     }
 
+    /**
+     * Returns true if there's nothing to patch: no name, no cookTime, and no
+     * meaningful ingredient or instruction changes.
+     */
     public boolean nothingToPatch() {
-        if (recipeId == null) {
-            return true;
-        }
-        if ((name == null || (name != null && name.isBlank())) && cookTime == null && ingredients == null
-                && instructions == null) {
-            return true;
-        }
-        if ((name == null || (name != null && name.isBlank())) && cookTime == null && instructions == null
-                && ingredients != null
-                && ingredients.size() == 0) {
-            return true;
-        }
-        if ((name == null || (name != null && name.isBlank())) && cookTime == null && ingredients == null
-                && instructions != null
-                && instructions.size() == 0) {
-            return true;
-        }
-        if ((name == null || (name != null && name.isBlank())) && cookTime == null && ingredients != null
-                && instructions != null
-                && instructions.size() == 0 && ingredients.size() == 0) {
-            return true;
-        }
-        return false;
+        boolean hasName = name != null && !name.isBlank();
+        boolean hasCookTime = cookTime != null;
+        boolean hasIngredients = ingredients != null && !ingredients.isEmpty();
+        boolean hasInstructions = instructions != null && !instructions.isEmpty();
+        return !hasName && !hasCookTime && !hasIngredients && !hasInstructions;
     }
 }

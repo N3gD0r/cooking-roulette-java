@@ -2,10 +2,8 @@ package org.n3gd0r.roulette.usecase;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
-
-import lombok.extern.slf4j.Slf4j;
 
 import org.n3gd0r.commons.mediator.HandlerFor;
 import org.n3gd0r.commons.mediator.RequestHandler;
@@ -16,6 +14,8 @@ import org.n3gd0r.roulette.domain.exception.NoRecipesFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @HandlerFor(RandomRecipeFiltersParameters.class)
@@ -33,25 +33,18 @@ public class RandomRecipeWithFiltersHandler implements RequestHandler<RandomReci
         log.info("Getting random recipe with filters");
         long totalRecipes = repository.count();
         log.debug("Total recipes in database: {}", totalRecipes);
-
-        if (request.isEmptyRequest()) {
-            log.debug("Empty filter request, selecting random recipe from all");
-            int randomPage = new Random().nextInt((int) totalRecipes);
-            Recipe foundRecipe = repository.findAll(PageRequest.of(randomPage, 1)).stream()
-                    .findFirst()
-                    .orElseThrow(NoRecipesFoundException::new);
-            return foundRecipe;
-        }
-
         if (totalRecipes < 1) {
             log.warn("No recipes found in database");
             throw new NoRecipesFoundException();
         }
-        if (totalRecipes == 1) {
-            log.debug("Only one recipe exists, returning it");
-            return repository.findAll(PageRequest.of(0, 1)).stream()
+
+        if (request.isEmptyRequest()) {
+            log.debug("Empty filter request, selecting random recipe from all");
+            int randomPage = ThreadLocalRandom.current().nextInt((int) totalRecipes);
+            Recipe foundRecipe = repository.findAll(PageRequest.of(randomPage, 1)).stream()
                     .findFirst()
                     .orElseThrow(NoRecipesFoundException::new);
+            return foundRecipe;
         }
 
         int totalPages = totalRecipes < request.pageSize() ? 1
@@ -80,11 +73,8 @@ public class RandomRecipeWithFiltersHandler implements RequestHandler<RandomReci
             return recipes.getFirst();
         }
 
-        int randomPage = new Random().nextInt((int) foundRecipes);
-        Recipe randomRecipe = recipes.stream()
-                .skip(randomPage)
-                .findFirst()
-                .orElseThrow(NoRecipesFoundException::new);
+        int randomIndex = ThreadLocalRandom.current().nextInt((int) foundRecipes);
+        Recipe randomRecipe = recipes.get(randomIndex);
 
         log.info("Random recipe selected with filters: {} ({})", randomRecipe.getName(), randomRecipe.getId());
         return randomRecipe;

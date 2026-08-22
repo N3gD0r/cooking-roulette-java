@@ -1,4 +1,4 @@
-package org.n3gd0r.recipe.web.dtos.requests;
+package org.n3gd0r.recipe.web;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,20 +11,19 @@ import org.n3gd0r.recipe.usecase.update.UpdateIngredientParameters;
 import org.n3gd0r.recipe.usecase.update.UpdateInstructionParameters;
 import org.n3gd0r.recipe.usecase.update.UpdateRecipeParameters;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 /**
- * RegisterRecipeRequest
+ * Request to fully update a recipe.
  */
 public record UpdateRecipeRequest(
-        @Valid @NotBlank String name,
-        @Valid @Positive Integer cookTime,
-        @Valid @NotEmpty List<UpdateIngredientRequest> ingredients,
-        @Valid @NotEmpty List<UpdateInstructionRequest> instructions) {
+        @NotBlank String name,
+        @Positive Integer cookTime,
+        @NotEmpty List<UpdateIngredientRequest> ingredients,
+        @NotEmpty List<UpdateInstructionRequest> instructions) {
     public record UpdateInstructionRequest(
             @Positive Integer instructionNumber,
             @NotBlank String instruction) {

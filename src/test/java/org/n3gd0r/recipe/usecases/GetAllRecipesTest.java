@@ -67,7 +67,7 @@ public class GetAllRecipesTest {
     void testGetAllRecipes() {
         GetAllRecipesParameters parameters = new GetAllRecipesParameters(PageRequest.of(0, 5));
 
-        List<Recipe> recipes = getAllRecipesQuery.execute(parameters);
+        List<Recipe> recipes = getAllRecipesQuery.execute(parameters).toList();
 
         assertNotNull(recipes);
         assertTrue(!recipes.isEmpty());
@@ -79,7 +79,7 @@ public class GetAllRecipesTest {
         recipeRepository.deleteAll();
         GetAllRecipesParameters parameters = new GetAllRecipesParameters(PageRequest.of(0, 5));
 
-        List<Recipe> recipes = getAllRecipesQuery.execute(parameters);
+        List<Recipe> recipes = getAllRecipesQuery.execute(parameters).toList();
 
         assertNotNull(recipes);
         assertTrue(recipes.isEmpty());
@@ -119,7 +119,7 @@ public class GetAllRecipesTest {
         recipeRepository.save(recipe);
         GetAllRecipesParameters parameters = new GetAllRecipesParameters(PageRequest.of(0, 5));
 
-        List<Recipe> recipes = getAllRecipesQuery.execute(parameters);
+        List<Recipe> recipes = getAllRecipesQuery.execute(parameters).toList();
 
         assertNotNull(recipes);
         assertTrue(!recipes.isEmpty());

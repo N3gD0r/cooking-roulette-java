@@ -1,4 +1,4 @@
-package org.n3gd0r.recipe.web.dtos.requests;
+package org.n3gd0r.recipe.web;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,11 +12,11 @@ import org.n3gd0r.recipe.usecase.patch.PatchIngredientParameters;
 import org.n3gd0r.recipe.usecase.patch.PatchInstructionParameters;
 import org.n3gd0r.recipe.usecase.patch.PatchRecipeParameters;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * RegisterRecipeRequest
+ * Request to partially update a recipe.
+ * Only provided fields will be patched; null fields are ignored.
  */
 public record PatchRecipeRequest(
         String name,
@@ -47,7 +47,7 @@ public record PatchRecipeRequest(
         }
     }
 
-    public PatchRecipeParameters toParameters(@Valid @NotNull UUID id) {
+    public PatchRecipeParameters toParameters(@NotNull UUID id) {
         return new PatchRecipeParameters(new RecipeId(id),
                 name,
                 cookTime,

@@ -8,10 +8,10 @@ public record UpdateIngredientParameters(String ingredientName, IngredientEnum i
         Mass weight) {
     public UpdateIngredientParameters {
         Assert.hasText(ingredientName,
-                "The RegisterRecipeWithIngredientsParameters ingredientName should not be null and must have text");
+                "The UpdateIngredientParameters ingredientName should not be blank");
         Assert.notNull(ingredientType,
-                "The RegisterRecipeWithIngredientsParameters ingredientType should not be null");
+                "The UpdateIngredientParameters ingredientType should not be null");
         Assert.notNull(weight,
-                "The RegisterRecipeWithIngredientsParameters weight should not be null");
+                "The UpdateIngredientParameters weight should not be null");
     }
 }

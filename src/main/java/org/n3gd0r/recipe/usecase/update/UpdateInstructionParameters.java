@@ -5,10 +5,10 @@ import org.springframework.util.Assert;
 public record UpdateInstructionParameters(Integer instructionNumber, String instruction) {
     public UpdateInstructionParameters {
         Assert.hasText(instruction,
-                "The RegisterRecipeWithInstructionsParameters instruction should have text");
+                "The UpdateInstructionParameters instruction should not be blank");
         Assert.notNull(instructionNumber,
-                "The RegisterRecipeWithInstructionsParameters instructionNumber should not be null");
+                "The UpdateInstructionParameters instructionNumber should not be null");
         Assert.isTrue(instructionNumber > 0,
-                "The RegisterRecipeWithInstructionsParameters instructionNumber should not be less de 1");
+                "The UpdateInstructionParameters instructionNumber should be greater than 0");
     }
 }

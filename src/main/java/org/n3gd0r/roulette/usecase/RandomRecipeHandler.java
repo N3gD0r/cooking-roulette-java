@@ -1,6 +1,6 @@
 package org.n3gd0r.roulette.usecase;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +34,7 @@ public class RandomRecipeHandler implements RequestHandler<RandomRecipeParameter
             throw new NoRecipesFoundException();
         }
         log.debug("Total recipes available: {}", totalRecipes);
-        int randomPage = new Random().nextInt((int) totalRecipes);
+        int randomPage = ThreadLocalRandom.current().nextInt((int) totalRecipes);
         log.debug("Selecting random page: {}", randomPage);
         Recipe foundRecipe = repository.findAll(PageRequest.of(randomPage, 1)).stream()
                 .findFirst()

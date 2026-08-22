@@ -1,15 +1,17 @@
 CREATE TABLE IF NOT EXISTS recipe
 (
-    cook_time REAL NOT NULL,
+    cook_time INT NOT NULL,
     id        UUID NOT NULL,
     name      VARCHAR(255),
     CONSTRAINT PK_RECIPE
-        PRIMARY KEY (id)
+        PRIMARY KEY (id),
+    CONSTRAINT UC_RECIPE_NAME
+        UNIQUE(name)
 );
 
 CREATE TABLE IF NOT EXISTS recipe_ingredient
 (
-    weight          REAL,
+    weight          INT,
     id              UUID NOT NULL,
     recipe_id       UUID,
     ingredient_name VARCHAR(255),
@@ -23,12 +25,12 @@ CREATE TABLE IF NOT EXISTS recipe_ingredient
                ((ARRAY ['CARNES'::CHARACTER VARYING, 'CEREALES_Y_TUBERCULOS'::CHARACTER VARYING, 'GRASAS'::CHARACTER VARYING, 'VERDURAS'::CHARACTER VARYING, 'FRUTAS'::CHARACTER VARYING, 'LECHE'::CHARACTER VARYING, 'LEGUMINOSAS'::CHARACTER VARYING, 'AZUCARES'::CHARACTER VARYING, 'ALIMENTOS_LIBRES_DE_ENERGIA'::CHARACTER VARYING, 'CEREALES_CON_GRASA'::CHARACTER VARYING, 'GRASAS_CON_AZUCAR'::CHARACTER VARYING])::TEXT[]))
 );
 
-CREATE TABLE IF NOT EXISTS recipe_step
+CREATE TABLE IF NOT EXISTS recipe_instruction
 (
-    step_number      INTEGER NOT NULL,
-    id               UUID    NOT NULL,
-    recipe_id        UUID,
-    step_instruction VARCHAR(255),
+    instruction_number INTEGER NOT NULL,
+    id                 UUID    NOT NULL,
+    recipe_id          UUID,
+    instruction        VARCHAR(255),
     CONSTRAINT PK_RECIPESTEP
         PRIMARY KEY (id),
     CONSTRAINT FK_RECIPESTEP_ON_RECIPE

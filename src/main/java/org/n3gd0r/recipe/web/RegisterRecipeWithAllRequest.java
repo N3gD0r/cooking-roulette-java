@@ -1,4 +1,4 @@
-package org.n3gd0r.recipe.web.dtos.requests;
+package org.n3gd0r.recipe.web;
 
 import java.util.List;
 
@@ -8,19 +8,19 @@ import org.n3gd0r.recipe.usecase.register.RegisterIngredientParameters;
 import org.n3gd0r.recipe.usecase.register.RegisterInstructionParameters;
 import org.n3gd0r.recipe.usecase.register.RegisterRecipeParameters;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 /**
- * RegisterRecipeRequest
+ * Request to register a recipe with all its ingredients and instructions in a
+ * single call.
  */
-public record RegisterRecipeWithAllRequest(@Valid @NotEmpty List<RegisterInstructionRequest> instructions,
-        @Valid @NotEmpty List<RegisterIngredientRequest> ingredients,
-        @Valid @NotBlank String name,
-        @Valid @Positive Integer cookTime) {
+public record RegisterRecipeWithAllRequest(@NotEmpty List<RegisterInstructionRequest> instructions,
+        @NotEmpty List<RegisterIngredientRequest> ingredients,
+        @NotBlank String name,
+        @Positive Integer cookTime) {
     public record RegisterInstructionRequest(
             @Positive Integer instructionNumber,
             @NotBlank String instruction) {
