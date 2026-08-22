@@ -38,8 +38,9 @@ public class RandomRecipeController {
     @GetMapping("/random/filter")
     public ResponseEntity<EntityModel<RecipeResponse>> getRandomRecipe(@RequestParam int pageSize,
             RandomRecipeRequest request) {
-        log.info("GET /api/random/recipe/{} - Getting random recipe from page size: {}", pageSize);
-        log.info("GET /api/random/recipe/{} - Using filters: {}", pageSize, request);
+        log.info("GET /api/recipes/random/filter?pageSize={} - Getting random recipe using page size: {}", pageSize,
+                pageSize);
+        log.info("Using filters: {}", request);
         var params = request.toQuery(pageSize);
         var recipe = mediator.send(params);
         var recipeResponse = RecipeResponse.of(recipe);

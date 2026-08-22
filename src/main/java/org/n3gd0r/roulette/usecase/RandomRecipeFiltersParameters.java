@@ -8,7 +8,7 @@ import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.springframework.util.Assert;
 
-public record RandomRecipeFiltersParameters(int pageSize, Optional<String> name, Optional<Integer> cookTime,
+public record RandomRecipeFiltersParameters(int pageSize, Optional<Integer> cookTime,
         Optional<Integer> instructionQuantity, Optional<Integer> ingredientQuantity, Optional<List<String>> ingredients,
         Optional<List<IngredientEnum>> ingredientTypes) implements Query<Recipe> {
 
@@ -17,7 +17,7 @@ public record RandomRecipeFiltersParameters(int pageSize, Optional<String> name,
     }
 
     public boolean isEmptyRequest() {
-        return name.isEmpty() && cookTime.isEmpty() && instructionQuantity.isEmpty() && ingredientQuantity.isEmpty()
+        return cookTime.isEmpty() && instructionQuantity.isEmpty() && ingredientQuantity.isEmpty()
                 && ingredients.isEmpty() && ingredientTypes().isEmpty();
     }
 }

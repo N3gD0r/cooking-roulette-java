@@ -10,6 +10,7 @@ import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.repository.RecipeRepository;
+import org.n3gd0r.roulette.domain.exception.NoRecipesForFiltersException;
 import org.n3gd0r.roulette.domain.exception.NoRecipesFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -66,7 +67,7 @@ public class RandomRecipeWithFiltersHandler implements RequestHandler<RandomReci
 
         if (foundRecipes < 1) {
             log.warn("No recipes matched the given filters");
-            throw new NoRecipesFoundException();
+            throw new NoRecipesForFiltersException();
         }
         if (foundRecipes == 1) {
             log.debug("Only one recipe matched filters, returning it");
@@ -76,7 +77,7 @@ public class RandomRecipeWithFiltersHandler implements RequestHandler<RandomReci
         int randomIndex = ThreadLocalRandom.current().nextInt((int) foundRecipes);
         Recipe randomRecipe = recipes.get(randomIndex);
 
-        log.info("Random recipe selected with filters: {} ({})", randomRecipe.getName(), randomRecipe.getId());
+        log.info("Random recipe selected: {} ({})", randomRecipe.getName(), randomRecipe.getId());
         return randomRecipe;
     }
 
@@ -109,10 +110,6 @@ public class RandomRecipeWithFiltersHandler implements RequestHandler<RandomReci
 
         if (request.cookTime().isPresent()) {
             recipePredicates.add(r -> r.getCookTime() == request.cookTime().get());
-        }
-
-        if (request.name().isPresent()) {
-            recipePredicates.add(r -> r.getName().equalsIgnoreCase(request.name().get()));
         }
 
         return recipePredicates;
