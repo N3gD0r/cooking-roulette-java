@@ -15,12 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.Recipe;
-import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
-import org.n3gd0r.recipe.domain.RecipeIngredientId;
 import org.n3gd0r.recipe.domain.RecipeIngredientMother;
 import org.n3gd0r.recipe.domain.RecipeInstruction;
-import org.n3gd0r.recipe.domain.RecipeInstructionId;
 import org.n3gd0r.recipe.domain.RecipeInstructionMother;
 import org.n3gd0r.recipe.domain.RecipeMother;
 import org.n3gd0r.recipe.repository.InMemoryRecipeRepository;
@@ -30,11 +27,12 @@ import org.n3gd0r.recipe.usecase.patch.PatchIngredientParameters;
 import org.n3gd0r.recipe.usecase.patch.PatchInstructionParameters;
 import org.n3gd0r.recipe.usecase.patch.PatchRecipeHandler;
 import org.n3gd0r.recipe.usecase.patch.PatchRecipeParameters;
+import org.n3gd0r.recipe.usecases.mocks.MockTestUtils;
 
 public class PatchRecipeTest {
     private RecipeRepository recipeRepository;
     private PatchRecipeHandler patchRecipeCommand;
-    private RecipeId recipeIdToPatch;
+    private UUID recipeIdToPatch;
     private Recipe recipeToPatch;
 
     @BeforeEach
@@ -42,17 +40,17 @@ public class PatchRecipeTest {
         recipeRepository = new InMemoryRecipeRepository();
         patchRecipeCommand = new PatchRecipeHandler(recipeRepository);
 
-        recipeIdToPatch = new RecipeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
+        recipeIdToPatch = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
         List<RecipeIngredient> ingredients = Arrays.asList(
                 RecipeIngredientMother.recipeIngredient()
-                        .id(new RecipeIngredientId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6")))
+                        .id(MockTestUtils.recipeIngredientIdForMocks())
                         .ingredientName("huevos")
                         .ingredientType(IngredientEnum.CARNES)
                         .weight(Mass.ofGrams(180))
                         .build());
         List<RecipeInstruction> instructions = Arrays.asList(
                 RecipeInstructionMother.recipeInstruction()
-                        .id(new RecipeInstructionId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6")))
+                        .id(MockTestUtils.recipeInstructionIdForMocks())
                         .instructionNumber(1)
                         .instruction("En agua hirviendo, colocar los huevos durante 15 minutos")
                         .build());
@@ -103,8 +101,7 @@ public class PatchRecipeTest {
 
     @Test
     void testPatchRecipeIngredients() {
-        RecipeIngredientId ingredienIdToPatch = new RecipeIngredientId(
-                UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
+        UUID ingredienIdToPatch = MockTestUtils.recipeIngredientIdForMocks();
         List<PatchIngredientParameters> ingredientParameters = Arrays.asList(
                 new PatchIngredientParameters(ingredienIdToPatch, "Jamon", IngredientEnum.CARNES, Mass.ofGrams(100)));
         PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
@@ -122,8 +119,7 @@ public class PatchRecipeTest {
 
     @Test
     void testPatchRecipeInstruction() {
-        RecipeInstructionId instructionIdToPatch = new RecipeInstructionId(
-                UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
+        UUID instructionIdToPatch = MockTestUtils.recipeInstructionIdForMocks();
         List<PatchInstructionParameters> instructionParameters = Arrays.asList(
                 new PatchInstructionParameters(instructionIdToPatch, 1,
                         "Colocar los huevos en agua hirviendo por 15 minutos"));

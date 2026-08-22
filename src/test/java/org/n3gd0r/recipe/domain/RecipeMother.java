@@ -11,13 +11,13 @@ public final class RecipeMother {
     }
 
     public static final class Builder {
-        private RecipeId id = new RecipeId(UUID.randomUUID());
+        private UUID id = UUID.randomUUID();
         private String name = "Huevos cocidos";
         private int cookTime = 20;
         private List<RecipeIngredient> ingredients = new ArrayList<>();
         private List<RecipeInstruction> instructions = new ArrayList<>();
 
-        public Builder id(RecipeId id) {
+        public Builder id(UUID id) {
             this.id = id;
             return this;
         }

@@ -37,7 +37,7 @@ public class GetAllRecipesMockTest {
     void testGetAllRecipes() {
         when(repository.findAll(any(Pageable.class)))
                 .thenReturn(Page.empty());
-        getAllRecipesQuery.execute(new GetAllRecipesParameters(PageRequest.of(0, 5)));
+        getAllRecipesQuery.execute(new GetAllRecipesParameters(0, 5));
         verify(repository, times(1)).findAll(PageRequest.of(0, 5));
     }
 
@@ -46,7 +46,7 @@ public class GetAllRecipesMockTest {
         when(repository.findAll(any(Pageable.class)))
                 .thenReturn(getRecipesPage(PageRequest.of(0, 5)));
 
-        List<Recipe> recipes = getAllRecipesQuery.execute(new GetAllRecipesParameters(PageRequest.of(0, 5))).toList();
+        List<Recipe> recipes = getAllRecipesQuery.execute(new GetAllRecipesParameters(0, 5)).toList();
         verify(repository, times(1)).findAll(any(Pageable.class));
         assertNotNull(recipes);
         assertTrue(recipes.size() == 2);

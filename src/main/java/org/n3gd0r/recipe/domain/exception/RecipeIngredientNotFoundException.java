@@ -1,6 +1,7 @@
 package org.n3gd0r.recipe.domain.exception;
 
-import org.n3gd0r.recipe.domain.RecipeIngredientId;
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class RecipeIngredientNotFoundException extends RuntimeException {
-    public RecipeIngredientNotFoundException(RecipeIngredientId id) {
-        super("RecipeIngredient with id %s not found".formatted(id.getId()));
+    public RecipeIngredientNotFoundException(UUID id) {
+        super("RecipeIngredient with id %s not found".formatted(id.toString()));
     }
 }

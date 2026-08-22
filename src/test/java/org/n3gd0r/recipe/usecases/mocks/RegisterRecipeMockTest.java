@@ -16,10 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
-import org.n3gd0r.recipe.domain.RecipeIngredientId;
 import org.n3gd0r.recipe.domain.RecipeIngredientMother;
 import org.n3gd0r.recipe.domain.RecipeInstruction;
-import org.n3gd0r.recipe.domain.RecipeInstructionId;
 import org.n3gd0r.recipe.domain.RecipeInstructionMother;
 import org.n3gd0r.recipe.domain.RecipeMother;
 import org.n3gd0r.recipe.repository.RecipeRepository;
@@ -50,8 +48,8 @@ public class RegisterRecipeMockTest {
                 toInstructionParameters(recipeToRegister.getInstructions()));
 
         doNothing().when(repository).validateNameUnique(any(String.class));
-        when(repository.nextRecipeIngredientId()).thenReturn(new RecipeIngredientId(UUID.randomUUID()));
-        when(repository.nextRecipeInstructionId()).thenReturn(new RecipeInstructionId(UUID.randomUUID()));
+        when(repository.nextRecipeIngredientId()).thenReturn(UUID.randomUUID());
+        when(repository.nextRecipeInstructionId()).thenReturn(UUID.randomUUID());
         when(repository.nextId()).thenReturn(recipeToRegister.getId());
         doNothing().when(repository).save(recipeToRegister);
         Recipe registeredRecipe = registerRecipeCommand.execute(parameters);

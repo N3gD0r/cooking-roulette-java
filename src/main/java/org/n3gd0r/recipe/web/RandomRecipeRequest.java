@@ -1,10 +1,10 @@
-package org.n3gd0r.roulette.web;
+package org.n3gd0r.recipe.web;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.n3gd0r.recipe.domain.IngredientEnum;
-import org.n3gd0r.roulette.usecase.RandomRecipeFiltersParameters;
+import org.n3gd0r.recipe.usecase.random.RandomRecipeFiltersParameters;
 
 public record RandomRecipeRequest(
         Optional<Integer> cookTime,

@@ -8,7 +8,6 @@ import org.n3gd0r.infrastructure.hateoas.RecipeResponse;
 import org.n3gd0r.recipe.usecase.delete.DeleteRecipeParameters;
 import org.n3gd0r.recipe.usecase.get.GetAllRecipesParameters;
 import org.n3gd0r.recipe.usecase.get.GetRecipeParameters;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -83,14 +82,26 @@ public class RecipeController {
     }
 
     @GetMapping
-    public ResponseEntity<PagedModel<EntityModel<RecipeResponse>>> getRecipes(@RequestParam int page,
-            @RequestParam int size) {
-        log.info("GET /api/recipes - Getting all recipes with page: {}, size: {}", page, size);
-        var query = new GetAllRecipesParameters(PageRequest.of(page, size));
+    public ResponseEntity<PagedModel<EntityModel<RecipeResponse>>> getRecipes() {
+        log.info("GET /api/recipes - Getting all recipes");
+        var query = GetAllRecipesParameters.defaultPage();
         var recipes = mediator.send(query);
         var recipesResponse = recipes.map(RecipeResponse::of);
         log.info("Got page of recipes: {}", recipesResponse);
-        var pagedModel = pageModelAssembler.toModel(recipesResponse);
+        var pagedModel = pageModelAssembler.toModel(recipesResponse, modelAssembler);
+        return ResponseEntity.ok(pagedModel);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<PagedModel<EntityModel<RecipeResponse>>> getRecipes(@RequestParam String name,
+            @RequestParam int page,
+            @RequestParam int size) {
+        log.info("GET /api/recipes - Getting all recipes with page: {}, size: {}", page, size);
+        var query = new GetAllRecipesParameters(page, size);
+        var recipes = mediator.send(query);
+        var recipesResponse = recipes.map(RecipeResponse::of);
+        log.info("Got page of recipes: {}", recipesResponse);
+        var pagedModel = pageModelAssembler.toModel(recipesResponse, modelAssembler);
         return ResponseEntity.ok(pagedModel);
     }
 

@@ -1,12 +1,11 @@
 package org.n3gd0r.recipe.usecase.delete;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.n3gd0r.commons.mediator.HandlerFor;
 import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * DeleteRecipe
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @HandlerFor(DeleteRecipeParameters.class)
 @Service
-@Transactional
 public class DeleteRecipeHandler implements RequestHandler<DeleteRecipeParameters, Void> {
     private final RecipeRepository repository;
 

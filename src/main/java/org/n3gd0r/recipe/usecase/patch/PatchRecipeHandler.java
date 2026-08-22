@@ -11,14 +11,12 @@ import org.n3gd0r.recipe.domain.exception.RecipeInstructionNotFoundException;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.n3gd0r.recipe.usecase.exception.NothingToPatchException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @HandlerFor(PatchRecipeParameters.class)
 @Service
-@Transactional
 public class PatchRecipeHandler implements RequestHandler<PatchRecipeParameters, Recipe> {
     private final RecipeRepository repository;
 
@@ -28,14 +26,14 @@ public class PatchRecipeHandler implements RequestHandler<PatchRecipeParameters,
 
     @Override
     public Recipe execute(PatchRecipeParameters request) {
-        log.info("Patching recipe: {}", request.recipeId());
+        log.info("Patching recipe: {}", request.id());
         if (request.nothingToPatch()) {
-            log.warn("Nothing to patch for recipe: {}", request.recipeId());
+            log.warn("Nothing to patch for recipe: {}", request.id());
             throw new NothingToPatchException();
         }
 
-        repository.validateExistsById(request.recipeId());
-        Recipe recipe = repository.getById(request.recipeId());
+        repository.validateExistsById(request.id());
+        Recipe recipe = repository.getById(request.id());
 
         if (request.name() != null && !recipe.getName().equalsIgnoreCase(request.name())) {
             log.debug("Updating recipe name from '{}' to '{}'", recipe.getName(), request.name());
@@ -49,19 +47,19 @@ public class PatchRecipeHandler implements RequestHandler<PatchRecipeParameters,
         }
 
         if (request.instructions() != null) {
-            log.debug("Patching {} instructions for recipe: {}", request.instructions().size(), request.recipeId());
+            log.debug("Patching {} instructions for recipe: {}", request.instructions().size(), request.id());
             request.instructions().stream()
                     .forEach(pi -> patchInstruction(recipe, pi));
         }
 
         if (request.ingredients() != null) {
-            log.debug("Patching {} ingredients for recipe: {}", request.ingredients().size(), request.recipeId());
+            log.debug("Patching {} ingredients for recipe: {}", request.ingredients().size(), request.id());
             request.ingredients().stream()
                     .forEach(pi -> patchIngredient(recipe, pi));
         }
 
         repository.save(recipe);
-        log.info("Recipe patched successfully: {}", request.recipeId());
+        log.info("Recipe patched successfully: {}", request.id());
         return recipe;
     }
 

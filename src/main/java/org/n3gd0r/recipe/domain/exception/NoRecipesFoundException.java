@@ -1,4 +1,4 @@
-package org.n3gd0r.roulette.domain.exception;
+package org.n3gd0r.recipe.domain.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

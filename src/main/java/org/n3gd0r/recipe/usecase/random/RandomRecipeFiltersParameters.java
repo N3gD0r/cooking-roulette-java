@@ -1,4 +1,4 @@
-package org.n3gd0r.roulette.usecase;
+package org.n3gd0r.recipe.usecase.random;
 
 import java.util.List;
 import java.util.Optional;

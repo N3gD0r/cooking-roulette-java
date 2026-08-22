@@ -7,40 +7,34 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.n3gd0r.recipe.domain.Recipe;
-import org.n3gd0r.recipe.domain.RecipeId;
-import org.n3gd0r.recipe.domain.RecipeIngredientId;
-import org.n3gd0r.recipe.domain.RecipeInstructionId;
+import org.n3gd0r.recipe.domain.exception.RecipeNameIsEmptyException;
 import org.n3gd0r.recipe.domain.exception.RecipeNotFoundException;
 import org.n3gd0r.recipe.domain.exception.RecipeWithNameAlreadyExistsException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.PredicateSpecification;
 
 public class InMemoryRecipeRepository implements RecipeRepository {
-    private final Map<RecipeId, Recipe> values = new HashMap<>();
+    private final Map<UUID, Recipe> values = new HashMap<>();
 
     @Override
-    public RecipeId nextId() {
-        return new RecipeId(UUID.randomUUID());
+    public UUID nextId() {
+        return UUID.randomUUID();
     }
 
     @Override
-    public RecipeIngredientId nextRecipeIngredientId() {
-        return new RecipeIngredientId(UUID.randomUUID());
+    public UUID nextRecipeIngredientId() {
+        return UUID.randomUUID();
     }
 
     @Override
-    public RecipeInstructionId nextRecipeInstructionId() {
-        return new RecipeInstructionId(UUID.randomUUID());
+    public UUID nextRecipeInstructionId() {
+        return UUID.randomUUID();
     }
 
     @Override
-    public Optional<Recipe> findById(RecipeId id) {
-        return Optional.ofNullable(values.get(id));
-    }
-
-    @Override
-    public Recipe findByName(String name) {
+    public Recipe getByName(String name) {
         return values.values().stream().filter(r -> r.getName().equalsIgnoreCase(name.trim().toLowerCase()))
                 .findFirst()
                 .orElseThrow(() -> new RecipeNotFoundException(name));
@@ -52,22 +46,21 @@ public class InMemoryRecipeRepository implements RecipeRepository {
     }
 
     @Override
-    public Recipe getById(RecipeId id) {
-        return findById(id).orElseThrow(() -> new RecipeNotFoundException(id));
+    public Recipe getById(UUID id) {
+        return Optional.ofNullable(values.get(id)).orElseThrow(() -> new RecipeNotFoundException(id));
     }
 
     @Override
-    public void validateExistsById(RecipeId recipeId) {
-        if (!values.containsKey(recipeId)) {
-            throw new RecipeNotFoundException(recipeId);
+    public void validateExistsById(UUID id) {
+        if (!values.containsKey(id)) {
+            throw new RecipeNotFoundException(id);
         }
     }
 
     @Override
     public void validateNameUnique(String name) {
         boolean nameExists = values.values().stream()
-                .filter(r -> r.getName().equalsIgnoreCase(name.trim().toLowerCase()))
-                .count() > 0;
+                .filter(r -> r.getName().equalsIgnoreCase(name.trim().toLowerCase())).count() > 0;
         if (nameExists) {
             throw new RecipeWithNameAlreadyExistsException(name);
         }
@@ -88,8 +81,8 @@ public class InMemoryRecipeRepository implements RecipeRepository {
     }
 
     @Override
-    public void deleteById(RecipeId recipeId) {
-        values.remove(recipeId);
+    public void deleteById(UUID id) {
+        values.remove(id);
     }
 
     @Override
@@ -97,4 +90,15 @@ public class InMemoryRecipeRepository implements RecipeRepository {
         return values.size();
     }
 
+    @Override
+    public List<Recipe> findAll(PredicateSpecification<Recipe> spec) {
+        return values.values().stream().toList();
+    }
+
+    @Override
+    public void validateEmptyName(String name) {
+        if (name.isEmpty()) {
+            throw new RecipeNameIsEmptyException();
+        }
+    }
 }

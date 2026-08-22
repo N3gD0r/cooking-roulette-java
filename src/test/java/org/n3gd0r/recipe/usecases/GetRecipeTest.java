@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.Recipe;
-import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
 import org.n3gd0r.recipe.domain.RecipeIngredientMother;
 import org.n3gd0r.recipe.domain.RecipeInstruction;
@@ -28,14 +27,14 @@ import org.n3gd0r.recipe.usecase.get.GetRecipeParameters;
 public class GetRecipeTest {
     private RecipeRepository recipeRepository;
     private GetRecipeHandler getRecipeQuery;
-    private RecipeId recipeIdToFetch;
+    private UUID recipeIdToFetch;
     private Recipe recipe;
 
     @BeforeEach
     void setUp() {
         recipeRepository = new InMemoryRecipeRepository();
         getRecipeQuery = new GetRecipeHandler(recipeRepository);
-        recipeIdToFetch = new RecipeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
+        recipeIdToFetch = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
         List<RecipeIngredient> ingredients = Arrays.asList(
                 RecipeIngredientMother.recipeIngredient()
@@ -82,7 +81,7 @@ public class GetRecipeTest {
 
     @Test
     void testGetRecibeWithWrongIdThrowsException() {
-        GetRecipeParameters parameters = new GetRecipeParameters(new RecipeId(UUID.randomUUID()), null);
+        GetRecipeParameters parameters = new GetRecipeParameters(UUID.randomUUID(), null);
 
         assertThrows(RecipeNotFoundException.class, () -> getRecipeQuery.execute(parameters));
     }

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.Recipe;
-import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
 import org.n3gd0r.recipe.domain.RecipeIngredientMother;
 import org.n3gd0r.recipe.domain.RecipeInstruction;
@@ -28,13 +27,13 @@ import org.springframework.data.domain.PageRequest;
 public class DeleteRecipeTest {
     private RecipeRepository recipeRepository;
     private DeleteRecipeHandler deleteRecipeCommand;
-    private RecipeId recipeIdToDelete;
+    private UUID recipeIdToDelete;
 
     @BeforeEach
     void setUp() {
         recipeRepository = new InMemoryRecipeRepository();
         deleteRecipeCommand = new DeleteRecipeHandler(recipeRepository);
-        recipeIdToDelete = new RecipeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
+        recipeIdToDelete = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
         List<RecipeIngredient> ingredients = Arrays.asList(
                 RecipeIngredientMother.recipeIngredient()

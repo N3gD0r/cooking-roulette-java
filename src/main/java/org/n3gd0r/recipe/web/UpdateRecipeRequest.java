@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
-import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.usecase.update.UpdateIngredientParameters;
 import org.n3gd0r.recipe.usecase.update.UpdateInstructionParameters;
 import org.n3gd0r.recipe.usecase.update.UpdateRecipeParameters;
@@ -44,7 +43,7 @@ public record UpdateRecipeRequest(
     }
 
     public UpdateRecipeParameters toParameters(UUID id) {
-        return new UpdateRecipeParameters(new RecipeId(id),
+        return new UpdateRecipeParameters(id,
                 name.toLowerCase(),
                 cookTime,
                 ingredients.stream()

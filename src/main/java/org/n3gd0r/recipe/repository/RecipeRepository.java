@@ -1,41 +1,5 @@
 package org.n3gd0r.recipe.repository;
 
-import java.util.Optional;
-
-import org.n3gd0r.recipe.domain.Recipe;
-import org.n3gd0r.recipe.domain.RecipeId;
-import org.n3gd0r.recipe.domain.RecipeIngredientId;
-import org.n3gd0r.recipe.domain.RecipeInstructionId;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-/**
- * RecipeRepository
- */
-public interface RecipeRepository {
-    RecipeId nextId();
-
-    RecipeIngredientId nextRecipeIngredientId();
-
-    RecipeInstructionId nextRecipeInstructionId();
-
-    Optional<Recipe> findById(RecipeId id);
-
-    Recipe findByName(String name);
-
-    void save(Recipe recipe);
-
-    Recipe getById(RecipeId id);
-
-    void validateExistsById(RecipeId recipeId);
-
-    void validateNameUnique(String name);
-
-    Page<Recipe> findAll(Pageable pageable);
-
-    void deleteAll();
-
-    void deleteById(RecipeId recipeId);
-
-    long count();
+public interface RecipeRepository
+        extends WriteRecipeRepository, ReadRecipeRepository, RecipeIdentifiersGenerator, ValidationRecipeRepository {
 }

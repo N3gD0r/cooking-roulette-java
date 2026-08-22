@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.Recipe;
-import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
 import org.n3gd0r.recipe.domain.RecipeIngredientMother;
 import org.n3gd0r.recipe.domain.RecipeInstruction;
@@ -31,14 +30,14 @@ import org.n3gd0r.recipe.usecase.update.UpdateRecipeParameters;
 public class UpdateRecipeTest {
     private RecipeRepository recipeRepository;
     private UpdateRecipeHandler updateRecipeCommand;
-    private RecipeId recipeIdToUpdate;
+    private UUID recipeIdToUpdate;
 
     @BeforeEach
     void setUp() {
         recipeRepository = new InMemoryRecipeRepository();
         updateRecipeCommand = new UpdateRecipeHandler(recipeRepository);
 
-        recipeIdToUpdate = new RecipeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
+        recipeIdToUpdate = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
         List<RecipeIngredient> ingredients = Arrays.asList(
                 RecipeIngredientMother.recipeIngredient()
                         .ingredientName("huevos")
@@ -131,7 +130,7 @@ public class UpdateRecipeTest {
                         "Colocar los huevos en el posillo con el agua hirviendo durante 15 minutos"),
                 new UpdateInstructionParameters(3,
                         "Retirar los huevos y dejarlos enfriar en agua fria con hielos durante 5 minutos"));
-        UpdateRecipeParameters parameters = new UpdateRecipeParameters(new RecipeId(UUID.randomUUID()),
+        UpdateRecipeParameters parameters = new UpdateRecipeParameters(UUID.randomUUID(),
                 "huevos cocidos", 25, ingredients,
                 instructions);
 

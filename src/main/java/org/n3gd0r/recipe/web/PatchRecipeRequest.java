@@ -5,9 +5,6 @@ import java.util.UUID;
 
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
-import org.n3gd0r.recipe.domain.RecipeId;
-import org.n3gd0r.recipe.domain.RecipeIngredientId;
-import org.n3gd0r.recipe.domain.RecipeInstructionId;
 import org.n3gd0r.recipe.usecase.patch.PatchIngredientParameters;
 import org.n3gd0r.recipe.usecase.patch.PatchInstructionParameters;
 import org.n3gd0r.recipe.usecase.patch.PatchRecipeParameters;
@@ -28,7 +25,7 @@ public record PatchRecipeRequest(
             Integer instructionNumber,
             String instruction) {
         public PatchInstructionParameters toParameters() {
-            return new PatchInstructionParameters(id != null ? new RecipeInstructionId(id) : null,
+            return new PatchInstructionParameters(id,
                     instructionNumber,
                     instruction);
         }
@@ -40,7 +37,7 @@ public record PatchRecipeRequest(
             IngredientEnum ingredientType,
             Integer weightInGrams) {
         public PatchIngredientParameters toParameters() {
-            return new PatchIngredientParameters(id != null ? new RecipeIngredientId(id) : null,
+            return new PatchIngredientParameters(id,
                     ingredientName,
                     ingredientType,
                     Mass.ofGrams(weightInGrams));
@@ -48,7 +45,7 @@ public record PatchRecipeRequest(
     }
 
     public PatchRecipeParameters toParameters(@NotNull UUID id) {
-        return new PatchRecipeParameters(new RecipeId(id),
+        return new PatchRecipeParameters(id,
                 name,
                 cookTime,
                 instructions == null ? null : instructions.stream().map(PatchInstructionRequest::toParameters).toList(),

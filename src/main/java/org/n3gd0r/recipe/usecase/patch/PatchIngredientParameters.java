@@ -1,10 +1,11 @@
 package org.n3gd0r.recipe.usecase.patch;
 
+import java.util.UUID;
+
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
-import org.n3gd0r.recipe.domain.RecipeIngredientId;
 
-public record PatchIngredientParameters(RecipeIngredientId id,
+public record PatchIngredientParameters(UUID id,
         String ingredientName,
         IngredientEnum ingredientType,
         Mass weight) {

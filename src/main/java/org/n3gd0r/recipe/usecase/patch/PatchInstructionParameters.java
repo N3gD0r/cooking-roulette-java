@@ -1,8 +1,8 @@
 package org.n3gd0r.recipe.usecase.patch;
 
-import org.n3gd0r.recipe.domain.RecipeInstructionId;
+import java.util.UUID;
 
-public record PatchInstructionParameters(RecipeInstructionId id,
+public record PatchInstructionParameters(UUID id,
         Integer instructionNumber,
         String instruction) {
 

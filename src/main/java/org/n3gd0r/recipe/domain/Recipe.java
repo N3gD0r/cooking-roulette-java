@@ -2,17 +2,18 @@ package org.n3gd0r.recipe.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-import org.n3gd0r.commons.AbstractEntity;
 import org.n3gd0r.recipe.domain.exception.RecipeIngredientNotFoundException;
 import org.n3gd0r.recipe.domain.exception.RecipeInstructionNotFoundException;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * A Recipe consists of: The name of the recipe; Ingredients, a set of
@@ -20,10 +21,12 @@ import lombok.Setter;
  * list of instructions, a step-by-step guide on how to cook the recipe, and
  * last: The estimated cooking time
  */
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 @Entity
-public class Recipe extends AbstractEntity<RecipeId> {
+public class Recipe {
+    @Id
+    private UUID id;
     @Column(length = 255, unique = true)
     private String name;
     private int cookTime;
@@ -32,15 +35,12 @@ public class Recipe extends AbstractEntity<RecipeId> {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeIngredient> ingredients = new ArrayList<>();
 
-    protected Recipe() {
-    }
-
-    public Recipe(RecipeId id,
+    public Recipe(UUID id,
             String name,
             int cookTime,
             List<RecipeIngredient> ingredients,
             List<RecipeInstruction> instructions) {
-        super(id);
+        this.id = id;
         this.name = name;
         this.cookTime = cookTime;
         for (RecipeIngredient ingredientInfo : ingredients) {
@@ -61,22 +61,22 @@ public class Recipe extends AbstractEntity<RecipeId> {
         ingredient.setRecipe(this);
     }
 
-    public boolean hasInstruction(RecipeInstructionId recipeInstructionId) {
+    public boolean hasInstruction(UUID recipeInstructionId) {
         return instructions.stream().anyMatch(ri -> ri.getId().equals(recipeInstructionId));
     }
 
-    public boolean hasIngredient(RecipeIngredientId ingredientId) {
+    public boolean hasIngredient(UUID ingredientId) {
         return ingredients.stream().anyMatch(ingredient -> ingredient.getId().equals(ingredientId));
     }
 
-    public RecipeIngredient getIngredient(RecipeIngredientId ingredientId) {
+    public RecipeIngredient getIngredient(UUID ingredientId) {
         return ingredients.stream()
                 .filter(ingredient -> ingredient.getId().equals(ingredientId))
                 .findFirst()
                 .orElseThrow(() -> new RecipeIngredientNotFoundException(ingredientId));
     }
 
-    public RecipeInstruction getInstruction(RecipeInstructionId instructionId) {
+    public RecipeInstruction getInstruction(UUID instructionId) {
         return instructions.stream()
                 .filter(instruction -> instruction.getId().equals(instructionId))
                 .findFirst()
@@ -93,5 +93,35 @@ public class Recipe extends AbstractEntity<RecipeId> {
         this.ingredients.clear();
         this.ingredients.addAll(ingredients);
         this.ingredients.forEach(i -> i.setRecipe(this));
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe [id=%s, name=%s]".formatted(id.toString(), name);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Recipe other = (Recipe) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.getId()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
     }
 }

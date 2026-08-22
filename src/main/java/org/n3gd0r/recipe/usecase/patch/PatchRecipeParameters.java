@@ -1,18 +1,18 @@
 package org.n3gd0r.recipe.usecase.patch;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.n3gd0r.commons.mediator.Command;
 import org.n3gd0r.recipe.domain.Recipe;
-import org.n3gd0r.recipe.domain.RecipeId;
 import org.springframework.util.Assert;
 
-public record PatchRecipeParameters(RecipeId recipeId, String name, Integer cookTime,
+public record PatchRecipeParameters(UUID id, String name, Integer cookTime,
         List<PatchInstructionParameters> instructions, List<PatchIngredientParameters> ingredients)
         implements Command<Recipe> {
 
     public PatchRecipeParameters {
-        Assert.notNull(recipeId, "The PatchRecipeParameters recipeId should not be null");
+        Assert.notNull(id, "The PatchRecipeParameters id should not be null");
     }
 
     /**

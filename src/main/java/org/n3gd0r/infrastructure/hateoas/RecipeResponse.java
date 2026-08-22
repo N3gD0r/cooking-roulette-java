@@ -17,20 +17,20 @@ public record RecipeResponse(UUID id, String name, int cookTime, List<Ingredient
         var recipeInstructions = recipe.getInstructions().stream()
                 .map(InstructionResponse::of)
                 .toList();
-        return new RecipeResponse(recipe.getId().getId(), recipe.getName(), recipe.getCookTime(), recipeIngredients,
+        return new RecipeResponse(recipe.getId(), recipe.getName(), recipe.getCookTime(), recipeIngredients,
                 recipeInstructions);
     }
 
     public record IngredientResponse(UUID id, String ingredientName, IngredientEnum ingredientType, int weightInGrams) {
         public static IngredientResponse of(RecipeIngredient ingredient) {
-            return new IngredientResponse(ingredient.getId().getId(), ingredient.getIngredientName(),
+            return new IngredientResponse(ingredient.getId(), ingredient.getIngredientName(),
                     ingredient.getIngredientType(), ingredient.getWeight().value());
         }
     }
 
     public record InstructionResponse(UUID id, String instruction, int instructionNumber) {
         public static InstructionResponse of(RecipeInstruction instruction) {
-            return new InstructionResponse(instruction.getId().getId(), instruction.getInstruction(),
+            return new InstructionResponse(instruction.getId(), instruction.getInstruction(),
                     instruction.getInstructionNumber());
         }
     }

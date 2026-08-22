@@ -1,22 +1,19 @@
 package org.n3gd0r.recipe.repository.implementations;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.n3gd0r.recipe.domain.Recipe;
-import org.n3gd0r.recipe.domain.RecipeId;
-import org.n3gd0r.recipe.domain.RecipeIngredientId;
-import org.n3gd0r.recipe.domain.RecipeInstructionId;
 import org.n3gd0r.recipe.domain.exception.RecipeNameIsEmptyException;
 import org.n3gd0r.recipe.domain.exception.RecipeNotFoundException;
 import org.n3gd0r.recipe.domain.exception.RecipeWithNameAlreadyExistsException;
 import org.n3gd0r.recipe.repository.RecipeRepository;
-import org.n3gd0r.recipe.repository.SpringDataJpaRecipeRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.stereotype.Repository;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * JpaRecipeRepository
@@ -25,49 +22,27 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class JpaRecipeRepository implements RecipeRepository {
 
-    private final SpringDataJpaRecipeRepository repository;
+    private final SpringJpaRepository repository;
 
-    public JpaRecipeRepository(SpringDataJpaRecipeRepository repository) {
+    public JpaRecipeRepository(SpringJpaRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public RecipeId nextId() {
-        return new RecipeId(UUID.randomUUID());
+    public long count() {
+        return repository.count();
     }
 
     @Override
-    public RecipeIngredientId nextRecipeIngredientId() {
-        return new RecipeIngredientId(UUID.randomUUID());
-    }
-
-    @Override
-    public RecipeInstructionId nextRecipeInstructionId() {
-        return new RecipeInstructionId(UUID.randomUUID());
-    }
-
-    @Override
-    public Optional<Recipe> findById(RecipeId id) {
-        log.debug("Finding recipe by id: {}", id);
-        return repository.findById(id);
-    }
-
-    @Override
-    public Recipe findByName(String name) {
-        log.debug("Finding recipe by name: {}", name);
-        return repository.getRecipeByName(name).orElseThrow(() -> new RecipeNotFoundException(name));
-    }
-
-    @Override
-    public void save(Recipe recipe) {
-        log.debug("Saving recipe: {} ({})", recipe.getName(), recipe.getId());
-        repository.save(recipe);
-    }
-
-    @Override
-    public Recipe getById(RecipeId id) {
+    public Recipe getById(UUID id) {
         log.debug("Getting recipe by id: {}", id);
         return repository.findById(id).orElseThrow(() -> new RecipeNotFoundException(id));
+    }
+
+    @Override
+    public Recipe getByName(String name) {
+        log.debug("Finding recipe by name: {}", name);
+        return repository.getRecipeByName(name).orElseThrow(() -> new RecipeNotFoundException(name));
     }
 
     @Override
@@ -77,23 +52,14 @@ public class JpaRecipeRepository implements RecipeRepository {
     }
 
     @Override
-    public void validateExistsById(RecipeId recipeId) {
-        if (!repository.existsById(recipeId)) {
-            log.error("Recipe not found by id: {}", recipeId);
-            throw new RecipeNotFoundException(recipeId);
-        }
+    public List<Recipe> findAll(PredicateSpecification<Recipe> spec) {
+        return repository.findAll(spec);
     }
 
     @Override
-    public void validateNameUnique(String name) {
-        if (name.isEmpty()) {
-            log.error("Recipe name is empty");
-            throw new RecipeNameIsEmptyException();
-        }
-        if (repository.existsByName(name)) {
-            log.error("Recipe with name already exists: {}", name);
-            throw new RecipeWithNameAlreadyExistsException(name);
-        }
+    public void save(Recipe recipe) {
+        log.debug("Saving recipe: {} ({})", recipe.getName(), recipe.getId());
+        repository.save(recipe);
     }
 
     @Override
@@ -103,13 +69,48 @@ public class JpaRecipeRepository implements RecipeRepository {
     }
 
     @Override
-    public void deleteById(RecipeId recipeId) {
-        log.debug("Deleting recipe by id: {}", recipeId);
-        repository.deleteById(recipeId);
+    public void deleteById(UUID id) {
+        log.debug("Deleting recipe by id: {}", id);
+        repository.deleteById(id);
     }
 
     @Override
-    public long count() {
-        return repository.count();
+    public void validateExistsById(UUID id) {
+        if (!repository.existsById(id)) {
+            log.error("Recipe not found by id: {}", id);
+            throw new RecipeNotFoundException(id);
+        }
+    }
+
+    @Override
+    public void validateNameUnique(String name) {
+        if (repository.existsByName(name)) {
+            log.error("Recipe with name already exists: {}", name);
+            throw new RecipeWithNameAlreadyExistsException(name);
+        }
+    }
+
+    @Override
+    public void validateEmptyName(String name) {
+        if (name.isEmpty()) {
+            log.error("Recipe name is empty");
+            throw new RecipeNameIsEmptyException();
+        }
+    }
+
+    // TODO: generate UUIDv7
+    @Override
+    public UUID nextId() {
+        return UUID.randomUUID();
+    }
+
+    @Override
+    public UUID nextRecipeIngredientId() {
+        return UUID.randomUUID();
+    }
+
+    @Override
+    public UUID nextRecipeInstructionId() {
+        return UUID.randomUUID();
     }
 }

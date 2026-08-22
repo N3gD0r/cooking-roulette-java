@@ -8,12 +8,12 @@ public final class RecipeIngredientMother {
     }
 
     public static final class Builder {
-        private RecipeIngredientId id = new RecipeIngredientId(UUID.randomUUID());
+        private UUID id = UUID.randomUUID();
         private String ingredientName = "agua";
         private IngredientEnum ingredientType = IngredientEnum.ALIMENTOS_LIBRES_DE_ENERGIA;
         private Mass weight = Mass.ofGrams(250);
 
-        public Builder id(RecipeIngredientId id) {
+        public Builder id(UUID id) {
             this.id = id;
             return this;
         }

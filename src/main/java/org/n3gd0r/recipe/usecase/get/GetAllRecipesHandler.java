@@ -5,18 +5,14 @@ import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * GetAllRecipes
- */
 @Slf4j
 @HandlerFor(GetAllRecipesParameters.class)
 @Service
-@Transactional(readOnly = true)
 public class GetAllRecipesHandler implements RequestHandler<GetAllRecipesParameters, Page<Recipe>> {
     private final RecipeRepository repository;
 
@@ -26,8 +22,8 @@ public class GetAllRecipesHandler implements RequestHandler<GetAllRecipesParamet
 
     @Override
     public Page<Recipe> execute(GetAllRecipesParameters request) {
-        log.info("Getting all recipes with pageable: {}", request.pageable());
-        Page<Recipe> recipes = repository.findAll(request.pageable());
+        log.info("Getting all recipes with page: {} and size: {}", request.page(), request.size());
+        Page<Recipe> recipes = repository.findAll(PageRequest.of(request.page(), request.size()));
         log.debug("Found recipes {}", recipes);
         return recipes;
     }

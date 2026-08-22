@@ -9,7 +9,6 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.n3gd0r.recipe.usecase.delete.DeleteRecipeHandler;
 import org.n3gd0r.recipe.usecase.delete.DeleteRecipeParameters;
@@ -26,7 +25,7 @@ public class DeleteRecipeMockTest {
 
     @Test
     void testMockDeleteRecipe() {
-        RecipeId recipeId = new RecipeId(UUID.randomUUID());
+        UUID recipeId = UUID.randomUUID();
         doNothing().when(repository).deleteById(recipeId);
 
         deleteRecipeCommand.execute(new DeleteRecipeParameters(recipeId));

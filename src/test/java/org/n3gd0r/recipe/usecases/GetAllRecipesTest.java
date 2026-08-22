@@ -20,7 +20,6 @@ import org.n3gd0r.recipe.repository.InMemoryRecipeRepository;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.n3gd0r.recipe.usecase.get.GetAllRecipesHandler;
 import org.n3gd0r.recipe.usecase.get.GetAllRecipesParameters;
-import org.springframework.data.domain.PageRequest;
 
 public class GetAllRecipesTest {
     private RecipeRepository recipeRepository;
@@ -65,7 +64,7 @@ public class GetAllRecipesTest {
 
     @Test
     void testGetAllRecipes() {
-        GetAllRecipesParameters parameters = new GetAllRecipesParameters(PageRequest.of(0, 5));
+        GetAllRecipesParameters parameters = new GetAllRecipesParameters(0, 5);
 
         List<Recipe> recipes = getAllRecipesQuery.execute(parameters).toList();
 
@@ -77,7 +76,7 @@ public class GetAllRecipesTest {
     @Test
     void testGetAllRecipesAfterDeleteOperationReturnsEmptyList() {
         recipeRepository.deleteAll();
-        GetAllRecipesParameters parameters = new GetAllRecipesParameters(PageRequest.of(0, 5));
+        GetAllRecipesParameters parameters = new GetAllRecipesParameters(0, 5);
 
         List<Recipe> recipes = getAllRecipesQuery.execute(parameters).toList();
 
@@ -117,7 +116,7 @@ public class GetAllRecipesTest {
                 .build();
 
         recipeRepository.save(recipe);
-        GetAllRecipesParameters parameters = new GetAllRecipesParameters(PageRequest.of(0, 5));
+        GetAllRecipesParameters parameters = new GetAllRecipesParameters(0, 5);
 
         List<Recipe> recipes = getAllRecipesQuery.execute(parameters).toList();
 

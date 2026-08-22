@@ -5,10 +5,7 @@ import java.util.UUID;
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.Recipe;
-import org.n3gd0r.recipe.domain.RecipeId;
-import org.n3gd0r.recipe.domain.RecipeIngredientId;
 import org.n3gd0r.recipe.domain.RecipeIngredientMother;
-import org.n3gd0r.recipe.domain.RecipeInstructionId;
 import org.n3gd0r.recipe.domain.RecipeInstructionMother;
 import org.n3gd0r.recipe.domain.RecipeMother;
 
@@ -29,15 +26,15 @@ public class MockTestUtils {
                 .build();
     }
 
-    public static RecipeId recipeIdForMocks() {
-        return new RecipeId(UUID.randomUUID());
+    public static UUID recipeIdForMocks() {
+        return UUID.randomUUID();
     }
 
-    public static RecipeIngredientId recipeIngredientIdForMocks() {
-        return new RecipeIngredientId(UUID.randomUUID());
+    public static UUID recipeIngredientIdForMocks() {
+        return UUID.randomUUID();
     }
 
-    public static RecipeInstructionId recipeInstructionIdForMocks() {
-        return new RecipeInstructionId(UUID.randomUUID());
+    public static UUID recipeInstructionIdForMocks() {
+        return UUID.randomUUID();
     }
 }

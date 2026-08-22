@@ -8,11 +8,11 @@ public final class RecipeInstructionMother {
     }
 
     public static final class Builder {
-        private RecipeInstructionId id = new RecipeInstructionId(UUID.randomUUID());
+        private UUID id = UUID.randomUUID();
         private int instructionNumber = 1;
         private String instruction = "Hervir el agua";
 
-        public Builder id(RecipeInstructionId id) {
+        public Builder id(UUID id) {
             this.id = id;
             return this;
         }

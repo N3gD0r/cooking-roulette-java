@@ -13,7 +13,6 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.n3gd0r.recipe.domain.Recipe;
-import org.n3gd0r.recipe.domain.RecipeId;
 import org.n3gd0r.recipe.domain.RecipeMother;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.n3gd0r.recipe.usecase.patch.PatchRecipeHandler;
@@ -31,7 +30,7 @@ public class PatchRecipeMockTest {
 
     @Test
     void testMockPatchRecipe() {
-        RecipeId recipeId = new RecipeId(UUID.randomUUID());
+        UUID recipeId = MockTestUtils.recipeIdForMocks();
         PatchRecipeParameters patchParameters = new PatchRecipeParameters(recipeId, "huevos mock", 15, null, null);
         Recipe recipe = RecipeMother.recipe().build();
 

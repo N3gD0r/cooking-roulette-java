@@ -1,4 +1,4 @@
-package org.n3gd0r.roulette.usecase;
+package org.n3gd0r.recipe.usecase.random;
 
 import org.n3gd0r.commons.mediator.Query;
 import org.n3gd0r.recipe.domain.Recipe;
