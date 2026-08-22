@@ -20,11 +20,6 @@
     <dependencies>
         <dependency>
             <groupId>org.n3gd0r.commons</groupId>
-            <artifactId>entities</artifactId>
-            <version>${org.n3gd0r.commons.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.n3gd0r.commons</groupId>
             <artifactId>mediator</artifactId>
             <version>${org.n3gd0r.commons.version}</version>
         </dependency>
