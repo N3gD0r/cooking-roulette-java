@@ -8,9 +8,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.n3gd0r.recipe.usecases.mocks.MockTestUtils.recipeForMocks;
-import static org.n3gd0r.recipe.usecases.mocks.MockTestUtils.recipeIngredientIdForMocks;
-import static org.n3gd0r.recipe.usecases.mocks.MockTestUtils.recipeInstructionIdForMocks;
+import static org.n3gd0r.recipe.usecases.TestUtils.ingredientIdGenerator;
+import static org.n3gd0r.recipe.usecases.TestUtils.instructionIdGenerator;
+import static org.n3gd0r.recipe.usecases.TestUtils.recipeForMocks;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,8 +50,8 @@ public class UpdateRecipeMockTest {
         doNothing().when(repository).validateExistsById(recipe.getId());
         when(repository.getById(recipe.getId())).thenReturn(recipe);
         doNothing().when(repository).validateNameUnique(any(String.class));
-        when(repository.nextRecipeIngredientId()).thenReturn(recipeIngredientIdForMocks());
-        when(repository.nextRecipeInstructionId()).thenReturn(recipeInstructionIdForMocks());
+        when(repository.nextRecipeIngredientId()).thenReturn(ingredientIdGenerator());
+        when(repository.nextRecipeInstructionId()).thenReturn(instructionIdGenerator());
         doNothing().when(repository).save(recipe);
         Recipe updatedRecipe = updateRecipeCommand.execute(parameters);
 

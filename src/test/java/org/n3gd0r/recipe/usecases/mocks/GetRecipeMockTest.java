@@ -6,8 +6,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.n3gd0r.recipe.usecases.mocks.MockTestUtils.recipeForMocks;
-import static org.n3gd0r.recipe.usecases.mocks.MockTestUtils.recipeIdForMocks;
+import static org.n3gd0r.recipe.usecases.TestUtils.recipeForMocks;
+import static org.n3gd0r.recipe.usecases.TestUtils.recipeIdGenerator;
 
 import java.util.UUID;
 
@@ -31,7 +31,7 @@ public class GetRecipeMockTest {
     @Test
     void testMockRecipeRepositoryGetRecipeById() {
         Recipe mockedRecipe = recipeForMocks();
-        UUID recipeId = recipeIdForMocks();
+        UUID recipeId = recipeIdGenerator();
         when(repository.getById(any(UUID.class))).thenReturn(mockedRecipe);
 
         Recipe foundRecipe = getRecipeQuery.execute(new GetRecipeParameters(recipeId, null));

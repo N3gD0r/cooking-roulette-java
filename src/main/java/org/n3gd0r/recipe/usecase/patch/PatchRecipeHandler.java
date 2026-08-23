@@ -47,43 +47,46 @@ public class PatchRecipeHandler implements RequestHandler<PatchRecipeParameters,
         }
 
         if (request.instructions() != null) {
-            log.debug("Patching {} instructions for recipe: {}", request.instructions().size(), request.id());
+            log.debug("Patching {} instructions for recipe with id {}", request.instructions().size(), request.id());
             request.instructions().stream()
                     .forEach(pi -> patchInstruction(recipe, pi));
         }
 
         if (request.ingredients() != null) {
-            log.debug("Patching {} ingredients for recipe: {}", request.ingredients().size(), request.id());
+            log.debug("Patching {} ingredients for recipe with id {}", request.ingredients().size(), request.id());
             request.ingredients().stream()
                     .forEach(pi -> patchIngredient(recipe, pi));
         }
 
         repository.save(recipe);
-        log.info("Recipe patched successfully: {}", request.id());
+        log.info("Recipe patched successfully with id {}", request.id());
         return recipe;
     }
 
-    private void patchInstruction(Recipe recipe, PatchInstructionParameters parameters) {
-        if (parameters.id() != null) {
-            if (!recipe.hasInstruction(parameters.id())) {
-                log.error("Recipe instruction not found: {}", parameters.id());
-                throw new RecipeInstructionNotFoundException(parameters.id());
+    private void patchInstruction(Recipe recipe, PatchInstructionParameters instructionParameters) {
+        if (instructionParameters.id() != null) {
+            if (!recipe.hasInstruction(instructionParameters.id())) {
+                log.error("Recipe instruction not found for patching with id {}", instructionParameters.id());
+                throw new RecipeInstructionNotFoundException(instructionParameters.id());
             }
-            RecipeInstruction instructionToPatch = recipe.getInstruction(parameters.id());
-            if (parameters.instruction() != null) {
-                log.debug("Updating instruction text for: {}", parameters.id());
-                instructionToPatch.setInstruction(parameters.instruction());
+
+            RecipeInstruction instructionToPatch = recipe.getInstruction(instructionParameters.id());
+
+            if (instructionParameters.instruction() != null) {
+                log.debug("Updating instruction text for recipe instruction with id {}", instructionParameters.id());
+                instructionToPatch.setInstruction(instructionParameters.instruction());
             }
-            if (parameters.instructionNumber() != null) {
-                log.debug("Updating instruction number for: {} -> {}", parameters.id(), parameters.instructionNumber());
-                instructionToPatch.setInstructionNumber(parameters.instructionNumber());
+            if (instructionParameters.instructionNumber() != null) {
+                log.debug("Updating instruction number for recipe instruction with id {} and instruction number {}",
+                        instructionParameters.id(),
+                        instructionParameters.instructionNumber());
+                instructionToPatch.setInstructionNumber(instructionParameters.instructionNumber());
             }
-        } else if (parameters.canAddInstruction()) {
-            log.debug("Adding new instruction: {}", parameters.instruction());
-            recipe.addInstruction(new RecipeInstruction(
-                    repository.nextRecipeInstructionId(),
-                    parameters.instructionNumber(),
-                    parameters.instruction()));
+        } else if (instructionParameters.canAddInstruction()) {
+            log.debug("No id provided, adding new recipe instruction: {}", instructionParameters.instruction());
+            recipe.addInstruction(new RecipeInstruction(repository.nextRecipeInstructionId(),
+                    instructionParameters.instructionNumber(),
+                    instructionParameters.instruction()));
         } else {
             log.error("Entity not suitable for update: RecipeInstruction - Missing instruction information");
             throw new EntityNotSuitableForPatchException("RecipeInstruction", "Missing instruction information.");
@@ -93,27 +96,29 @@ public class PatchRecipeHandler implements RequestHandler<PatchRecipeParameters,
     private void patchIngredient(Recipe recipe, PatchIngredientParameters parameters) {
         if (parameters.id() != null) {
             if (!recipe.hasIngredient(parameters.id())) {
-                log.error("Recipe ingredient not found: {}", parameters.id());
+                log.error("Recipe ingredient not found with id {}", parameters.id());
                 throw new RecipeIngredientNotFoundException(parameters.id());
             }
             RecipeIngredient ingredientToPatch = recipe.getIngredient(parameters.id());
             if (parameters.weight() != null) {
-                log.debug("Updating weight for ingredient: {}", parameters.id());
+                log.debug("Updating weight for recipe ingredient with id {} and weight {}", parameters.id(),
+                        parameters.weight());
                 ingredientToPatch.setWeight(parameters.weight());
             }
             if (parameters.ingredientName() != null) {
-                log.debug("Updating ingredient name for: {}", parameters.id());
+                log.debug("Updating ingredient name for recipe ingredient with id {} and name {}", parameters.id(),
+                        parameters.ingredientName());
                 ingredientToPatch.setIngredientName(parameters.ingredientName().trim().toLowerCase());
             }
             if (parameters.ingredientType() != null) {
-                log.debug("Updating ingredient type for: {}", parameters.id());
+                log.debug("Updating ingredient type for recipe ingredient with id {} and ingredient type {}",
+                        parameters.id(), parameters.ingredientType());
                 ingredientToPatch.setIngredientType(parameters.ingredientType());
             }
 
         } else if (parameters.canAddIngredient()) {
-            log.debug("Adding new ingredient: {}", parameters.ingredientName());
-            recipe.addIngredient(new RecipeIngredient(
-                    repository.nextRecipeIngredientId(),
+            log.debug("No recipe ingredient provided, adding new ingredient: {}", parameters.ingredientName());
+            recipe.addIngredient(new RecipeIngredient(repository.nextRecipeIngredientId(),
                     parameters.ingredientName().trim().toLowerCase(),
                     parameters.ingredientType(),
                     parameters.weight()));

@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.PredicateSpecification;
 
 public class InMemoryRecipeRepository implements RecipeRepository {
-    private final Map<UUID, Recipe> values = new HashMap<>();
+    private final Map<UUID, Recipe> recipeTable = new HashMap<>();
 
     @Override
     public UUID nextId() {
@@ -35,64 +35,66 @@ public class InMemoryRecipeRepository implements RecipeRepository {
 
     @Override
     public Recipe getByName(String name) {
-        return values.values().stream().filter(r -> r.getName().equalsIgnoreCase(name.trim().toLowerCase()))
+        return recipeTable.values().stream().filter(r -> r.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElseThrow(() -> new RecipeNotFoundException(name));
     }
 
     @Override
     public void save(Recipe recipe) {
-        values.put(recipe.getId(), recipe);
+        recipeTable.put(recipe.getId(), recipe);
     }
 
     @Override
     public Recipe getById(UUID id) {
-        return Optional.ofNullable(values.get(id)).orElseThrow(() -> new RecipeNotFoundException(id));
+        return Optional.ofNullable(recipeTable.get(id)).orElseThrow(() -> new RecipeNotFoundException(id));
     }
 
     @Override
     public void validateExistsById(UUID id) {
-        if (!values.containsKey(id)) {
+        if (!recipeTable.containsKey(id)) {
             throw new RecipeNotFoundException(id);
         }
     }
 
     @Override
     public void validateNameUnique(String name) {
-        boolean nameExists = values.values().stream()
-                .filter(r -> r.getName().equalsIgnoreCase(name.trim().toLowerCase())).count() > 0;
-        if (nameExists) {
+        boolean exists = recipeTable.values().stream()
+                .anyMatch(r -> r.getName().equalsIgnoreCase(name));
+        System.out.println(name);
+        if (exists) {
+            System.out.println(exists);
             throw new RecipeWithNameAlreadyExistsException(name);
         }
     }
 
     @Override
     public Page<Recipe> findAll(Pageable pageable) {
-        List<Recipe> recipes = values.values().stream()
+        List<Recipe> recipes = recipeTable.values().stream()
                 .skip((long) pageable.getPageNumber() * pageable.getPageSize())
                 .limit(pageable.getPageSize())
                 .toList();
-        return new PageImpl<>(recipes, pageable, values.size());
+        return new PageImpl<>(recipes, pageable, recipeTable.size());
     }
 
     @Override
     public void deleteAll() {
-        values.clear();
+        recipeTable.clear();
     }
 
     @Override
     public void deleteById(UUID id) {
-        values.remove(id);
+        recipeTable.remove(id);
     }
 
     @Override
     public long count() {
-        return values.size();
+        return recipeTable.size();
     }
 
     @Override
     public List<Recipe> findAll(PredicateSpecification<Recipe> spec) {
-        return values.values().stream().toList();
+        return recipeTable.values().stream().toList();
     }
 
     @Override

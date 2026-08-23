@@ -1,6 +1,5 @@
 package org.n3gd0r.recipe.usecases;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,12 +26,13 @@ import org.n3gd0r.recipe.usecase.patch.PatchIngredientParameters;
 import org.n3gd0r.recipe.usecase.patch.PatchInstructionParameters;
 import org.n3gd0r.recipe.usecase.patch.PatchRecipeHandler;
 import org.n3gd0r.recipe.usecase.patch.PatchRecipeParameters;
-import org.n3gd0r.recipe.usecases.mocks.MockTestUtils;
 
 public class PatchRecipeTest {
     private RecipeRepository recipeRepository;
     private PatchRecipeHandler patchRecipeCommand;
     private UUID recipeIdToPatch;
+    private UUID ingredientIdToPatch;
+    private UUID instructionIdToPatch;
     private Recipe recipeToPatch;
 
     @BeforeEach
@@ -41,16 +41,18 @@ public class PatchRecipeTest {
         patchRecipeCommand = new PatchRecipeHandler(recipeRepository);
 
         recipeIdToPatch = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+        ingredientIdToPatch = TestUtils.ingredientIdGenerator();
+        instructionIdToPatch = TestUtils.ingredientIdGenerator();
         List<RecipeIngredient> ingredients = Arrays.asList(
                 RecipeIngredientMother.recipeIngredient()
-                        .id(MockTestUtils.recipeIngredientIdForMocks())
+                        .id(ingredientIdToPatch)
                         .ingredientName("huevos")
                         .ingredientType(IngredientEnum.CARNES)
                         .weight(Mass.ofGrams(180))
                         .build());
         List<RecipeInstruction> instructions = Arrays.asList(
                 RecipeInstructionMother.recipeInstruction()
-                        .id(MockTestUtils.recipeInstructionIdForMocks())
+                        .id(instructionIdToPatch)
                         .instructionNumber(1)
                         .instruction("En agua hirviendo, colocar los huevos durante 15 minutos")
                         .build());
@@ -101,9 +103,8 @@ public class PatchRecipeTest {
 
     @Test
     void testPatchRecipeIngredients() {
-        UUID ingredienIdToPatch = MockTestUtils.recipeIngredientIdForMocks();
         List<PatchIngredientParameters> ingredientParameters = Arrays.asList(
-                new PatchIngredientParameters(ingredienIdToPatch, "Jamon", IngredientEnum.CARNES, Mass.ofGrams(100)));
+                new PatchIngredientParameters(ingredientIdToPatch, "Jamon", IngredientEnum.CARNES, Mass.ofGrams(100)));
         PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
                 null, ingredientParameters);
         int originalIngredientsSize = recipeToPatch.getIngredients().size();
@@ -119,7 +120,6 @@ public class PatchRecipeTest {
 
     @Test
     void testPatchRecipeInstruction() {
-        UUID instructionIdToPatch = MockTestUtils.recipeInstructionIdForMocks();
         List<PatchInstructionParameters> instructionParameters = Arrays.asList(
                 new PatchInstructionParameters(instructionIdToPatch, 1,
                         "Colocar los huevos en agua hirviendo por 15 minutos"));
@@ -146,9 +146,8 @@ public class PatchRecipeTest {
         Recipe patchedRecipe = patchRecipeCommand.execute(recipeParameters);
         List<RecipeIngredient> patchedIngredients = patchedRecipe.getIngredients();
 
-        assertThat(patchedIngredients.get(1).getIngredientName()).isEqualToIgnoringCase("jamon");
-        assertThat(patchedIngredients.get(1).getWeight().value()).isEqualTo(100);
-
+        assertEquals(patchedIngredients.get(1).getIngredientName(), "jamon");
+        assertEquals(patchedIngredients.get(1).getWeight().value(), 100);
         assertNotEquals(originalIngredientsSize, patchedIngredients.size());
         assertTrue(patchedIngredients.size() == 2);
         assertEquals("huevos", patchedIngredients.get(0).getIngredientName());

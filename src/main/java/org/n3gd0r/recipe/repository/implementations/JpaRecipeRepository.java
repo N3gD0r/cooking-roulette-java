@@ -15,9 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * JpaRecipeRepository
- */
 @Slf4j
 @Repository
 public class JpaRecipeRepository implements RecipeRepository {

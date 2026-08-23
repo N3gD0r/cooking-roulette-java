@@ -17,6 +17,7 @@ import org.n3gd0r.recipe.domain.RecipeMother;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.n3gd0r.recipe.usecase.patch.PatchRecipeHandler;
 import org.n3gd0r.recipe.usecase.patch.PatchRecipeParameters;
+import org.n3gd0r.recipe.usecases.TestUtils;
 
 public class PatchRecipeMockTest {
     private RecipeRepository repository;
@@ -30,7 +31,7 @@ public class PatchRecipeMockTest {
 
     @Test
     void testMockPatchRecipe() {
-        UUID recipeId = MockTestUtils.recipeIdForMocks();
+        UUID recipeId = TestUtils.recipeIdGenerator();
         PatchRecipeParameters patchParameters = new PatchRecipeParameters(recipeId, "huevos mock", 15, null, null);
         Recipe recipe = RecipeMother.recipe().build();
 

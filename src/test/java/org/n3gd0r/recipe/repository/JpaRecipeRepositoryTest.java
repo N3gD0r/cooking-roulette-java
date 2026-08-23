@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.n3gd0r.infrastructure.test.RecipeDataJpaTest;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeMother;
-import org.n3gd0r.recipe.repository.implementations.JpaRecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 
@@ -18,7 +17,7 @@ import jakarta.persistence.EntityManager;
 @RecipeDataJpaTest
 public class JpaRecipeRepositoryTest {
     @Autowired
-    private JpaRecipeRepository repository;
+    private RecipeRepository repository;
     @Autowired
     private EntityManager entityManager;
     @Autowired
@@ -39,8 +38,12 @@ public class JpaRecipeRepositoryTest {
         entityManager.flush();
         entityManager.clear();
 
-        assertEquals(id, jdbcClient.sql("SELECT id from recipe").query(UUID.class).single());
-        assertEquals("huevos a la mexicana", jdbcClient.sql("SELECT name from recipe").query(String.class).single());
-        assertEquals(30, jdbcClient.sql("SELECT cook_time from recipe").query(Integer.class).single());
+        UUID savedId = jdbcClient.sql("SELECT id from recipe").query(UUID.class).single();
+        String savedName = jdbcClient.sql("SELECT name from recipe").query(String.class).single();
+        int savedCookTime = jdbcClient.sql("SELECT cook_time from recipe").query(Integer.class).single();
+
+        assertEquals(id, savedId);
+        assertEquals("huevos a la mexicana", savedName);
+        assertEquals(30, savedCookTime);
     }
 }

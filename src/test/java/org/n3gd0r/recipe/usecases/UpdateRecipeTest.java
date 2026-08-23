@@ -37,7 +37,7 @@ public class UpdateRecipeTest {
         recipeRepository = new InMemoryRecipeRepository();
         updateRecipeCommand = new UpdateRecipeHandler(recipeRepository);
 
-        recipeIdToUpdate = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+        recipeIdToUpdate = TestUtils.recipeIdGenerator();
         List<RecipeIngredient> ingredients = Arrays.asList(
                 RecipeIngredientMother.recipeIngredient()
                         .ingredientName("huevos")

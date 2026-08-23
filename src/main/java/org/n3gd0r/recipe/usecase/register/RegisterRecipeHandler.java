@@ -26,7 +26,7 @@ public class RegisterRecipeHandler implements RequestHandler<RegisterRecipeParam
     @Override
     public Recipe execute(RegisterRecipeParameters request) {
         log.info("Registering recipe: {}", request.name());
-        repository.validateNameUnique(request.name());
+        repository.validateNameUnique(request.name().trim());
         List<RecipeIngredient> ingredients = request.ingredients().stream()
                 .map(ri -> new RecipeIngredient(repository.nextRecipeIngredientId(),
                         ri.ingredientName().trim().toLowerCase(),

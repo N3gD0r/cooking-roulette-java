@@ -31,9 +31,9 @@ public class Recipe {
     private String name;
     private int cookTime;
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RecipeInstruction> instructions = new ArrayList<>();
+    private List<RecipeInstruction> instructions;
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RecipeIngredient> ingredients = new ArrayList<>();
+    private List<RecipeIngredient> ingredients;
 
     public Recipe(UUID id,
             String name,
@@ -43,12 +43,8 @@ public class Recipe {
         this.id = id;
         this.name = name;
         this.cookTime = cookTime;
-        for (RecipeIngredient ingredientInfo : ingredients) {
-            addIngredient(ingredientInfo);
-        }
-        for (RecipeInstruction instruction : instructions) {
-            addInstruction(instruction);
-        }
+        this.ingredients = new ArrayList<>(ingredients);
+        this.instructions = new ArrayList<>(instructions);
     }
 
     public void addInstruction(RecipeInstruction recipeInstruction) {

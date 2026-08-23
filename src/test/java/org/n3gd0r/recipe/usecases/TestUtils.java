@@ -1,4 +1,4 @@
-package org.n3gd0r.recipe.usecases.mocks;
+package org.n3gd0r.recipe.usecases;
 
 import java.util.UUID;
 
@@ -9,7 +9,7 @@ import org.n3gd0r.recipe.domain.RecipeIngredientMother;
 import org.n3gd0r.recipe.domain.RecipeInstructionMother;
 import org.n3gd0r.recipe.domain.RecipeMother;
 
-public class MockTestUtils {
+public class TestUtils {
     public static Recipe recipeForMocks() {
         return RecipeMother.recipe()
                 .name("huevos cocidos")
@@ -26,15 +26,15 @@ public class MockTestUtils {
                 .build();
     }
 
-    public static UUID recipeIdForMocks() {
+    public static UUID recipeIdGenerator() {
         return UUID.randomUUID();
     }
 
-    public static UUID recipeIngredientIdForMocks() {
+    public static UUID ingredientIdGenerator() {
         return UUID.randomUUID();
     }
 
-    public static UUID recipeInstructionIdForMocks() {
+    public static UUID instructionIdGenerator() {
         return UUID.randomUUID();
     }
 }
