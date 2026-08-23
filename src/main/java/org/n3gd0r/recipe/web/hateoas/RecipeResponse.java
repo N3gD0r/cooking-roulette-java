@@ -1,4 +1,4 @@
-package org.n3gd0r.infrastructure.hateoas;
+package org.n3gd0r.recipe.web.hateoas;
 
 import java.util.List;
 import java.util.UUID;

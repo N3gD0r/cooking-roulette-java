@@ -3,11 +3,14 @@ package org.n3gd0r.recipe.web;
 import java.util.UUID;
 
 import org.n3gd0r.commons.mediator.IMediator;
-import org.n3gd0r.infrastructure.hateoas.RecipeModelAssembler;
-import org.n3gd0r.infrastructure.hateoas.RecipeResponse;
 import org.n3gd0r.recipe.usecase.delete.DeleteRecipeParameters;
 import org.n3gd0r.recipe.usecase.get.GetAllRecipesParameters;
 import org.n3gd0r.recipe.usecase.get.GetRecipeParameters;
+import org.n3gd0r.recipe.web.dtos.requests.PatchRecipeRequest;
+import org.n3gd0r.recipe.web.dtos.requests.RegisterRecipeWithAllRequest;
+import org.n3gd0r.recipe.web.dtos.requests.UpdateRecipeRequest;
+import org.n3gd0r.recipe.web.hateoas.RecipeModelAssembler;
+import org.n3gd0r.recipe.web.hateoas.RecipeResponse;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;

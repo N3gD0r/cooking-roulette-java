@@ -1,9 +1,10 @@
 package org.n3gd0r.recipe.web;
 
 import org.n3gd0r.commons.mediator.IMediator;
-import org.n3gd0r.infrastructure.hateoas.RecipeModelAssembler;
-import org.n3gd0r.infrastructure.hateoas.RecipeResponse;
 import org.n3gd0r.recipe.usecase.random.RandomRecipeParameters;
+import org.n3gd0r.recipe.web.dtos.requests.RandomRecipeRequest;
+import org.n3gd0r.recipe.web.hateoas.RecipeModelAssembler;
+import org.n3gd0r.recipe.web.hateoas.RecipeResponse;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

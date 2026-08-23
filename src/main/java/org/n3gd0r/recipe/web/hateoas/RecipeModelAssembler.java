@@ -1,4 +1,4 @@
-package org.n3gd0r.infrastructure.hateoas;
+package org.n3gd0r.recipe.web.hateoas;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
