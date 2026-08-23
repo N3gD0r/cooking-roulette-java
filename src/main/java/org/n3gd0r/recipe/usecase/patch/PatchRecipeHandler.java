@@ -2,6 +2,7 @@ package org.n3gd0r.recipe.usecase.patch;
 
 import org.n3gd0r.commons.mediator.HandlerFor;
 import org.n3gd0r.commons.mediator.RequestHandler;
+import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
 import org.n3gd0r.recipe.domain.RecipeInstruction;
@@ -100,10 +101,10 @@ public class PatchRecipeHandler implements RequestHandler<PatchRecipeParameters,
                 throw new RecipeIngredientNotFoundException(parameters.id());
             }
             RecipeIngredient ingredientToPatch = recipe.getIngredient(parameters.id());
-            if (parameters.weight() != null) {
+            if (parameters.weightInGrams() != null) {
                 log.debug("Updating weight for recipe ingredient with id {} and weight {}", parameters.id(),
-                        parameters.weight());
-                ingredientToPatch.setWeight(parameters.weight());
+                        parameters.weightInGrams());
+                ingredientToPatch.setWeight(Mass.ofGrams(parameters.weightInGrams()));
             }
             if (parameters.ingredientName() != null) {
                 log.debug("Updating ingredient name for recipe ingredient with id {} and name {}", parameters.id(),
@@ -121,7 +122,7 @@ public class PatchRecipeHandler implements RequestHandler<PatchRecipeParameters,
             recipe.addIngredient(new RecipeIngredient(repository.nextRecipeIngredientId(),
                     parameters.ingredientName().trim().toLowerCase(),
                     parameters.ingredientType(),
-                    parameters.weight()));
+                    Mass.ofGrams(parameters.weightInGrams())));
         } else {
             log.error("Entity not suitable for update: RecipeIngredient - Missing ingredient information");
             throw new EntityNotSuitableForPatchException("RecipeIngredient", "Missing ingredient information.");

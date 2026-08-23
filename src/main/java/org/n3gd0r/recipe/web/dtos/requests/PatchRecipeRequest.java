@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.n3gd0r.recipe.domain.IngredientEnum;
-import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.usecase.patch.PatchIngredientParameters;
 import org.n3gd0r.recipe.usecase.patch.PatchInstructionParameters;
 import org.n3gd0r.recipe.usecase.patch.PatchRecipeParameters;
@@ -40,7 +39,7 @@ public record PatchRecipeRequest(
             return new PatchIngredientParameters(id,
                     ingredientName,
                     ingredientType,
-                    Mass.ofGrams(weightInGrams));
+                    weightInGrams);
         }
     }
 

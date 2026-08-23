@@ -104,7 +104,7 @@ public class PatchRecipeTest {
     @Test
     void testPatchRecipeIngredients() {
         List<PatchIngredientParameters> ingredientParameters = Arrays.asList(
-                new PatchIngredientParameters(ingredientIdToPatch, "Jamon", IngredientEnum.CARNES, Mass.ofGrams(100)));
+                new PatchIngredientParameters(ingredientIdToPatch, "Jamon", IngredientEnum.CARNES, 100));
         PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
                 null, ingredientParameters);
         int originalIngredientsSize = recipeToPatch.getIngredients().size();
@@ -138,7 +138,7 @@ public class PatchRecipeTest {
     @Test
     void testPatchRecipeAddIngredient() {
         List<PatchIngredientParameters> ingredientParameters = Arrays.asList(
-                new PatchIngredientParameters(null, "Jamon", IngredientEnum.CARNES, Mass.ofGrams(100)));
+                new PatchIngredientParameters(null, "Jamon", IngredientEnum.CARNES, 100));
         PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
                 null, ingredientParameters);
         int originalIngredientsSize = recipeToPatch.getIngredients().size();
