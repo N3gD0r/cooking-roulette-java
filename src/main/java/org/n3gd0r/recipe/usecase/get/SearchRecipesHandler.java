@@ -6,7 +6,6 @@ import org.n3gd0r.commons.mediator.HandlerFor;
 import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.repository.RecipeRepository;
-import org.n3gd0r.recipe.usecase.exception.RequestForHandlerNullPointerException;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +22,6 @@ public class SearchRecipesHandler implements RequestHandler<SearchRecipesParamet
 
     @Override
     public List<Recipe> execute(SearchRecipesParameters request) {
-        if (request == null) {
-            log.warn("Request SearchRecipesParameters is null");
-            throw new RequestForHandlerNullPointerException(SearchRecipesParameters.class);
-        }
         return repository.findAll(request.toFilterQuery());
     }
 }

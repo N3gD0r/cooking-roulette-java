@@ -59,9 +59,7 @@ public class InMemoryRecipeRepository implements RecipeRepository {
     public void validateNameUnique(String name) {
         boolean exists = recipeTable.values().stream()
                 .anyMatch(r -> r.getName().equalsIgnoreCase(name));
-        System.out.println(name);
         if (exists) {
-            System.out.println(exists);
             throw new RecipeWithNameAlreadyExistsException(name);
         }
     }

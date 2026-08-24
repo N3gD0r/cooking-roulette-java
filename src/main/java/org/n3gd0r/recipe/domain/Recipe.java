@@ -48,7 +48,7 @@ public class Recipe {
     }
 
     public void setName(String name) {
-        if (!this.name.equalsIgnoreCase(name.trim())) {
+        if (!name.isBlank() && !this.name.equalsIgnoreCase(name.trim())) {
             this.name = name.trim().toLowerCase();
         }
     }
