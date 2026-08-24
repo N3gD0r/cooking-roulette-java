@@ -1,25 +1,20 @@
 package org.n3gd0r.recipe.usecase.random;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Predicate;
 
 import org.n3gd0r.commons.mediator.HandlerFor;
 import org.n3gd0r.commons.mediator.RequestHandler;
-import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.exception.NoRecipesForFiltersException;
-import org.n3gd0r.recipe.domain.exception.NoRecipesFoundException;
 import org.n3gd0r.recipe.repository.RecipeRepository;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@HandlerFor(RandomRecipeFiltersParameters.class)
 @Service
+@HandlerFor(RandomRecipeFiltersParameters.class)
 public class RandomRecipeWithFiltersHandler implements RequestHandler<RandomRecipeFiltersParameters, Recipe> {
     private final RecipeRepository repository;
 
@@ -29,40 +24,9 @@ public class RandomRecipeWithFiltersHandler implements RequestHandler<RandomReci
 
     @Override
     public Recipe execute(RandomRecipeFiltersParameters request) {
-        log.info("Getting random recipe with filters");
-        long totalRecipes = repository.count();
-        log.debug("Total recipes in database: {}", totalRecipes);
-        if (totalRecipes < 1) {
-            log.warn("No recipes found in database");
-            throw new NoRecipesFoundException();
-        }
-
-        if (request.isEmptyRequest()) {
-            log.debug("Empty filter request, selecting random recipe from all");
-            int randomPage = ThreadLocalRandom.current().nextInt((int) totalRecipes);
-            Recipe foundRecipe = repository.findAll(PageRequest.of(randomPage, 1)).stream()
-                    .findFirst()
-                    .orElseThrow(NoRecipesFoundException::new);
-            return foundRecipe;
-        }
-
-        int totalPages = totalRecipes < request.pageSize() ? 1
-                : (int) Math.ceil((double) totalRecipes / request.pageSize());
-        log.debug("Scanning {} pages with pageSize: {}", totalPages, request.pageSize());
-        List<Recipe> recipes = new ArrayList<>();
-
-        for (int i = 0; i < totalPages; i++) {
-            int currentPage = i * request.pageSize();
-            recipes.addAll(repository.findAll(PageRequest.of(currentPage, request.pageSize()))
-                    .stream()
-                    .filter(getPredicates(request).stream()
-                            .reduce(Predicate::and).orElse(r -> false))
-                    .toList());
-        }
-
+        log.info("RandomRecipeWithFiltersHandler - Getting random recipe with filters");
+        List<Recipe> recipes = repository.findAll(request.toFilterQuery());
         long foundRecipes = recipes.size();
-        log.debug("Found {} recipes matching filters out of {} total", foundRecipes, totalRecipes);
-
         if (foundRecipes < 1) {
             log.warn("No recipes matched the given filters");
             throw new NoRecipesForFiltersException();
@@ -77,39 +41,5 @@ public class RandomRecipeWithFiltersHandler implements RequestHandler<RandomReci
 
         log.info("Random recipe selected: {} ({})", randomRecipe.getName(), randomRecipe.getId());
         return randomRecipe;
-    }
-
-    private List<Predicate<Recipe>> getPredicates(RandomRecipeFiltersParameters request) {
-        List<Predicate<Recipe>> recipePredicates = new ArrayList<>();
-
-        if (request.ingredients().isPresent()) {
-            for (String ingredient : request.ingredients().get()) {
-                recipePredicates.add(r -> r.getIngredients().stream()
-                        .filter(ri -> ri.getIngredientName().equalsIgnoreCase(ingredient)).count() > 0);
-            }
-        }
-
-        if (request.ingredientTypes().isPresent()) {
-            for (IngredientEnum ingredientType : request.ingredientTypes().get()) {
-                recipePredicates.add(r -> r.getIngredients().stream()
-                        .filter(ri -> ri.getIngredientType().toString()
-                                .equalsIgnoreCase(ingredientType.toString()))
-                        .count() > 0);
-            }
-        }
-
-        if (request.ingredientQuantity().isPresent()) {
-            recipePredicates.add(r -> r.getIngredients().size() == request.ingredientQuantity().get());
-        }
-
-        if (request.instructionQuantity().isPresent()) {
-            recipePredicates.add(r -> r.getInstructions().size() == request.instructionQuantity().get());
-        }
-
-        if (request.cookTime().isPresent()) {
-            recipePredicates.add(r -> r.getCookTime() == request.cookTime().get());
-        }
-
-        return recipePredicates;
     }
 }

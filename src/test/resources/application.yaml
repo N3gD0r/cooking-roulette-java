@@ -1,0 +1,17 @@
+server:
+  port: 4444
+spring:
+  application:
+    name: cooking-tests
+
+  datasource:
+    url: ${DBURL}
+    username: ${DBUSER}
+    password: ${DBPASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: "none"
+    show-sql: true
+  flyway:
+    enabled: true

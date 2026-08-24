@@ -9,7 +9,10 @@ import org.springframework.util.Assert;
 /**
  * RegisterRecipeCommand
  */
-public record RegisterRecipeParameters(String name, Integer cookTime, List<RegisterIngredientParameters> ingredients,
+public record RegisterRecipeParameters(
+        String name,
+        Integer cookTime,
+        List<RegisterIngredientParameters> ingredients,
         List<RegisterInstructionParameters> instructions) implements Command<Recipe> {
     public RegisterRecipeParameters {
         Assert.hasText(name, "The RegisterRecipeCommand name should have text");

@@ -34,20 +34,9 @@ public class GetRecipeMockTest {
         UUID recipeId = recipeIdGenerator();
         when(repository.getById(any(UUID.class))).thenReturn(mockedRecipe);
 
-        Recipe foundRecipe = getRecipeQuery.execute(new GetRecipeParameters(recipeId, null));
+        Recipe foundRecipe = getRecipeQuery.execute(new GetRecipeParameters(recipeId));
 
         verify(repository, times(1)).getById(any(UUID.class));
-        assertEquals(mockedRecipe, foundRecipe);
-    }
-
-    @Test
-    void testMockRecipeRepositoryGetRecipeByName() {
-        Recipe mockedRecipe = recipeForMocks();
-        when(repository.getByName(any(String.class))).thenReturn(mockedRecipe);
-
-        Recipe foundRecipe = getRecipeQuery.execute(new GetRecipeParameters(null, "huevos cocidos"));
-
-        verify(repository, times(1)).getByName(any(String.class));
         assertEquals(mockedRecipe, foundRecipe);
     }
 }

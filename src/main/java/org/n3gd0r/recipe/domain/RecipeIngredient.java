@@ -31,9 +31,15 @@ public class RecipeIngredient {
 
     public RecipeIngredient(UUID id, String ingredientName, IngredientEnum ingredientType, Mass weight) {
         this.id = id;
-        this.ingredientName = ingredientName;
+        this.ingredientName = ingredientName.trim().toLowerCase();
         this.ingredientType = ingredientType;
         this.weight = weight;
+    }
+
+    public void setIngredientName(String ingredientName) {
+        if (!ingredientName.isBlank() && !this.ingredientName.equalsIgnoreCase(ingredientName.trim())) {
+            this.ingredientName = ingredientName.trim().toLowerCase();
+        }
     }
 
     public int totalMass() {

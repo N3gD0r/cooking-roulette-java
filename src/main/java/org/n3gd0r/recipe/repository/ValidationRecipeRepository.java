@@ -9,6 +9,4 @@ public interface ValidationRecipeRepository {
     void validateExistsById(UUID id);
 
     void validateNameUnique(String name);
-
-    void validateEmptyName(String name);
 }

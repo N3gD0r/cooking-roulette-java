@@ -1,6 +1,8 @@
+server:
+  port: 4444
 spring:
   application:
-    name: cooking
+    name: cooking-tests
 
   datasource:
     url: ${DB_TEST_URL}

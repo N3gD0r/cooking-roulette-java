@@ -4,8 +4,18 @@ import java.util.List;
 import java.util.Optional;
 
 import org.n3gd0r.commons.mediator.Query;
+import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Recipe;
+import org.n3gd0r.recipe.repository.FilterQuery;
 
-public record SearchRecipesParameters(Optional<String> name, Optional<Integer> cookTime, int page, int size)
-        implements Query<List<Recipe>> {
+public record SearchRecipesParameters(
+        Optional<String> name,
+        Optional<Integer> cookTime,
+        Optional<Integer> instructionQuantity,
+        Optional<Integer> ingredientQuantity,
+        Optional<List<String>> ingredients,
+        Optional<List<IngredientEnum>> ingredientTypes) implements Query<List<Recipe>> {
+    public FilterQuery toFilterQuery() {
+        return new FilterQuery(name, cookTime, instructionQuantity, ingredientQuantity, ingredients, ingredientTypes);
+    }
 }

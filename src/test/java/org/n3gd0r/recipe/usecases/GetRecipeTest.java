@@ -60,35 +60,17 @@ public class GetRecipeTest {
 
     @Test
     void testGetRecipeById() {
-        GetRecipeParameters parameters = new GetRecipeParameters(recipeIdToFetch, null);
+        GetRecipeParameters parameters = new GetRecipeParameters(recipeIdToFetch);
 
         Recipe recipe = getRecipeQuery.execute(parameters);
 
         assertNotNull(recipe);
         assertEquals(this.recipe, recipe);
-    }
-
-    @Test
-    void testGetRecipeByName() {
-        GetRecipeParameters parameters = new GetRecipeParameters(null, "huevos cocidos");
-
-        Recipe recipe = getRecipeQuery.execute(parameters);
-
-        assertNotNull(recipe);
-        assertEquals(this.recipe, recipe);
-        assertEquals(this.recipe.getName(), recipe.getName());
     }
 
     @Test
     void testGetRecibeWithWrongIdThrowsException() {
-        GetRecipeParameters parameters = new GetRecipeParameters(UUID.randomUUID(), null);
-
-        assertThrows(RecipeNotFoundException.class, () -> getRecipeQuery.execute(parameters));
-    }
-
-    @Test
-    void testGetRecibeWithWrongNameThrowsException() {
-        GetRecipeParameters parameters = new GetRecipeParameters(null, "Definetly not a name 123");
+        GetRecipeParameters parameters = new GetRecipeParameters(UUID.randomUUID());
 
         assertThrows(RecipeNotFoundException.class, () -> getRecipeQuery.execute(parameters));
     }

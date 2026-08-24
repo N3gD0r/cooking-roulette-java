@@ -10,7 +10,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.n3gd0r.recipe.domain.IngredientEnum;
-import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.exception.RecipeWithNameAlreadyExistsException;
 import org.n3gd0r.recipe.repository.InMemoryRecipeRepository;
@@ -34,7 +33,7 @@ public class RegisterRecipeTest {
     @Test
     void testRegisterOneRecipe() {
         List<RegisterIngredientParameters> ingredients = Arrays.asList(
-                new RegisterIngredientParameters("huevos", IngredientEnum.CARNES, Mass.ofGrams(180)));
+                new RegisterIngredientParameters("huevos", IngredientEnum.CARNES, 180));
         List<RegisterInstructionParameters> instructions = Arrays.asList(
                 new RegisterInstructionParameters(1, "En agua hirviendo, colocar los huevos durante 15 minutos."),
                 new RegisterInstructionParameters(2,
@@ -51,7 +50,7 @@ public class RegisterRecipeTest {
     @Test
     void testRegisterRecipeWithSameNameThrowsException() {
         List<RegisterIngredientParameters> ingredients = Arrays.asList(
-                new RegisterIngredientParameters("huevos", IngredientEnum.CARNES, Mass.ofGrams(180)));
+                new RegisterIngredientParameters("huevos", IngredientEnum.CARNES, 180));
         List<RegisterInstructionParameters> instructions = Arrays.asList(
                 new RegisterInstructionParameters(1, "En agua hirviendo, colocar los huevos durante 15 minutos."),
                 new RegisterInstructionParameters(2,
@@ -80,7 +79,7 @@ public class RegisterRecipeTest {
     @Test
     void testRegisterRecipeWithEmptyInstructionsThrowsException() {
         List<RegisterIngredientParameters> ingredients = Arrays.asList(
-                new RegisterIngredientParameters("huevos", IngredientEnum.CARNES, Mass.ofGrams(180)));
+                new RegisterIngredientParameters("huevos", IngredientEnum.CARNES, 180));
         List<RegisterInstructionParameters> instructions = Arrays.asList();
 
         assertThrows(IllegalArgumentException.class,

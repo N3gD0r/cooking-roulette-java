@@ -4,7 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.n3gd0r.recipe.domain.ParamsMother.PatchIngredientsParamsMother.patchIngredientParamsBuilder;
+import static org.n3gd0r.recipe.domain.ParamsMother.PatchInstructionParamsMother.patchInstructionParamsBuilder;
+import static org.n3gd0r.recipe.domain.ParamsMother.PatchRecipeParamsMother.patchRecipeParamsBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -69,8 +73,10 @@ public class PatchRecipeTest {
 
     @Test
     void testPatchRecipeName() {
-        PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, "huevos hervidos", null,
-                null, null);
+        PatchRecipeParameters recipeParameters = patchRecipeParamsBuilder()
+                .id(recipeIdToPatch)
+                .name("huevos hervidos")
+                .build();
         String recipeNameBeforePatch = recipeToPatch.getName();
 
         Recipe patchedRecipe = patchRecipeCommand.execute(recipeParameters);
@@ -81,16 +87,21 @@ public class PatchRecipeTest {
 
     @Test
     void testPatchRecipeWithEmptyNameThrowsException() {
-        PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, "", null,
-                null, null);
+        PatchRecipeParameters recipeParameters = patchRecipeParamsBuilder()
+                .id(recipeIdToPatch)
+                .name("")
+                .build();
 
         assertThrows(NothingToPatchException.class, () -> patchRecipeCommand.execute(recipeParameters));
     }
 
     @Test
     void testPatchRecipeNameAndCooKTime() {
-        PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, "huevos hervidos", 20,
-                null, null);
+        PatchRecipeParameters recipeParameters = patchRecipeParamsBuilder()
+                .id(recipeIdToPatch)
+                .name("huevos hervidos")
+                .cookTime(20)
+                .build();
         String recipeNameBeforePatch = recipeToPatch.getName();
         Integer cookTimeBeforePatch = recipeToPatch.getCookTime();
 
@@ -103,10 +114,17 @@ public class PatchRecipeTest {
 
     @Test
     void testPatchRecipeIngredients() {
-        List<PatchIngredientParameters> ingredientParameters = Arrays.asList(
-                new PatchIngredientParameters(ingredientIdToPatch, "Jamon", IngredientEnum.CARNES, 100));
-        PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
-                null, ingredientParameters);
+        List<PatchIngredientParameters> ingredientParameters = Arrays.asList(patchIngredientParamsBuilder()
+                .id(ingredientIdToPatch)
+                .ingredientName("Jamon")
+                .ingredientType(IngredientEnum.CARNES)
+                .weight(100)
+                .build());
+
+        PatchRecipeParameters recipeParameters = patchRecipeParamsBuilder()
+                .id(recipeIdToPatch)
+                .ingredients(ingredientParameters)
+                .build();
         int originalIngredientsSize = recipeToPatch.getIngredients().size();
 
         Recipe patchedRecipe = patchRecipeCommand.execute(recipeParameters);
@@ -120,11 +138,13 @@ public class PatchRecipeTest {
 
     @Test
     void testPatchRecipeInstruction() {
-        List<PatchInstructionParameters> instructionParameters = Arrays.asList(
-                new PatchInstructionParameters(instructionIdToPatch, 1,
-                        "Colocar los huevos en agua hirviendo por 15 minutos"));
-        PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
-                instructionParameters, null);
+        List<PatchInstructionParameters> instructionParameters = Arrays.asList(patchInstructionParamsBuilder()
+                .id(instructionIdToPatch)
+                .instructionNumber(1)
+                .instruction("Colocar los huevos en agua hirviendo por 15 minutos")
+                .build());
+        PatchRecipeParameters recipeParameters = patchRecipeParamsBuilder()
+                .id(recipeIdToPatch).instructions(instructionParameters).build();
         int originalInstructionsSize = recipeToPatch.getInstructions().size();
 
         Recipe patchedRecipe = patchRecipeCommand.execute(recipeParameters);
@@ -138,9 +158,17 @@ public class PatchRecipeTest {
     @Test
     void testPatchRecipeAddIngredient() {
         List<PatchIngredientParameters> ingredientParameters = Arrays.asList(
-                new PatchIngredientParameters(null, "Jamon", IngredientEnum.CARNES, 100));
-        PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
-                null, ingredientParameters);
+                patchIngredientParamsBuilder()
+                        .ingredientName("Jamon")
+                        .ingredientType(IngredientEnum.CARNES)
+                        .weight(100)
+                        .build());
+
+        PatchRecipeParameters recipeParameters = patchRecipeParamsBuilder()
+                .id(recipeIdToPatch)
+                .ingredients(ingredientParameters)
+                .build();
+
         int originalIngredientsSize = recipeToPatch.getIngredients().size();
 
         Recipe patchedRecipe = patchRecipeCommand.execute(recipeParameters);
@@ -159,9 +187,16 @@ public class PatchRecipeTest {
     @Test
     void testPatchRecipeAddInstruction() {
         List<PatchInstructionParameters> instructionParameters = Arrays.asList(
-                new PatchInstructionParameters(null, 2, "Retirar los huevos y enfriarlos en agua con hielos"));
-        PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
-                instructionParameters, null);
+                patchInstructionParamsBuilder()
+                        .instructionNumber(2)
+                        .instruction("Retirar los huevos y enfriarlos en agua con hielos")
+                        .build());
+
+        PatchRecipeParameters recipeParameters = patchRecipeParamsBuilder()
+                .id(recipeIdToPatch)
+                .instructions(instructionParameters)
+                .build();
+
         int originalInstructionsSize = recipeToPatch.getInstructions().size();
 
         Recipe patchedRecipe = patchRecipeCommand.execute(recipeParameters);
@@ -174,35 +209,46 @@ public class PatchRecipeTest {
 
     @Test
     void testEmptyPatchRecipeThrowsException() {
-        PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null, null, null);
+        PatchRecipeParameters recipeParameters = patchRecipeParamsBuilder().id(recipeIdToPatch).build();
 
         assertThrows(NothingToPatchException.class, () -> patchRecipeCommand.execute(recipeParameters));
     }
 
     @Test
     void testPatchRecipeWithEmptyIngredientListThrowsException() {
-        List<PatchIngredientParameters> ingredientParameters = Arrays.asList();
-        PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
-                null, ingredientParameters);
+        List<PatchIngredientParameters> ingredientParameters = new ArrayList<>();
+
+        PatchRecipeParameters recipeParameters = patchRecipeParamsBuilder()
+                .id(recipeIdToPatch)
+                .ingredients(ingredientParameters)
+                .build();
 
         assertThrows(NothingToPatchException.class, () -> patchRecipeCommand.execute(recipeParameters));
     }
 
     @Test
     void testPatchRecipeWithInstructionListThrowsException() {
-        List<PatchInstructionParameters> instructionParameters = Arrays.asList();
-        PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
-                instructionParameters, null);
+        List<PatchInstructionParameters> instructionParameters = new ArrayList<>();
+
+        PatchRecipeParameters recipeParameters = patchRecipeParamsBuilder()
+                .id(recipeIdToPatch)
+                .instructions(instructionParameters)
+                .build();
 
         assertThrows(NothingToPatchException.class, () -> patchRecipeCommand.execute(recipeParameters));
     }
 
     @Test
     void testPatchRecipeWithEmptyListsThrowsException() {
-        List<PatchInstructionParameters> instructionParameters = Arrays.asList();
-        List<PatchIngredientParameters> ingredientParameters = Arrays.asList();
-        PatchRecipeParameters recipeParameters = new PatchRecipeParameters(recipeIdToPatch, null, null,
-                instructionParameters, ingredientParameters);
+        List<PatchInstructionParameters> instructionParameters = new ArrayList<>();
+        List<PatchIngredientParameters> ingredientParameters = new ArrayList<>();
+
+        PatchRecipeParameters recipeParameters = patchRecipeParamsBuilder()
+                .id(recipeIdToPatch)
+                .instructions(instructionParameters)
+                .ingredients(ingredientParameters)
+                .build();
+
         assertThrows(NothingToPatchException.class, () -> patchRecipeCommand.execute(recipeParameters));
     }
 }

@@ -1,10 +1,10 @@
 package org.n3gd0r.recipe.usecase.register;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.n3gd0r.commons.mediator.HandlerFor;
 import org.n3gd0r.commons.mediator.RequestHandler;
+import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
 import org.n3gd0r.recipe.domain.RecipeInstruction;
@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@HandlerFor(RegisterRecipeParameters.class)
 @Service
+@HandlerFor(RegisterRecipeParameters.class)
 public class RegisterRecipeHandler implements RequestHandler<RegisterRecipeParameters, Recipe> {
     private final RecipeRepository repository;
 
@@ -26,12 +26,12 @@ public class RegisterRecipeHandler implements RequestHandler<RegisterRecipeParam
     @Override
     public Recipe execute(RegisterRecipeParameters request) {
         log.info("Registering recipe: {}", request.name());
-        repository.validateNameUnique(request.name().trim());
+        repository.validateNameUnique(request.name());
         List<RecipeIngredient> ingredients = request.ingredients().stream()
                 .map(ri -> new RecipeIngredient(repository.nextRecipeIngredientId(),
-                        ri.ingredientName().trim().toLowerCase(),
+                        ri.ingredientName(),
                         ri.ingredientType(),
-                        ri.weight()))
+                        Mass.ofGrams(ri.weight())))
                 .toList();
         log.debug("Created {} ingredients for recipe: {}", ingredients.size(), request.name());
 
@@ -42,14 +42,13 @@ public class RegisterRecipeHandler implements RequestHandler<RegisterRecipeParam
                 .toList();
         log.debug("Created {} instructions for recipe: {}", instructions.size(), request.name());
 
-        UUID id = repository.nextId();
-        Recipe recipe = new Recipe(id,
-                request.name().trim().toLowerCase(),
+        Recipe recipe = new Recipe(repository.nextId(),
+                request.name(),
                 request.cookTime(),
                 ingredients,
                 instructions);
         repository.save(recipe);
-        log.info("Recipe registered successfully: {} ({})", request.name(), id);
+        log.info("Recipe registered successfully: {} ({})", recipe.getName(), recipe.getId());
         return recipe;
     }
 }

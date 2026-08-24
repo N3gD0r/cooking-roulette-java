@@ -7,14 +7,15 @@ import org.n3gd0r.commons.mediator.RequestHandler;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.exception.NoRecipesFoundException;
 import org.n3gd0r.recipe.repository.RecipeRepository;
+import org.n3gd0r.recipe.usecase.exception.RequestForHandlerNullPointerException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@HandlerFor(RandomRecipeParameters.class)
 @Service
+@HandlerFor(RandomRecipeParameters.class)
 public class RandomRecipeHandler implements RequestHandler<RandomRecipeParameters, Recipe> {
 
     private final RecipeRepository repository;
@@ -25,6 +26,10 @@ public class RandomRecipeHandler implements RequestHandler<RandomRecipeParameter
 
     @Override
     public Recipe execute(RandomRecipeParameters request) {
+        if (request == null) {
+            log.warn("Request RandomRecipeParameters is null");
+            throw new RequestForHandlerNullPointerException(RandomRecipeParameters.class);
+        }
         log.info("Getting random recipe");
         long totalRecipes = repository.count();
         if (totalRecipes == 0) {

@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
@@ -17,7 +16,7 @@ public interface ReadRecipeRepository {
 
     Page<Recipe> findAll(Pageable pageable);
 
-    List<Recipe> findAll(PredicateSpecification<Recipe> spec);
+    List<Recipe> findAll(FilterQuery spec);
 
     long count();
 }

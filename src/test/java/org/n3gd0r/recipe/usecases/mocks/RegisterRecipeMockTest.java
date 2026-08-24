@@ -65,7 +65,8 @@ public class RegisterRecipeMockTest {
 
     private List<RegisterIngredientParameters> toIngredientParameters(List<RecipeIngredient> ingredients) {
         return ingredients.stream().map(
-                ri -> new RegisterIngredientParameters(ri.getIngredientName(), ri.getIngredientType(), ri.getWeight()))
+                ri -> new RegisterIngredientParameters(ri.getIngredientName(), ri.getIngredientType(),
+                        ri.getWeight().value()))
                 .toList();
     }
 

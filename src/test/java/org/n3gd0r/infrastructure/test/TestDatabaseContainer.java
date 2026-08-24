@@ -8,7 +8,7 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 @TestConfiguration(proxyBeanMethods = false)
-@ActiveProfiles("datajpatest")
+@ActiveProfiles("integration")
 public class TestDatabaseContainer {
     @Bean
     @ServiceConnection

@@ -1,16 +1,17 @@
 package org.n3gd0r.recipe.repository.implementations;
 
+import static org.n3gd0r.recipe.repository.implementations.FilterRecipeSpecification.buildSpecification;
+
 import java.util.List;
 import java.util.UUID;
 
 import org.n3gd0r.recipe.domain.Recipe;
-import org.n3gd0r.recipe.domain.exception.RecipeNameIsEmptyException;
 import org.n3gd0r.recipe.domain.exception.RecipeNotFoundException;
 import org.n3gd0r.recipe.domain.exception.RecipeWithNameAlreadyExistsException;
+import org.n3gd0r.recipe.repository.FilterQuery;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.stereotype.Repository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -49,8 +50,11 @@ public class JpaRecipeRepository implements RecipeRepository {
     }
 
     @Override
-    public List<Recipe> findAll(PredicateSpecification<Recipe> spec) {
-        return repository.findAll(spec);
+    public List<Recipe> findAll(FilterQuery filters) {
+        if (filters.noFilters()) {
+            throw new ZeroFiltersForQueryException();
+        }
+        return repository.findAll(buildSpecification(filters));
     }
 
     @Override
@@ -81,17 +85,9 @@ public class JpaRecipeRepository implements RecipeRepository {
 
     @Override
     public void validateNameUnique(String name) {
-        if (repository.existsByName(name)) {
+        if (repository.existsByName(name.trim().toLowerCase())) {
             log.error("Recipe with name already exists: {}", name);
             throw new RecipeWithNameAlreadyExistsException(name);
-        }
-    }
-
-    @Override
-    public void validateEmptyName(String name) {
-        if (name.isEmpty()) {
-            log.error("Recipe name is empty");
-            throw new RecipeNameIsEmptyException();
         }
     }
 

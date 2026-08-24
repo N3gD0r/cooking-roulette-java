@@ -7,13 +7,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.n3gd0r.recipe.domain.Recipe;
-import org.n3gd0r.recipe.domain.exception.RecipeNameIsEmptyException;
 import org.n3gd0r.recipe.domain.exception.RecipeNotFoundException;
 import org.n3gd0r.recipe.domain.exception.RecipeWithNameAlreadyExistsException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.PredicateSpecification;
 
 public class InMemoryRecipeRepository implements RecipeRepository {
     private final Map<UUID, Recipe> recipeTable = new HashMap<>();
@@ -93,14 +91,10 @@ public class InMemoryRecipeRepository implements RecipeRepository {
     }
 
     @Override
-    public List<Recipe> findAll(PredicateSpecification<Recipe> spec) {
-        return recipeTable.values().stream().toList();
-    }
-
-    @Override
-    public void validateEmptyName(String name) {
-        if (name.isEmpty()) {
-            throw new RecipeNameIsEmptyException();
-        }
+    public List<Recipe> findAll(FilterQuery filters) {
+        List<Recipe> recipes = recipeTable.values().stream()
+                .filter(r -> r.getName().equalsIgnoreCase(filters.name().get()))
+                .toList();
+        return recipes;
     }
 }

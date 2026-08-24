@@ -18,6 +18,6 @@ import org.springframework.test.context.ActiveProfiles;
         @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Repository.class)
 })
 @Import(TestDatabaseContainer.class)
-@ActiveProfiles("datajpatest")
+@ActiveProfiles("integration")
 public @interface RecipeDataJpaTest {
 }

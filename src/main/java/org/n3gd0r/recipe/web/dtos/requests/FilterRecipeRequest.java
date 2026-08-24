@@ -4,17 +4,19 @@ import java.util.List;
 import java.util.Optional;
 
 import org.n3gd0r.recipe.domain.IngredientEnum;
-import org.n3gd0r.recipe.usecase.random.RandomRecipeFiltersParameters;
+import org.n3gd0r.recipe.usecase.get.SearchRecipesParameters;
 
-public record RandomRecipeRequest(
+public record FilterRecipeRequest(
+        String name,
         Integer cookTime,
         Integer instructionQuantity,
         Integer ingredientQuantity,
         List<String> ingredients,
         List<IngredientEnum> ingredientTypes) {
 
-    public RandomRecipeFiltersParameters toRandomQuery() {
-        return new RandomRecipeFiltersParameters(
+    public SearchRecipesParameters toQuery() {
+        return new SearchRecipesParameters(
+                Optional.ofNullable(name),
                 Optional.ofNullable(cookTime),
                 Optional.ofNullable(instructionQuantity),
                 Optional.ofNullable(ingredientQuantity),

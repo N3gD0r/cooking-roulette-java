@@ -41,10 +41,16 @@ public class Recipe {
             List<RecipeIngredient> ingredients,
             List<RecipeInstruction> instructions) {
         this.id = id;
-        this.name = name;
+        this.name = name.trim().toLowerCase();
         this.cookTime = cookTime;
         this.ingredients = new ArrayList<>(ingredients);
         this.instructions = new ArrayList<>(instructions);
+    }
+
+    public void setName(String name) {
+        if (!this.name.equalsIgnoreCase(name.trim())) {
+            this.name = name.trim().toLowerCase();
+        }
     }
 
     public void addInstruction(RecipeInstruction recipeInstruction) {

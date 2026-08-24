@@ -8,13 +8,14 @@ import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeIngredient;
 import org.n3gd0r.recipe.domain.RecipeInstruction;
 import org.n3gd0r.recipe.repository.RecipeRepository;
+import org.n3gd0r.recipe.usecase.exception.RequestForHandlerNullPointerException;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@HandlerFor(UpdateRecipeParameters.class)
 @Service
+@HandlerFor(UpdateRecipeParameters.class)
 public class UpdateRecipeHandler implements RequestHandler<UpdateRecipeParameters, Recipe> {
     private final RecipeRepository repository;
 
@@ -24,6 +25,10 @@ public class UpdateRecipeHandler implements RequestHandler<UpdateRecipeParameter
 
     @Override
     public Recipe execute(UpdateRecipeParameters request) {
+        if (request == null) {
+            log.warn("Request UpdateRecipeParameters is null");
+            throw new RequestForHandlerNullPointerException(UpdateRecipeParameters.class);
+        }
         log.info("Updating recipe: {}", request.id());
         repository.validateExistsById(request.id());
         Recipe recipe = repository.getById(request.id());
