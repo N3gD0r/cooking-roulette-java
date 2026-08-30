@@ -12,12 +12,12 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.n3gd0r.recipe.domain.ParamsMother;
 import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.domain.RecipeMother;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.n3gd0r.recipe.usecase.patch.PatchRecipeHandler;
 import org.n3gd0r.recipe.usecase.patch.PatchRecipeParameters;
+import org.n3gd0r.recipe.usecases.ParamsMother;
 import org.n3gd0r.recipe.usecases.TestUtils;
 
 public class PatchRecipeMockTest {
@@ -33,7 +33,7 @@ public class PatchRecipeMockTest {
     @Test
     void testMockPatchRecipe() {
         UUID recipeId = TestUtils.recipeIdGenerator();
-        PatchRecipeParameters patchParameters = ParamsMother.PatchRecipeParamsMother.patchRecipeParamsBuilder()
+        PatchRecipeParameters patchParameters = ParamsMother.PatchRecipeParamsMother.builder()
                 .id(recipeId)
                 .name("huevos mock")
                 .cookTime(15)

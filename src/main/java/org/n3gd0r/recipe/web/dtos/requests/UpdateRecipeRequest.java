@@ -15,9 +15,6 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-/**
- * Request to fully update a recipe.
- */
 public record UpdateRecipeRequest(
         @NotBlank String name,
         @Positive Integer cookTime,

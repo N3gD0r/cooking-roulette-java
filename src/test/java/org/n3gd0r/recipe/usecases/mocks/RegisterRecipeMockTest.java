@@ -25,6 +25,7 @@ import org.n3gd0r.recipe.usecase.register.RegisterIngredientParameters;
 import org.n3gd0r.recipe.usecase.register.RegisterInstructionParameters;
 import org.n3gd0r.recipe.usecase.register.RegisterRecipeHandler;
 import org.n3gd0r.recipe.usecase.register.RegisterRecipeParameters;
+import org.n3gd0r.recipe.usecases.ParamsMother.RegisterRecipeParamsMother;
 
 public class RegisterRecipeMockTest {
     private RecipeRepository repository;
@@ -42,10 +43,12 @@ public class RegisterRecipeMockTest {
                 .withIngredient(RecipeIngredientMother.recipeIngredient().build())
                 .withInstruction(RecipeInstructionMother.recipeInstruction().build())
                 .build();
-        RegisterRecipeParameters parameters = new RegisterRecipeParameters(recipeToRegister.getName(),
-                recipeToRegister.getCookTime(),
-                toIngredientParameters(recipeToRegister.getIngredients()),
-                toInstructionParameters(recipeToRegister.getInstructions()));
+        RegisterRecipeParameters parameters = RegisterRecipeParamsMother.builder()
+                .name(recipeToRegister.getName())
+                .cookTime(recipeToRegister.getCookTime())
+                .ingredients(toIngredientParameters(recipeToRegister.getIngredients()))
+                .instructions(toInstructionParameters(recipeToRegister.getInstructions()))
+                .build();
 
         doNothing().when(repository).validateNameUnique(any(String.class));
         when(repository.nextRecipeIngredientId()).thenReturn(UUID.randomUUID());

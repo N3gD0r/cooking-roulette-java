@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,9 @@ import org.n3gd0r.recipe.usecase.register.RegisterIngredientParameters;
 import org.n3gd0r.recipe.usecase.register.RegisterInstructionParameters;
 import org.n3gd0r.recipe.usecase.register.RegisterRecipeHandler;
 import org.n3gd0r.recipe.usecase.register.RegisterRecipeParameters;
+import org.n3gd0r.recipe.usecases.ParamsMother.RegisterIngredientsParamsMother;
+import org.n3gd0r.recipe.usecases.ParamsMother.RegisterInstructionsParamsMother;
+import org.n3gd0r.recipe.usecases.ParamsMother.RegisterRecipeParamsMother;
 import org.springframework.data.domain.PageRequest;
 
 public class RegisterRecipeTest {
@@ -33,14 +37,31 @@ public class RegisterRecipeTest {
     @Test
     void testRegisterOneRecipe() {
         List<RegisterIngredientParameters> ingredients = Arrays.asList(
-                new RegisterIngredientParameters("huevos", IngredientEnum.CARNES, 180));
+                RegisterIngredientsParamsMother.builder()
+                        .ingredientName("huevo")
+                        .ingredientType(IngredientEnum.CARNES)
+                        .weight(180)
+                        .build());
         List<RegisterInstructionParameters> instructions = Arrays.asList(
-                new RegisterInstructionParameters(1, "En agua hirviendo, colocar los huevos durante 15 minutos."),
-                new RegisterInstructionParameters(2,
-                        "Despues de ese lapso de tiempo, retirar los huevos y colocarlos en agua fria durante 5 minutos"),
-                new RegisterInstructionParameters(3, "Pelar los huevos"));
-        RegisterRecipeParameters recipeParameters = new RegisterRecipeParameters("huevos cocidos", 15, ingredients,
-                instructions);
+                RegisterInstructionsParamsMother.builder()
+                        .instructionNumber(1)
+                        .instruction("En agua hirviendo, colocar los huevos durante 15 minutos.")
+                        .build(),
+                RegisterInstructionsParamsMother.builder()
+                        .instructionNumber(2)
+                        .instruction(
+                                "Despues de ese lapso de tiempo, retirar los huevos y colocarlos en agua fria durante 5 minutos")
+                        .build(),
+                RegisterInstructionsParamsMother.builder()
+                        .instructionNumber(3)
+                        .instruction("Pelar los huevos")
+                        .build());
+        RegisterRecipeParameters recipeParameters = RegisterRecipeParamsMother.builder()
+                .name("huevos cocidos")
+                .cookTime(15)
+                .ingredients(ingredients)
+                .instructions(instructions)
+                .build();
         Recipe recipe = registerRecipeCommand.execute(recipeParameters);
 
         assertNotNull(recipe);
@@ -50,14 +71,32 @@ public class RegisterRecipeTest {
     @Test
     void testRegisterRecipeWithSameNameThrowsException() {
         List<RegisterIngredientParameters> ingredients = Arrays.asList(
-                new RegisterIngredientParameters("huevos", IngredientEnum.CARNES, 180));
+                RegisterIngredientsParamsMother.builder()
+                        .ingredientName("huevo")
+                        .ingredientType(IngredientEnum.CARNES)
+                        .weight(180)
+                        .build());
         List<RegisterInstructionParameters> instructions = Arrays.asList(
-                new RegisterInstructionParameters(1, "En agua hirviendo, colocar los huevos durante 15 minutos."),
-                new RegisterInstructionParameters(2,
-                        "Despues de ese lapso de tiempo, retirar los huevos y colocarlos en agua fria durante 5 minutos"),
-                new RegisterInstructionParameters(3, "Pelar los huevos"));
-        RegisterRecipeParameters recipeParameters = new RegisterRecipeParameters("huevos cocidos", 15, ingredients,
-                instructions);
+                RegisterInstructionsParamsMother.builder()
+                        .instructionNumber(1)
+                        .instruction("En agua hirviendo, colocar los huevos durante 15 minutos.")
+                        .build(),
+                RegisterInstructionsParamsMother.builder()
+                        .instructionNumber(2)
+                        .instruction(
+                                "Despues de ese lapso de tiempo, retirar los huevos y colocarlos en agua fria durante 5 minutos")
+                        .build(),
+                RegisterInstructionsParamsMother.builder()
+                        .instructionNumber(3)
+                        .instruction("Pelar los huevos")
+                        .build());
+        RegisterRecipeParameters recipeParameters = RegisterRecipeParamsMother.builder()
+                .name("huevos cocidos")
+                .cookTime(15)
+                .ingredients(ingredients)
+                .instructions(instructions)
+                .build();
+
         registerRecipeCommand.execute(recipeParameters);
 
         assertThrows(RecipeWithNameAlreadyExistsException.class, () -> registerRecipeCommand.execute(recipeParameters));
@@ -67,13 +106,22 @@ public class RegisterRecipeTest {
     void testRegisterRecipeWithEmptyIngredientsThrowsException() {
         List<RegisterIngredientParameters> ingredients = Arrays.asList();
         List<RegisterInstructionParameters> instructions = Arrays.asList(
-                new RegisterInstructionParameters(1, "En agua hirviendo, colocar los huevos durante 15 minutos."),
-                new RegisterInstructionParameters(2,
-                        "Despues de ese lapso de tiempo, retirar los huevos y colocarlos en agua fria durante 5 minutos"),
-                new RegisterInstructionParameters(3, "Pelar los huevos"));
+                RegisterInstructionsParamsMother.builder()
+                        .instructionNumber(1)
+                        .instruction("En agua hirviendo, colocar los huevos durante 15 minutos.")
+                        .build(),
+                RegisterInstructionsParamsMother.builder()
+                        .instructionNumber(2)
+                        .instruction(
+                                "Despues de ese lapso de tiempo, retirar los huevos y colocarlos en agua fria durante 5 minutos")
+                        .build(),
+                RegisterInstructionsParamsMother.builder()
+                        .instructionNumber(3)
+                        .instruction("Pelar los huevos")
+                        .build());
 
         assertThrows(IllegalArgumentException.class,
-                () -> new RegisterRecipeParameters("huevos cocidos", 15, ingredients, instructions));
+                () -> new RegisterRecipeParameters(UUID.randomUUID(), "huevos cocidos", 15, ingredients, instructions));
     }
 
     @Test
@@ -83,6 +131,6 @@ public class RegisterRecipeTest {
         List<RegisterInstructionParameters> instructions = Arrays.asList();
 
         assertThrows(IllegalArgumentException.class,
-                () -> new RegisterRecipeParameters("huevos cocidos", 15, ingredients, instructions));
+                () -> new RegisterRecipeParameters(UUID.randomUUID(), "huevos cocidos", 15, ingredients, instructions));
     }
 }

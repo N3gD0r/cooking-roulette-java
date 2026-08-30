@@ -1,6 +1,7 @@
 package org.n3gd0r.recipe.web.dtos.requests;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.usecase.register.RegisterIngredientParameters;
@@ -17,6 +18,7 @@ import jakarta.validation.constraints.Positive;
  * single call.
  */
 public record RegisterRecipeWithAllRequest(
+        @NotNull UUID recipeUserId,
         @NotEmpty List<RegisterInstructionRequest> instructions,
         @NotEmpty List<RegisterIngredientRequest> ingredients,
         @NotBlank String name,
@@ -24,6 +26,7 @@ public record RegisterRecipeWithAllRequest(
 
     public RegisterRecipeParameters toParameters() {
         return new RegisterRecipeParameters(
+                recipeUserId,
                 name,
                 cookTime,
                 ingredients.stream().map(RegisterIngredientRequest::toParameters).toList(),

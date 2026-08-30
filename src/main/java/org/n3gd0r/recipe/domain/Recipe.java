@@ -27,6 +27,7 @@ import lombok.NoArgsConstructor;
 public class Recipe {
     @Id
     private UUID id;
+    private UUID recipeUserId;
     @Column(length = 255, unique = true)
     private String name;
     private int cookTime;
@@ -36,11 +37,13 @@ public class Recipe {
     private List<RecipeIngredient> ingredients;
 
     public Recipe(UUID id,
+            UUID recipeUserId,
             String name,
             int cookTime,
             List<RecipeIngredient> ingredients,
             List<RecipeInstruction> instructions) {
         this.id = id;
+        this.recipeUserId = recipeUserId;
         this.name = name.trim().toLowerCase();
         this.cookTime = cookTime;
         this.ingredients = new ArrayList<>(ingredients);
