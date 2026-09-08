@@ -37,13 +37,11 @@ public class Recipe {
     private List<RecipeIngredient> ingredients;
 
     public Recipe(UUID id,
-            UUID recipeUserId,
             String name,
             int cookTime,
             List<RecipeIngredient> ingredients,
             List<RecipeInstruction> instructions) {
         this.id = id;
-        this.recipeUserId = recipeUserId;
         this.name = name.trim().toLowerCase();
         this.cookTime = cookTime;
         this.ingredients = new ArrayList<>(ingredients);

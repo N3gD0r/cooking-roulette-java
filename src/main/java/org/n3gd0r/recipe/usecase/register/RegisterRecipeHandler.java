@@ -43,7 +43,6 @@ public class RegisterRecipeHandler implements RequestHandler<RegisterRecipeParam
         log.debug("Created {} instructions for recipe: {}", instructions.size(), request.name());
 
         Recipe recipe = new Recipe(repository.nextId(),
-                request.recipeUserId(),
                 request.name(),
                 request.cookTime(),
                 ingredients,

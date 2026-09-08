@@ -1,7 +1,6 @@
 package org.n3gd0r.recipe.usecase.register;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.n3gd0r.commons.mediator.Command;
 import org.n3gd0r.recipe.domain.Recipe;
@@ -11,13 +10,11 @@ import org.springframework.util.Assert;
  * RegisterRecipeCommand
  */
 public record RegisterRecipeParameters(
-        UUID recipeUserId,
         String name,
         Integer cookTime,
         List<RegisterIngredientParameters> ingredients,
         List<RegisterInstructionParameters> instructions) implements Command<Recipe> {
     public RegisterRecipeParameters {
-        Assert.notNull(recipeUserId, "The RegisterRecipeParameters recipeUserId should not be null");
         Assert.hasText(name, "The RegisterRecipeParameters name should have text");
         Assert.notNull(cookTime, "The RegisterRecipeParameters cookTime should not be null");
         Assert.isTrue(cookTime > 0, "The RegisterRecipeParameters cookTime should be a positive number");

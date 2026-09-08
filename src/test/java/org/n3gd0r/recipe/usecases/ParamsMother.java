@@ -131,16 +131,10 @@ public final class ParamsMother {
         }
 
         public static class Builder {
-            private UUID recipeUserId = UUID.randomUUID();
             private String name = "huevos cocidos";
             private Integer cookTime = 15;
             private List<RegisterIngredientParameters> ingredients = new ArrayList<>();
             private List<RegisterInstructionParameters> instructions = new ArrayList<>();
-
-            public Builder recipeUserId(UUID recipeUserId) {
-                this.recipeUserId = recipeUserId;
-                return this;
-            }
 
             public Builder name(String name) {
                 this.name = name;
@@ -163,7 +157,7 @@ public final class ParamsMother {
             }
 
             public RegisterRecipeParameters build() {
-                return new RegisterRecipeParameters(recipeUserId, name, cookTime, ingredients, instructions);
+                return new RegisterRecipeParameters(name, cookTime, ingredients, instructions);
             }
         }
     }

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -121,7 +120,7 @@ public class RegisterRecipeTest {
                         .build());
 
         assertThrows(IllegalArgumentException.class,
-                () -> new RegisterRecipeParameters(UUID.randomUUID(), "huevos cocidos", 15, ingredients, instructions));
+                () -> new RegisterRecipeParameters("huevos cocidos", 15, ingredients, instructions));
     }
 
     @Test
@@ -131,6 +130,6 @@ public class RegisterRecipeTest {
         List<RegisterInstructionParameters> instructions = Arrays.asList();
 
         assertThrows(IllegalArgumentException.class,
-                () -> new RegisterRecipeParameters(UUID.randomUUID(), "huevos cocidos", 15, ingredients, instructions));
+                () -> new RegisterRecipeParameters("huevos cocidos", 15, ingredients, instructions));
     }
 }

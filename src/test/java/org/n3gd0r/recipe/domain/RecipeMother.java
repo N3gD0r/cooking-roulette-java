@@ -12,7 +12,6 @@ public final class RecipeMother {
 
     public static final class Builder {
         private UUID id = UUID.randomUUID();
-        private UUID recipeUserId = UUID.randomUUID();
         private String name = "Huevos cocidos";
         private int cookTime = 20;
         private List<RecipeIngredient> ingredients = new ArrayList<>();
@@ -20,11 +19,6 @@ public final class RecipeMother {
 
         public Builder id(UUID id) {
             this.id = id;
-            return this;
-        }
-
-        public Builder recipeUserId(UUID recipeUserId) {
-            this.recipeUserId = recipeUserId;
             return this;
         }
 
@@ -59,7 +53,7 @@ public final class RecipeMother {
         }
 
         public Recipe build() {
-            return new Recipe(id, recipeUserId, name, cookTime, ingredients, instructions);
+            return new Recipe(id, name, cookTime, ingredients, instructions);
         }
     }
 }

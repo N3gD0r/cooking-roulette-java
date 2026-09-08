@@ -1,12 +1,35 @@
 spring:
   application:
     name: cooking
-
+  security:
+    user:
+      name: ${SEC_USER}
+      password: ${SEC_USER_PASSWORD}
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_SERVER}
+      client:
+        registration:
+          cooking-auth:
+            provider: spring
+            client-id: cooking-auth
+            client-name: cooking-auth
+            client-secret: ${OAUTH2_COOKING_AUTH_SECRET}
+            authorization-grant-type: authorization_code
+            redirect-uri: ${AUTH_SERVER_LOGIN}
+            scope:
+              - openid
+              - profile
+              - read
+              - write
+        provider:
+          spring:
+            issuer-uri: ${AUTH_SERVER}
   datasource:
     url: ${DBURL}
     username: ${DBUSER}
     password: ${DBPASSWORD}
-
   jpa:
     hibernate:
       ddl-auto: "none"
