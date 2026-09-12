@@ -3,6 +3,7 @@ package org.n3gd0r.recipe.web;
 import java.util.UUID;
 
 import org.n3gd0r.commons.mediator.IMediator;
+import org.n3gd0r.infrastructure.SecurityCurrentUser;
 import org.n3gd0r.recipe.usecase.delete.DeleteRecipeParameters;
 import org.n3gd0r.recipe.usecase.get.GetAllRecipesParameters;
 import org.n3gd0r.recipe.usecase.get.GetRecipeParameters;
@@ -39,19 +40,21 @@ public class RecipeController {
     private final IMediator mediator;
     private final RecipeModelAssembler modelAssembler;
     private final PagedResourcesAssembler<RecipeResponse> pageModelAssembler;
+    private final SecurityCurrentUser currentUser;
 
     public RecipeController(IMediator mediator, RecipeModelAssembler assembler,
-            PagedResourcesAssembler<RecipeResponse> pageAssembler) {
+            PagedResourcesAssembler<RecipeResponse> pageAssembler, SecurityCurrentUser currentUser) {
         this.mediator = mediator;
         this.modelAssembler = assembler;
         this.pageModelAssembler = pageAssembler;
+        this.currentUser = currentUser;
     }
 
     @PostMapping
     public ResponseEntity<EntityModel<RecipeResponse>> registerRecipe(
             @Valid @RequestBody RegisterRecipeWithAllRequest request) {
         log.info("POST /api/recipes - Registering recipe: {}", request.name());
-        var params = request.toParameters();
+        var params = request.toParameters(currentUser.recipeUserId());
         var recipe = mediator.send(params);
         var recipeResponse = RecipeResponse.of(recipe);
         log.debug("Recipe registered successfully: {}", recipe.getId());
@@ -62,7 +65,8 @@ public class RecipeController {
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<RecipeResponse>> getRecipe(@PathVariable UUID id) {
         log.info("GET /api/recipes/{} - Getting recipe by id", id);
-        var params = new GetRecipeParameters(id);
+        var currentUserId = currentUser.recipeUserId();
+        var params = new GetRecipeParameters(currentUserId, id);
         var foundRecipe = mediator.send(params);
         var recipeResponse = RecipeResponse.of(foundRecipe);
         log.info("Found recipe: {}", recipeResponse);
@@ -74,7 +78,8 @@ public class RecipeController {
     public ResponseEntity<CollectionModel<EntityModel<RecipeResponse>>> getRecipes(
             @RequestBody FilterRecipeRequest request) {
         log.info("GET /api/recipes - Getting all recipes with filters {}", request);
-        var query = request.toQuery();
+        var currentUserId = currentUser.recipeUserId();
+        var query = request.toQuery(currentUserId);
         var recipes = mediator.send(query);
         var recipesResponse = recipes.stream().map(RecipeResponse::of).toList();
         log.info("Got filtered recipes: {}", recipesResponse);
@@ -86,7 +91,8 @@ public class RecipeController {
     public ResponseEntity<PagedModel<EntityModel<RecipeResponse>>> getRecipes(@RequestParam int page,
             @RequestParam int size) {
         log.info("GET /api/recipes - Getting all recipes");
-        var query = new GetAllRecipesParameters(page, size);
+        var currentUserId = currentUser.recipeUserId();
+        var query = new GetAllRecipesParameters(currentUserId, page, size);
         var recipes = mediator.send(query);
         var recipesResponse = recipes.map(RecipeResponse::of);
         log.info("Got page of recipes: {}", recipesResponse);
@@ -98,7 +104,8 @@ public class RecipeController {
     public ResponseEntity<EntityModel<RecipeResponse>> putRecipe(@PathVariable UUID id,
             @RequestBody UpdateRecipeRequest request) {
         log.info("PUT /api/recipes/{} - Updating recipe", id);
-        var params = request.toParameters(id);
+        var currentUserId = currentUser.recipeUserId();
+        var params = request.toParameters(id, currentUserId);
         var recipe = mediator.send(params);
         var recipeResponse = RecipeResponse.of(recipe);
         var model = modelAssembler.toModel(recipeResponse);
@@ -109,7 +116,9 @@ public class RecipeController {
     public ResponseEntity<EntityModel<RecipeResponse>> patchRecipe(@PathVariable UUID id,
             @RequestBody PatchRecipeRequest request) {
         log.info("PATCH /api/recipes/{} - Patching recipe", id);
-        var foundRecipeToPatch = mediator.send(request.toParameters(id));
+        var currentUserId = currentUser.recipeUserId();
+        var params = request.toParameters(id, currentUserId);
+        var foundRecipeToPatch = mediator.send(params);
         var recipeResponse = RecipeResponse.of(foundRecipeToPatch);
         var model = modelAssembler.toModel(recipeResponse);
         return ResponseEntity.ok(model);
@@ -118,7 +127,8 @@ public class RecipeController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRecipe(@PathVariable UUID id) {
         log.info("DELETE /api/recipes/{} - Deleting recipe", id);
-        var params = DeleteRecipeParameters.recipeId(id);
+        var currentUserId = currentUser.recipeUserId();
+        var params = new DeleteRecipeParameters(currentUserId, id);
         mediator.send(params);
         return ResponseEntity.accepted().build();
     }

@@ -1,6 +1,7 @@
 package org.n3gd0r.recipe.web;
 
 import org.n3gd0r.commons.mediator.IMediator;
+import org.n3gd0r.infrastructure.SecurityCurrentUser;
 import org.n3gd0r.recipe.usecase.random.RandomRecipeParameters;
 import org.n3gd0r.recipe.web.dtos.requests.RandomRecipeRequest;
 import org.n3gd0r.recipe.web.hateoas.RecipeModelAssembler;
@@ -21,16 +22,20 @@ import lombok.extern.slf4j.Slf4j;
 public class RandomRecipeController {
     private final IMediator mediator;
     private final RecipeModelAssembler modelAssembler;
+    private final SecurityCurrentUser currentUser;
 
-    public RandomRecipeController(IMediator mediator, RecipeModelAssembler modelAssembler) {
+    public RandomRecipeController(IMediator mediator, RecipeModelAssembler modelAssembler,
+            SecurityCurrentUser currentUser) {
         this.mediator = mediator;
         this.modelAssembler = modelAssembler;
+        this.currentUser = currentUser;
     }
 
     @GetMapping("/random")
     public ResponseEntity<EntityModel<RecipeResponse>> getRandomRecipe() {
         log.info("GET /api/random/recipe - Getting random recipe");
-        var params = new RandomRecipeParameters();
+        var currentUserId = currentUser.recipeUserId();
+        var params = new RandomRecipeParameters(currentUserId);
         var recipe = mediator.send(params);
         var recipeResponse = RecipeResponse.of(recipe);
         var model = modelAssembler.toModel(recipeResponse);
@@ -40,7 +45,8 @@ public class RandomRecipeController {
     @PostMapping("/random/match")
     public ResponseEntity<EntityModel<RecipeResponse>> getRandomRecipe(@RequestBody RandomRecipeRequest request) {
         log.info("GET /api/random/match - using filters: {}", request);
-        var params = request.toRandomQuery();
+        var currentUserId = currentUser.recipeUserId();
+        var params = request.toRandomQuery(currentUserId);
         if (params.isEmptyRequest()) {
             log.info("GET /api/random/match - no filters provided, switching to GET /api/random/recipe");
             log.debug("Calling getRandomRecipe() with no filtering");

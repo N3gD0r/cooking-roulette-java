@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * RecipeWithNameAlreadyExistsException is thrown when creating a recipe with a
  * name that already exists in the database
  */
-@ResponseStatus(HttpStatus.BAD_REQUEST)
+@ResponseStatus(HttpStatus.CONFLICT)
 public class RecipeWithNameAlreadyExistsException extends RuntimeException {
     public RecipeWithNameAlreadyExistsException(String name) {
         super("Recipe with %s already exists".formatted(name));

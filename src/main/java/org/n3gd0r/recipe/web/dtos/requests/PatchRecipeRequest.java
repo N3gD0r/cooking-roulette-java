@@ -42,9 +42,10 @@ public record PatchRecipeRequest(
         }
     }
 
-    public PatchRecipeParameters toParameters(@NotNull UUID id) {
+    public PatchRecipeParameters toParameters(@NotNull UUID id, @NotNull UUID recipeUserId) {
         return new PatchRecipeParameters(
                 id,
+                recipeUserId,
                 Optional.ofNullable(name),
                 Optional.ofNullable(cookTime),
                 instructions == null ? Optional.empty()

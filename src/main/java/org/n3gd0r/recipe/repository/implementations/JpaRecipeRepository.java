@@ -98,7 +98,6 @@ public class JpaRecipeRepository implements RecipeRepository {
         }
     }
 
-    // TODO: generate UUIDv7
     @Override
     public UUID nextId() {
         return ID_GENERATOR.generate();

@@ -39,8 +39,9 @@ public record UpdateRecipeRequest(
         }
     }
 
-    public UpdateRecipeParameters toParameters(UUID id) {
+    public UpdateRecipeParameters toParameters(UUID id, UUID recipeUserId) {
         return new UpdateRecipeParameters(id,
+                recipeUserId,
                 name.toLowerCase(),
                 cookTime,
                 ingredients.stream()
