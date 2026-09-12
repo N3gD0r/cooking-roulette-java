@@ -1,6 +1,7 @@
 package org.n3gd0r.recipe.repository.implementations;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.n3gd0r.recipe.domain.IngredientEnum;
 import org.n3gd0r.recipe.domain.Recipe;
@@ -10,6 +11,11 @@ import org.n3gd0r.recipe.repository.FilterQuery;
 import org.springframework.data.jpa.domain.PredicateSpecification;
 
 public final class FilterRecipeSpecification {
+
+    public static PredicateSpecification<Recipe> hasOwner(UUID recipeUserId) {
+        return (root, builder) -> builder.equal(root.get("recipeUserId"), recipeUserId);
+    }
+
     public static PredicateSpecification<Recipe> hasName(String name) {
         return (root, builder) -> builder.equal(root.<String>get("name"), name);
     }
@@ -44,8 +50,8 @@ public final class FilterRecipeSpecification {
                 .in(ingredientTypes);
     }
 
-    public static PredicateSpecification<Recipe> buildSpecification(FilterQuery filters) {
-        PredicateSpecification<Recipe> spec = PredicateSpecification.unrestricted();
+    public static PredicateSpecification<Recipe> buildSpecification(UUID recipeUserId, FilterQuery filters) {
+        PredicateSpecification<Recipe> spec = hasOwner(recipeUserId);
         filters.name().ifPresent(name -> spec.and(hasName(name)));
         filters.cookTime().ifPresent(cookTime -> spec.and(hasCookTime(cookTime)));
         filters.instructionQuantity().ifPresent(quantity -> spec.and(hasInstructionSize(quantity)));

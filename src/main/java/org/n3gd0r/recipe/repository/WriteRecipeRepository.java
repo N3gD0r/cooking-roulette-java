@@ -11,5 +11,5 @@ public interface WriteRecipeRepository {
 
     void deleteAll();
 
-    void deleteById(UUID id);
+    void deleteById(UUID recipeUserId, UUID id);
 }

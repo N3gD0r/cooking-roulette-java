@@ -10,13 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
 public interface ReadRecipeRepository {
-    Recipe getById(UUID id);
+    Recipe getById(UUID recipeUserId, UUID id);
 
-    Recipe getByName(String name);
+    Recipe getByName(UUID recipeUserId, String name);
 
-    Page<Recipe> findAll(Pageable pageable);
+    Page<Recipe> findAll(UUID recipeUserId, Pageable pageable);
 
-    List<Recipe> findAll(FilterQuery spec);
+    List<Recipe> findAll(UUID recipeUserId, FilterQuery spec);
 
-    long count();
+    long count(UUID recipeUserId);
 }

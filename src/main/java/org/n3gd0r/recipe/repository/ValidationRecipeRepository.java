@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
 public interface ValidationRecipeRepository {
-    void validateExistsById(UUID id);
+    void validateExistsById(UUID recipeUserId, UUID id);
 
-    void validateNameUnique(String name);
+    void validateNameUnique(UUID recipeUserId, String name);
 }

@@ -14,6 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import com.fasterxml.uuid.Generators;
+import com.fasterxml.uuid.NoArgGenerator;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -21,40 +24,42 @@ import lombok.extern.slf4j.Slf4j;
 public class JpaRecipeRepository implements RecipeRepository {
 
     private final SpringJpaRepository repository;
+    private static final NoArgGenerator ID_GENERATOR = Generators.timeBasedEpochGenerator();
 
     public JpaRecipeRepository(SpringJpaRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public long count() {
-        return repository.count();
+    public long count(UUID recipeUserId) {
+        return repository.countByRecipeUserId(recipeUserId);
     }
 
     @Override
-    public Recipe getById(UUID id) {
+    public Recipe getById(UUID recipeUserId, UUID id) {
         log.debug("Getting recipe by id: {}", id);
-        return repository.findById(id).orElseThrow(() -> new RecipeNotFoundException(id));
+        return repository.findByRecipeUserIdAndId(recipeUserId, id).orElseThrow(() -> new RecipeNotFoundException(id));
     }
 
     @Override
-    public Recipe getByName(String name) {
+    public Recipe getByName(UUID recipeUserId, String name) {
         log.debug("Finding recipe by name: {}", name);
-        return repository.getRecipeByName(name).orElseThrow(() -> new RecipeNotFoundException(name));
+        return repository.findByRecipeUserIdAndName(recipeUserId, name)
+                .orElseThrow(() -> new RecipeNotFoundException(name));
     }
 
     @Override
-    public Page<Recipe> findAll(Pageable pageable) {
+    public Page<Recipe> findAll(UUID recipeUserId, Pageable pageable) {
         log.debug("Finding all recipes with pageable: {}", pageable);
-        return repository.findAll(pageable);
+        return repository.findAllByRecipeUserId(recipeUserId, pageable);
     }
 
     @Override
-    public List<Recipe> findAll(FilterQuery filters) {
+    public List<Recipe> findAll(UUID recipeUserId, FilterQuery filters) {
         if (filters.noFilters()) {
             throw new ZeroFiltersForQueryException();
         }
-        return repository.findAll(buildSpecification(filters));
+        return repository.findAllByRecipeUserId(recipeUserId, buildSpecification(recipeUserId, filters));
     }
 
     @Override
@@ -70,22 +75,24 @@ public class JpaRecipeRepository implements RecipeRepository {
     }
 
     @Override
-    public void deleteById(UUID id) {
+    public void deleteById(UUID recipeUserId, UUID id) {
         log.debug("Deleting recipe by id: {}", id);
-        repository.deleteById(id);
+        Recipe recipe = repository.findByRecipeUserIdAndId(recipeUserId, id)
+                .orElseThrow(() -> new RecipeNotFoundException(id));
+        repository.delete(recipe);
     }
 
     @Override
-    public void validateExistsById(UUID id) {
-        if (!repository.existsById(id)) {
-            log.error("Recipe not found by id: {}", id);
+    public void validateExistsById(UUID recipeUserId, UUID id) {
+        if (!repository.existsByRecipeUserIdAndId(recipeUserId, id)) {
+            log.error("Recipe not found by id: {} for user: {}", id, recipeUserId);
             throw new RecipeNotFoundException(id);
         }
     }
 
     @Override
-    public void validateNameUnique(String name) {
-        if (repository.existsByName(name.trim().toLowerCase())) {
+    public void validateNameUnique(UUID recipeUserId, String name) {
+        if (repository.existsByRecipeUserIdAndName(recipeUserId, name.trim().toLowerCase())) {
             log.error("Recipe with name already exists: {}", name);
             throw new RecipeWithNameAlreadyExistsException(name);
         }
@@ -94,16 +101,16 @@ public class JpaRecipeRepository implements RecipeRepository {
     // TODO: generate UUIDv7
     @Override
     public UUID nextId() {
-        return UUID.randomUUID();
+        return ID_GENERATOR.generate();
     }
 
     @Override
     public UUID nextRecipeIngredientId() {
-        return UUID.randomUUID();
+        return ID_GENERATOR.generate();
     }
 
     @Override
     public UUID nextRecipeInstructionId() {
-        return UUID.randomUUID();
+        return ID_GENERATOR.generate();
     }
 }

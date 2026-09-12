@@ -8,7 +8,6 @@ import org.n3gd0r.recipe.domain.exception.RecipeIngredientNotFoundException;
 import org.n3gd0r.recipe.domain.exception.RecipeInstructionNotFoundException;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -28,7 +27,6 @@ public class Recipe {
     @Id
     private UUID id;
     private UUID recipeUserId;
-    @Column(length = 255, unique = true)
     private String name;
     private int cookTime;
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -37,11 +35,13 @@ public class Recipe {
     private List<RecipeIngredient> ingredients;
 
     public Recipe(UUID id,
+            UUID recipeUserId,
             String name,
             int cookTime,
             List<RecipeIngredient> ingredients,
             List<RecipeInstruction> instructions) {
         this.id = id;
+        this.recipeUserId = recipeUserId;
         this.name = name.trim().toLowerCase();
         this.cookTime = cookTime;
         this.ingredients = new ArrayList<>(ingredients);
