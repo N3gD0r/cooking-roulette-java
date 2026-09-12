@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
 
 public record PatchRecipeParameters(
         UUID id,
+        UUID recipeUserId,
         Optional<String> name,
         Optional<Integer> cookTime,
         Optional<List<PatchInstructionParameters>> instructions,
@@ -17,6 +18,7 @@ public record PatchRecipeParameters(
 
     public PatchRecipeParameters {
         Assert.notNull(id, "The PatchRecipeParameters id should not be null");
+        Assert.notNull(recipeUserId, "The PatchRecipeParameters recipeUserId should not be null");
     }
 
     /**

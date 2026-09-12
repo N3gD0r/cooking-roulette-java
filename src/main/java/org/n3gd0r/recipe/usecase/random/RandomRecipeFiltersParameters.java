@@ -2,6 +2,7 @@ package org.n3gd0r.recipe.usecase.random;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.n3gd0r.commons.mediator.Query;
 import org.n3gd0r.recipe.domain.IngredientEnum;
@@ -9,6 +10,7 @@ import org.n3gd0r.recipe.domain.Recipe;
 import org.n3gd0r.recipe.repository.FilterQuery;
 
 public record RandomRecipeFiltersParameters(
+        UUID recipeUserId,
         Optional<Integer> cookTime,
         Optional<Integer> instructionQuantity,
         Optional<Integer> ingredientQuantity,

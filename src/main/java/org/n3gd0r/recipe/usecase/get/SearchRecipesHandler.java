@@ -22,6 +22,6 @@ public class SearchRecipesHandler implements RequestHandler<SearchRecipesParamet
 
     @Override
     public List<Recipe> execute(SearchRecipesParameters request) {
-        return repository.findAll(request.toFilterQuery());
+        return repository.findAll(request.recipeUserId(), request.toFilterQuery());
     }
 }

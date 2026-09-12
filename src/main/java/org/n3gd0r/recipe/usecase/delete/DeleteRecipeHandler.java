@@ -23,8 +23,8 @@ public class DeleteRecipeHandler implements RequestHandler<DeleteRecipeParameter
     @Override
     public Void execute(DeleteRecipeParameters request) {
         log.info("Deleting recipe: {}", request.id());
-        repository.validateExistsById(request.id());
-        repository.deleteById(request.id());
+        repository.validateExistsById(request.recipeUserId(), request.id());
+        repository.deleteById(request.recipeUserId(), request.id());
         log.info("Recipe deleted successfully: {}", request.id());
         return null;
     }

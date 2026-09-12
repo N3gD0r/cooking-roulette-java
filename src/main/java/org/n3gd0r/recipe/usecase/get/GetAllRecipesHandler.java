@@ -23,6 +23,6 @@ public class GetAllRecipesHandler implements RequestHandler<GetAllRecipesParamet
     @Override
     public Page<Recipe> execute(GetAllRecipesParameters request) {
         log.info("Getting all recipes with page: {} and size: {}", request.page(), request.size());
-        return repository.findAll(PageRequest.of(request.page(), request.size()));
+        return repository.findAll(request.recipeUserId(), PageRequest.of(request.page(), request.size()));
     }
 }

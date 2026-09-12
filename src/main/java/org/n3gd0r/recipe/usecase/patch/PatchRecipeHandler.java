@@ -35,8 +35,8 @@ public class PatchRecipeHandler implements RequestHandler<PatchRecipeParameters,
         }
 
         log.info("Patching recipe: {}", request.id());
-        repository.validateExistsById(request.id());
-        Recipe recipe = repository.getById(request.id());
+        repository.validateExistsById(request.recipeUserId(), request.id());
+        Recipe recipe = repository.getById(request.recipeUserId(), request.id());
 
         patchRecipeFields(recipe, request);
         patchInstructions(recipe, request);
@@ -49,7 +49,7 @@ public class PatchRecipeHandler implements RequestHandler<PatchRecipeParameters,
 
     private void patchRecipeFields(Recipe recipe, PatchRecipeParameters request) {
         request.name().ifPresent((name) -> {
-            repository.validateNameUnique(name);
+            repository.validateNameUnique(request.recipeUserId(), name);
             recipe.setName(name);
         });
         request.cookTime().ifPresent(recipe::setCookTime);

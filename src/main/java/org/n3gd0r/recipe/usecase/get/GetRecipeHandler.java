@@ -21,6 +21,6 @@ public class GetRecipeHandler implements RequestHandler<GetRecipeParameters, Rec
     @Override
     public Recipe execute(GetRecipeParameters request) {
         log.info("Getting recipe by id: {}", request.id());
-        return repository.getById(request.id());
+        return repository.getById(request.recipeUserId(), request.id());
     }
 }

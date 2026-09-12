@@ -25,7 +25,7 @@ public class RandomRecipeWithFiltersHandler implements RequestHandler<RandomReci
     @Override
     public Recipe execute(RandomRecipeFiltersParameters request) {
         log.info("RandomRecipeWithFiltersHandler - Getting random recipe with filters");
-        List<Recipe> recipes = repository.findAll(request.toFilterQuery());
+        List<Recipe> recipes = repository.findAll(request.recipeUserId(), request.toFilterQuery());
         long foundRecipes = recipes.size();
         if (foundRecipes < 1) {
             log.warn("No recipes matched the given filters");

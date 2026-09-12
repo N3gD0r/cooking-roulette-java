@@ -25,13 +25,13 @@ public class UpdateRecipeHandler implements RequestHandler<UpdateRecipeParameter
     @Override
     public Recipe execute(UpdateRecipeParameters request) {
         log.info("Updating recipe: {}", request.id());
-        repository.validateExistsById(request.id());
-        Recipe recipe = repository.getById(request.id());
+        repository.validateExistsById(request.recipeUserId(), request.id());
+        Recipe recipe = repository.getById(request.recipeUserId(), request.id());
         if (!recipe.getName().equalsIgnoreCase(request.name().trim())) {
             log.debug("Updating recipe name from '{}' to '{}'", recipe.getName(), request.name());
-            repository.validateNameUnique(request.name().trim());
+            repository.validateNameUnique(request.recipeUserId(), request.name());
         }
-        recipe.setName(request.name().trim().toLowerCase());
+        recipe.setName(request.name());
         recipe.setCookTime(request.cookTime());
         List<RecipeIngredient> ingredients = request.ingredients().stream()
                 .map(ingredientParameters -> new RecipeIngredient(
