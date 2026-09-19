@@ -29,14 +29,14 @@ public class RandomRecipeHandler implements RequestHandler<RandomRecipeParameter
         long totalRecipes = repository.count(request.recipeUserId());
         if (totalRecipes == 0) {
             log.warn("No recipes found in database");
-            throw new NoRecipesFoundException();
+            throw new NoRecipesFoundException(request.recipeUserId());
         }
         log.debug("Total recipes available: {}", totalRecipes);
         int randomPage = ThreadLocalRandom.current().nextInt((int) totalRecipes);
         log.debug("Selecting random page: {}", randomPage);
         Recipe foundRecipe = repository.findAll(request.recipeUserId(), PageRequest.of(randomPage, 1)).stream()
                 .findFirst()
-                .orElseThrow(NoRecipesFoundException::new);
+                .orElseThrow(() -> new NoRecipesFoundException(request.recipeUserId()));
         log.info("Random recipe selected: {} ({})", foundRecipe.getName(), foundRecipe.getId());
         return foundRecipe;
     }

@@ -1,8 +1,12 @@
-server:
-  port: 4444
 spring:
   application:
     name: cooking-tests
+  mvc:
+    apiversion:
+      default: 1.0
+      detect-supported: true
+      use:
+        path-segment: 1
   security:
     oauth2:
       resourceserver:
@@ -18,3 +22,5 @@ spring:
     show-sql: true
   flyway:
     enabled: true
+server:
+  port: 4444

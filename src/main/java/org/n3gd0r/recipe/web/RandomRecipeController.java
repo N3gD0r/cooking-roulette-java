@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/recipes")
+@RequestMapping(path = "/api/v{version}/recipes", version = "1.0")
 public class RandomRecipeController {
     private final IMediator mediator;
     private final RecipeModelAssembler modelAssembler;

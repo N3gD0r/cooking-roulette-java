@@ -1,25 +1,12 @@
 spring:
   application:
-    name: cooking
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: ${AUTH_ISSUER}
-  datasource:
-    url: ${DBURL}
-    username: ${DBUSER}
-    password: ${DBPASSWORD}
+    name: cooking-roulette-recipes
+  mvc:
+    apiversion:
+      default: 1.0
+      detect-supported: true
+      use:
+        path-segment: 1
   jpa:
     hibernate:
       ddl-auto: "none"
-    show-sql: true
-  flyway:
-    enabled: true
-logging:
-  level:
-    root: INFO
-    org.n3gd0r: DEBUG
-    org.springframework.web: INFO
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

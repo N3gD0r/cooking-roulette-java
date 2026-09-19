@@ -1,18 +1,26 @@
 spring:
-  application:
-    name: cooking
+  docker:
+    compose:
+      lifecycle-management: start-and-stop
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${AUTH_ISSUER}
+          issuer-uri: http://localhost:9000
   datasource:
-    url: ${DBURL}
-    username: ${DBUSER}
-    password: ${DBPASSWORD}
+    url: jdbc:postgresql://localhost:5432/recipes
+    username: developer
+    password: Dev_recipes1
   jpa:
-    hibernate:
-      ddl-auto: "none"
     show-sql: true
   flyway:
     enabled: true
+logging:
+  level:
+    root: INFO
+    org.n3gd0r: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+server:
+  port: 8080

@@ -1,6 +1,4 @@
 spring:
-  application:
-    name: cooking
   security:
     oauth2:
       resourceserver:
@@ -11,8 +9,8 @@ spring:
     username: ${DBUSER}
     password: ${DBPASSWORD}
   jpa:
-    hibernate:
-      ddl-auto: "none"
-    show-sql: true
+    show-sql: false
   flyway:
     enabled: true
+server:
+  port: 80

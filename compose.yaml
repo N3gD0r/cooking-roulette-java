@@ -3,6 +3,11 @@ services:
     image: postgres:latest
     container_name: recipes
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${DBUSER} -d ${DBNAME}'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
     environment:
       - POSTGRES_PASSWORD=${DBPASSWORD}
       - POSTGRES_USER=${DBUSER}
