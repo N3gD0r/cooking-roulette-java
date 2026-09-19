@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ import org.n3gd0r.recipe.usecase.get.GetAllRecipesParameters;
 public class GetAllRecipesTest {
     private RecipeRepository recipeRepository;
     private GetAllRecipesHandler getAllRecipesQuery;
+    private UUID randomUserId = UUID.randomUUID();
 
     @BeforeEach
     void setUp() {
@@ -53,6 +55,7 @@ public class GetAllRecipesTest {
                         .build());
 
         Recipe recipe = RecipeMother.recipe()
+                .userId(randomUserId)
                 .name("huevos cocidos")
                 .cookTime(20)
                 .ingredients(ingredients)
@@ -64,7 +67,7 @@ public class GetAllRecipesTest {
 
     @Test
     void testGetAllRecipes() {
-        GetAllRecipesParameters parameters = new GetAllRecipesParameters(0, 5);
+        GetAllRecipesParameters parameters = new GetAllRecipesParameters(randomUserId, 0, 5);
 
         List<Recipe> recipes = getAllRecipesQuery.execute(parameters).toList();
 
@@ -76,7 +79,7 @@ public class GetAllRecipesTest {
     @Test
     void testGetAllRecipesAfterDeleteOperationReturnsEmptyList() {
         recipeRepository.deleteAll();
-        GetAllRecipesParameters parameters = new GetAllRecipesParameters(0, 5);
+        GetAllRecipesParameters parameters = new GetAllRecipesParameters(randomUserId, 0, 5);
 
         List<Recipe> recipes = getAllRecipesQuery.execute(parameters).toList();
 
@@ -109,6 +112,7 @@ public class GetAllRecipesTest {
                         .build());
 
         Recipe recipe = RecipeMother.recipe()
+                .userId(randomUserId)
                 .name("otros huevos hervidos")
                 .cookTime(20)
                 .ingredients(ingredients)
@@ -116,7 +120,7 @@ public class GetAllRecipesTest {
                 .build();
 
         recipeRepository.save(recipe);
-        GetAllRecipesParameters parameters = new GetAllRecipesParameters(0, 5);
+        GetAllRecipesParameters parameters = new GetAllRecipesParameters(randomUserId, 0, 5);
 
         List<Recipe> recipes = getAllRecipesQuery.execute(parameters).toList();
 

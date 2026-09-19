@@ -28,6 +28,7 @@ public class GetRecipeTest {
     private RecipeRepository recipeRepository;
     private GetRecipeHandler getRecipeQuery;
     private UUID recipeIdToFetch;
+    private UUID randomUserId;
     private Recipe recipe;
 
     @BeforeEach
@@ -35,6 +36,7 @@ public class GetRecipeTest {
         recipeRepository = new InMemoryRecipeRepository();
         getRecipeQuery = new GetRecipeHandler(recipeRepository);
         recipeIdToFetch = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+        randomUserId = UUID.randomUUID();
 
         List<RecipeIngredient> ingredients = Arrays.asList(
                 RecipeIngredientMother.recipeIngredient()
@@ -49,6 +51,7 @@ public class GetRecipeTest {
                         .build());
         recipe = RecipeMother.recipe()
                 .id(recipeIdToFetch)
+                .userId(randomUserId)
                 .name("huevos cocidos")
                 .cookTime(20)
                 .ingredients(ingredients)
@@ -60,7 +63,7 @@ public class GetRecipeTest {
 
     @Test
     void testGetRecipeById() {
-        GetRecipeParameters parameters = new GetRecipeParameters(recipeIdToFetch);
+        GetRecipeParameters parameters = new GetRecipeParameters(randomUserId, recipeIdToFetch);
 
         Recipe recipe = getRecipeQuery.execute(parameters);
 
@@ -70,7 +73,7 @@ public class GetRecipeTest {
 
     @Test
     void testGetRecibeWithWrongIdThrowsException() {
-        GetRecipeParameters parameters = new GetRecipeParameters(UUID.randomUUID());
+        GetRecipeParameters parameters = new GetRecipeParameters(randomUserId, UUID.randomUUID());
 
         assertThrows(RecipeNotFoundException.class, () -> getRecipeQuery.execute(parameters));
     }

@@ -33,21 +33,23 @@ public class PatchRecipeMockTest {
     @Test
     void testMockPatchRecipe() {
         UUID recipeId = TestUtils.recipeIdGenerator();
+        UUID randomUserId = UUID.randomUUID();
         PatchRecipeParameters patchParameters = ParamsMother.PatchRecipeParamsMother.builder()
                 .id(recipeId)
+                .userId(randomUserId)
                 .name("huevos mock")
                 .cookTime(15)
                 .build();
         Recipe recipe = RecipeMother.recipe().build();
 
-        doNothing().when(repository).validateExistsById(recipeId);
+        doNothing().when(repository).validateExistsById(randomUserId, recipeId);
         doNothing().when(repository).save(recipe);
-        when(repository.getById(recipeId)).thenReturn(recipe);
+        when(repository.getById(randomUserId, recipeId)).thenReturn(recipe);
         Recipe savedRecipe = patchRecipeCommand.execute(patchParameters);
 
-        verify(repository, times(1)).validateExistsById(recipeId);
+        verify(repository, times(1)).validateExistsById(randomUserId, recipeId);
         verify(repository, times(1)).save(recipe);
-        verify(repository, times(1)).getById(recipeId);
+        verify(repository, times(1)).getById(randomUserId, recipeId);
         assertNotNull(savedRecipe);
         assertEquals(recipe, savedRecipe);
     }

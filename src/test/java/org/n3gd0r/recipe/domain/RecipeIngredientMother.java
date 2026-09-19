@@ -37,5 +37,4 @@ public final class RecipeIngredientMother {
             return new RecipeIngredient(id, ingredientName, ingredientType, weight);
         }
     }
-
 }

@@ -1,13 +1,8 @@
 package org.n3gd0r.recipe.usecase.register;
 
-import java.util.List;
-
 import org.n3gd0r.commons.mediator.HandlerFor;
 import org.n3gd0r.commons.mediator.RequestHandler;
-import org.n3gd0r.recipe.domain.Mass;
 import org.n3gd0r.recipe.domain.Recipe;
-import org.n3gd0r.recipe.domain.RecipeIngredient;
-import org.n3gd0r.recipe.domain.RecipeInstruction;
 import org.n3gd0r.recipe.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
 
@@ -27,27 +22,9 @@ public class RegisterRecipeHandler implements RequestHandler<RegisterRecipeParam
     public Recipe execute(RegisterRecipeParameters request) {
         log.info("Registering recipe: {}", request.name());
         repository.validateNameUnique(request.recipeUserId(), request.name());
-        List<RecipeIngredient> ingredients = request.ingredients().stream()
-                .map(ri -> new RecipeIngredient(repository.nextRecipeIngredientId(),
-                        ri.ingredientName(),
-                        ri.ingredientType(),
-                        Mass.ofGrams(ri.weight())))
-                .toList();
-        log.debug("Created {} ingredients for recipe: {}", ingredients.size(), request.name());
-
-        List<RecipeInstruction> instructions = request.instructions().stream()
-                .map(ri -> new RecipeInstruction(repository.nextRecipeInstructionId(),
-                        ri.instructionNumber(),
-                        ri.instruction()))
-                .toList();
-        log.debug("Created {} instructions for recipe: {}", instructions.size(), request.name());
-
-        Recipe recipe = new Recipe(repository.nextId(),
-                request.recipeUserId(),
-                request.name(),
-                request.cookTime(),
-                ingredients,
-                instructions);
+        Recipe recipe = request.toRecipe(repository::nextId,
+                repository::nextRecipeIngredientId,
+                repository::nextRecipeInstructionId);
         repository.save(recipe);
         log.info("Recipe registered successfully: {} ({})", recipe.getName(), recipe.getId());
         return recipe;

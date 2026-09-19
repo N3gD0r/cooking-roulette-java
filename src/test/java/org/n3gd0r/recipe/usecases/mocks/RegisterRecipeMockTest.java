@@ -2,7 +2,7 @@ package org.n3gd0r.recipe.usecases.mocks;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -30,11 +30,13 @@ import org.n3gd0r.recipe.usecases.ParamsMother.RegisterRecipeParamsMother;
 public class RegisterRecipeMockTest {
     private RecipeRepository repository;
     private RegisterRecipeHandler registerRecipeCommand;
+    private UUID recipeUserId;
 
     @BeforeEach
     void setUp() {
         repository = Mockito.mock(RecipeRepository.class);
         registerRecipeCommand = new RegisterRecipeHandler(repository);
+        recipeUserId = UUID.randomUUID();
     }
 
     @Test
@@ -44,20 +46,21 @@ public class RegisterRecipeMockTest {
                 .withInstruction(RecipeInstructionMother.recipeInstruction().build())
                 .build();
         RegisterRecipeParameters parameters = RegisterRecipeParamsMother.builder()
+                .userId(recipeUserId)
                 .name(recipeToRegister.getName())
                 .cookTime(recipeToRegister.getCookTime())
                 .ingredients(toIngredientParameters(recipeToRegister.getIngredients()))
                 .instructions(toInstructionParameters(recipeToRegister.getInstructions()))
                 .build();
 
-        doNothing().when(repository).validateNameUnique(any(String.class));
+        doNothing().when(repository).validateNameUnique(eq(recipeUserId), eq(recipeToRegister.getName()));
         when(repository.nextRecipeIngredientId()).thenReturn(UUID.randomUUID());
         when(repository.nextRecipeInstructionId()).thenReturn(UUID.randomUUID());
         when(repository.nextId()).thenReturn(recipeToRegister.getId());
         doNothing().when(repository).save(recipeToRegister);
         Recipe registeredRecipe = registerRecipeCommand.execute(parameters);
 
-        verify(repository, times(1)).validateNameUnique(any(String.class));
+        verify(repository, times(1)).validateNameUnique(eq(recipeUserId), eq(recipeToRegister.getName()));
         verify(repository, times(1)).nextRecipeIngredientId();
         verify(repository, times(1)).nextRecipeInstructionId();
         verify(repository, times(1)).nextId();

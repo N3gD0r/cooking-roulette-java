@@ -13,26 +13,35 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import com.fasterxml.uuid.Generators;
+import com.fasterxml.uuid.NoArgGenerator;
+
 public class InMemoryRecipeRepository implements RecipeRepository {
     private final Map<UUID, Recipe> recipeTable = new HashMap<>();
+    private static final NoArgGenerator ID_GENERATOR = Generators.timeBasedEpochGenerator();
 
     @Override
     public UUID nextId() {
-        return UUID.randomUUID();
+        return ID_GENERATOR.generate();
     }
 
     @Override
     public UUID nextRecipeIngredientId() {
-        return UUID.randomUUID();
+        return ID_GENERATOR.generate();
     }
 
     @Override
     public UUID nextRecipeInstructionId() {
-        return UUID.randomUUID();
+        return ID_GENERATOR.generate();
     }
 
     @Override
-    public Recipe getByName(String name) {
+    public Recipe getById(UUID recipeUserId, UUID id) {
+        return Optional.ofNullable(recipeTable.get(id)).orElseThrow(() -> new RecipeNotFoundException(id));
+    }
+
+    @Override
+    public Recipe getByName(UUID recipeUserId, String name) {
         return recipeTable.values().stream().filter(r -> r.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElseThrow(() -> new RecipeNotFoundException(name));
@@ -44,19 +53,14 @@ public class InMemoryRecipeRepository implements RecipeRepository {
     }
 
     @Override
-    public Recipe getById(UUID id) {
-        return Optional.ofNullable(recipeTable.get(id)).orElseThrow(() -> new RecipeNotFoundException(id));
-    }
-
-    @Override
-    public void validateExistsById(UUID id) {
+    public void validateExistsById(UUID recipeUserId, UUID id) {
         if (!recipeTable.containsKey(id)) {
             throw new RecipeNotFoundException(id);
         }
     }
 
     @Override
-    public void validateNameUnique(String name) {
+    public void validateNameUnique(UUID recipeUserId, String name) {
         boolean exists = recipeTable.values().stream()
                 .anyMatch(r -> r.getName().equalsIgnoreCase(name));
         if (exists) {
@@ -65,7 +69,7 @@ public class InMemoryRecipeRepository implements RecipeRepository {
     }
 
     @Override
-    public Page<Recipe> findAll(Pageable pageable) {
+    public Page<Recipe> findAll(UUID recipeUserId, Pageable pageable) {
         List<Recipe> recipes = recipeTable.values().stream()
                 .skip((long) pageable.getPageNumber() * pageable.getPageSize())
                 .limit(pageable.getPageSize())
@@ -79,17 +83,17 @@ public class InMemoryRecipeRepository implements RecipeRepository {
     }
 
     @Override
-    public void deleteById(UUID id) {
+    public void deleteById(UUID reipceUserId, UUID id) {
         recipeTable.remove(id);
     }
 
     @Override
-    public long count() {
+    public long count(UUID recipeUserId) {
         return recipeTable.size();
     }
 
     @Override
-    public List<Recipe> findAll(FilterQuery filters) {
+    public List<Recipe> findAll(UUID recipeUserId, FilterQuery filters) {
         List<Recipe> recipes = recipeTable.values().stream()
                 .filter(r -> r.getName().equalsIgnoreCase(filters.name().get()))
                 .toList();

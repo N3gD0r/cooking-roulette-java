@@ -1,6 +1,11 @@
 package org.n3gd0r.recipe.usecase.register;
 
+import java.util.UUID;
+import java.util.function.Supplier;
+
 import org.n3gd0r.recipe.domain.IngredientEnum;
+import org.n3gd0r.recipe.domain.Mass;
+import org.n3gd0r.recipe.domain.RecipeIngredient;
 import org.springframework.util.Assert;
 
 public record RegisterIngredientParameters(String ingredientName, IngredientEnum ingredientType,
@@ -13,5 +18,9 @@ public record RegisterIngredientParameters(String ingredientName, IngredientEnum
         Assert.notNull(weight,
                 "The RegisterIngredientParameters weight should not be null");
         Assert.isTrue(weight > 0, "The RegisterIngredientParameters weight should be a positive number");
+    }
+
+    public RecipeIngredient toRecipeIngredient(Supplier<UUID> ingredientId) {
+        return new RecipeIngredient(ingredientId.get(), ingredientName, ingredientType, Mass.ofGrams(weight));
     }
 }

@@ -31,6 +31,7 @@ public class UpdateRecipeTest {
     private RecipeRepository recipeRepository;
     private UpdateRecipeHandler updateRecipeCommand;
     private UUID recipeIdToUpdate;
+    private UUID recipeUserId;
 
     @BeforeEach
     void setUp() {
@@ -38,6 +39,7 @@ public class UpdateRecipeTest {
         updateRecipeCommand = new UpdateRecipeHandler(recipeRepository);
 
         recipeIdToUpdate = TestUtils.recipeIdGenerator();
+        recipeUserId = UUID.randomUUID();
         List<RecipeIngredient> ingredients = Arrays.asList(
                 RecipeIngredientMother.recipeIngredient()
                         .ingredientName("huevos")
@@ -51,6 +53,7 @@ public class UpdateRecipeTest {
                         .build());
         Recipe recipe = RecipeMother.recipe()
                 .id(recipeIdToUpdate)
+                .userId(recipeUserId)
                 .name("huevos cocidos")
                 .cookTime(15)
                 .ingredients(ingredients)
@@ -76,7 +79,8 @@ public class UpdateRecipeTest {
                         "Colocar los huevos en el posillo con el agua hirviendo durante 15 minutos"),
                 new UpdateInstructionParameters(3,
                         "Retirar los huevos y dejarlos enfriar en agua fria con hielos durante 5 minutos"));
-        UpdateRecipeParameters recipeParameters = new UpdateRecipeParameters(recipeIdToUpdate, "huevos hervidos", 25,
+        UpdateRecipeParameters recipeParameters = new UpdateRecipeParameters(recipeIdToUpdate, recipeUserId,
+                "huevos hervidos", 25,
                 ingredientParameters,
                 instructionParameters);
 
@@ -103,7 +107,8 @@ public class UpdateRecipeTest {
                         "Colocar los huevos en el posillo con el agua hirviendo durante 15 minutos"),
                 new UpdateInstructionParameters(3,
                         "Retirar los huevos y dejarlos enfriar en agua fria con hielos durante 5 minutos"));
-        UpdateRecipeParameters parameters = new UpdateRecipeParameters(recipeIdToUpdate, "huevos cocidos", 25,
+        UpdateRecipeParameters parameters = new UpdateRecipeParameters(recipeIdToUpdate, recipeIdToUpdate,
+                "huevos cocidos", 25,
                 ingredients,
                 instructions);
 
@@ -131,6 +136,7 @@ public class UpdateRecipeTest {
                 new UpdateInstructionParameters(3,
                         "Retirar los huevos y dejarlos enfriar en agua fria con hielos durante 5 minutos"));
         UpdateRecipeParameters parameters = new UpdateRecipeParameters(UUID.randomUUID(),
+                UUID.randomUUID(),
                 "huevos cocidos", 25, ingredients,
                 instructions);
 
@@ -172,7 +178,8 @@ public class UpdateRecipeTest {
                         "Colocar los huevos en el posillo con el agua hirviendo durante 15 minutos"),
                 new UpdateInstructionParameters(3,
                         "Retirar los huevos y dejarlos enfriar en agua fria con hielos durante 5 minutos"));
-        UpdateRecipeParameters recipeParameters = new UpdateRecipeParameters(recipeIdToUpdate, "huevos hervidos", 25,
+        UpdateRecipeParameters recipeParameters = new UpdateRecipeParameters(recipeIdToUpdate, recipeUserId,
+                "huevos hervidos", 25,
                 ingredientParameters,
                 instructionParameters);
 

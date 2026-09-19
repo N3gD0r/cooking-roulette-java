@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,9 +27,11 @@ import org.springframework.data.domain.PageRequest;
 public class RegisterRecipeTest {
     private RecipeRepository recipeRepository;
     private RegisterRecipeHandler registerRecipeCommand;
+    private UUID recipeUserId;
 
     @BeforeEach
     void setUp() {
+        recipeUserId = UUID.randomUUID();
         recipeRepository = new InMemoryRecipeRepository();
         registerRecipeCommand = new RegisterRecipeHandler(recipeRepository);
     }
@@ -56,6 +59,7 @@ public class RegisterRecipeTest {
                         .instruction("Pelar los huevos")
                         .build());
         RegisterRecipeParameters recipeParameters = RegisterRecipeParamsMother.builder()
+                .userId(recipeUserId)
                 .name("huevos cocidos")
                 .cookTime(15)
                 .ingredients(ingredients)
@@ -64,7 +68,7 @@ public class RegisterRecipeTest {
         Recipe recipe = registerRecipeCommand.execute(recipeParameters);
 
         assertNotNull(recipe);
-        assertTrue(recipeRepository.findAll(PageRequest.of(0, 10)).getContent().size() == 1);
+        assertTrue(recipeRepository.findAll(recipeUserId, PageRequest.of(0, 10)).getContent().size() == 1);
     }
 
     @Test
@@ -120,7 +124,7 @@ public class RegisterRecipeTest {
                         .build());
 
         assertThrows(IllegalArgumentException.class,
-                () -> new RegisterRecipeParameters("huevos cocidos", 15, ingredients, instructions));
+                () -> new RegisterRecipeParameters(recipeUserId, "huevos cocidos", 15, ingredients, instructions));
     }
 
     @Test
@@ -130,6 +134,6 @@ public class RegisterRecipeTest {
         List<RegisterInstructionParameters> instructions = Arrays.asList();
 
         assertThrows(IllegalArgumentException.class,
-                () -> new RegisterRecipeParameters("huevos cocidos", 15, ingredients, instructions));
+                () -> new RegisterRecipeParameters(recipeUserId, "huevos cocidos", 15, ingredients, instructions));
     }
 }

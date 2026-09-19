@@ -2,14 +2,14 @@ package org.n3gd0r.recipe.usecase.register;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 import org.n3gd0r.commons.mediator.Command;
 import org.n3gd0r.recipe.domain.Recipe;
+import org.n3gd0r.recipe.domain.RecipeIngredient;
+import org.n3gd0r.recipe.domain.RecipeInstruction;
 import org.springframework.util.Assert;
 
-/**
- * RegisterRecipeCommand
- */
 public record RegisterRecipeParameters(
         UUID recipeUserId,
         String name,
@@ -25,5 +25,16 @@ public record RegisterRecipeParameters(
                 "The RegisterRecipeParameters ingredients should not be null and have at least one ingredient");
         Assert.notEmpty(instructions,
                 "The RegisterRecipeParameters instructions should not be null and have at least one recipe instruction");
+    }
+
+    public Recipe toRecipe(Supplier<UUID> recipeId, Supplier<UUID> recipeIngredientId,
+            Supplier<UUID> recipeInstructionId) {
+        List<RecipeIngredient> recipeIngredients = ingredients.stream()
+                .map(i -> i.toRecipeIngredient(recipeIngredientId))
+                .toList();
+        List<RecipeInstruction> recipeInstructions = instructions.stream()
+                .map(i -> i.toRecipeInstruction(recipeInstructionId))
+                .toList();
+        return new Recipe(recipeId.get(), recipeUserId, name, cookTime, recipeIngredients, recipeInstructions);
     }
 }

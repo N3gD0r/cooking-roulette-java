@@ -46,6 +46,8 @@ public class Recipe {
         this.cookTime = cookTime;
         this.ingredients = new ArrayList<>(ingredients);
         this.instructions = new ArrayList<>(instructions);
+        this.ingredients.forEach(i -> i.setRecipe(this));
+        this.instructions.forEach(i -> i.setRecipe(this));
     }
 
     public void setName(String name) {

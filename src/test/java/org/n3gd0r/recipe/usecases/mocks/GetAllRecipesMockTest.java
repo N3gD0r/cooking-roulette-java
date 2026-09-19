@@ -2,7 +2,7 @@ package org.n3gd0r.recipe.usecases.mocks;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,19 +36,23 @@ public class GetAllRecipesMockTest {
 
     @Test
     void testGetAllRecipes() {
-        when(repository.findAll(any(Pageable.class)))
+        UUID randomUserId = UUID.randomUUID();
+        PageRequest page = PageRequest.of(0, 5);
+        when(repository.findAll(eq(randomUserId), eq(page)))
                 .thenReturn(Page.empty());
-        getAllRecipesQuery.execute(new GetAllRecipesParameters(0, 5));
-        verify(repository, times(1)).findAll(PageRequest.of(0, 5));
+        getAllRecipesQuery.execute(new GetAllRecipesParameters(randomUserId, 0, 5));
+        verify(repository, times(1)).findAll(eq(randomUserId), eq(page));
     }
 
     @Test
     void testGetAllRecipesPopulated() {
-        when(repository.findAll(any(Pageable.class)))
+        UUID randomUserId = UUID.randomUUID();
+        PageRequest page = PageRequest.of(0, 5);
+        when(repository.findAll(eq(randomUserId), eq(page)))
                 .thenReturn(getRecipesPage(PageRequest.of(0, 5)));
 
-        List<Recipe> recipes = getAllRecipesQuery.execute(new GetAllRecipesParameters(0, 5)).toList();
-        verify(repository, times(1)).findAll(any(Pageable.class));
+        List<Recipe> recipes = getAllRecipesQuery.execute(new GetAllRecipesParameters(randomUserId, 0, 5)).toList();
+        verify(repository, times(1)).findAll(eq(randomUserId), eq(page));
         assertNotNull(recipes);
         assertTrue(recipes.size() == 2);
     }

@@ -3,12 +3,15 @@ server:
 spring:
   application:
     name: cooking-tests
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_ISSUER}
   datasource:
     url: ${DBURL}
     username: ${DBUSER}
     password: ${DBPASSWORD}
-
   jpa:
     hibernate:
       ddl-auto: "none"

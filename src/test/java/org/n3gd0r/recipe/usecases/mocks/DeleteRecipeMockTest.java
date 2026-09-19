@@ -16,20 +16,22 @@ import org.n3gd0r.recipe.usecase.delete.DeleteRecipeParameters;
 public class DeleteRecipeMockTest {
     private DeleteRecipeHandler deleteRecipeCommand;
     private RecipeRepository repository;
+    private UUID recipeUserId;
 
     @BeforeEach
     void setUp() {
         repository = mock(RecipeRepository.class);
         deleteRecipeCommand = new DeleteRecipeHandler(repository);
+        recipeUserId = UUID.randomUUID();
     }
 
     @Test
     void testMockDeleteRecipe() {
         UUID recipeId = UUID.randomUUID();
-        doNothing().when(repository).deleteById(recipeId);
+        doNothing().when(repository).deleteById(recipeUserId, recipeId);
 
-        deleteRecipeCommand.execute(new DeleteRecipeParameters(recipeId));
+        deleteRecipeCommand.execute(new DeleteRecipeParameters(recipeUserId, recipeId));
 
-        verify(repository, times(1)).deleteById(recipeId);
+        verify(repository, times(1)).deleteById(recipeUserId, recipeId);
     }
 }

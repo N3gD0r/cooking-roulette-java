@@ -89,6 +89,7 @@ public final class ParamsMother {
 
         public static class Builder {
             private UUID id = UUID.randomUUID();
+            private UUID userId = UUID.randomUUID();
             private Optional<String> name = Optional.empty();
             private Optional<Integer> cookTime = Optional.empty();
             private Optional<List<PatchInstructionParameters>> instructions = Optional.empty();
@@ -96,6 +97,11 @@ public final class ParamsMother {
 
             public Builder id(UUID id) {
                 this.id = id;
+                return this;
+            }
+
+            public Builder userId(UUID userId) {
+                this.userId = userId;
                 return this;
             }
 
@@ -120,7 +126,7 @@ public final class ParamsMother {
             }
 
             public PatchRecipeParameters build() {
-                return new PatchRecipeParameters(id, name, cookTime, instructions, ingredients);
+                return new PatchRecipeParameters(id, userId, name, cookTime, instructions, ingredients);
             }
         }
     }
@@ -131,10 +137,16 @@ public final class ParamsMother {
         }
 
         public static class Builder {
+            private UUID userId = UUID.randomUUID();
             private String name = "huevos cocidos";
             private Integer cookTime = 15;
             private List<RegisterIngredientParameters> ingredients = new ArrayList<>();
             private List<RegisterInstructionParameters> instructions = new ArrayList<>();
+
+            public Builder userId(UUID userId) {
+                this.userId = userId;
+                return this;
+            }
 
             public Builder name(String name) {
                 this.name = name;
@@ -157,7 +169,7 @@ public final class ParamsMother {
             }
 
             public RegisterRecipeParameters build() {
-                return new RegisterRecipeParameters(name, cookTime, ingredients, instructions);
+                return new RegisterRecipeParameters(userId, name, cookTime, ingredients, instructions);
             }
         }
     }

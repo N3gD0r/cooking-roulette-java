@@ -1,20 +1,18 @@
 spring:
   application:
     name: cooking
-  devtools:
-    add-properties: false
-    livereload:
-      enabled: false
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_ISSUER}
   datasource:
     url: ${DBURL}
     username: ${DBUSER}
     password: ${DBPASSWORD}
-
   jpa:
     hibernate:
-      ddl-auto: none
-    show-sql: false
-
+      ddl-auto: "none"
+    show-sql: true
   flyway:
     enabled: true
